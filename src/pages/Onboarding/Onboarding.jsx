@@ -5,18 +5,12 @@ import Notification from '../Components/Notification';
 export default function Onboarding({navigation}) {
 
   const [isVisible, setIsVisible] = useState();
-  const [modalVisible, setModalVisible] = useState(false);  
+  
   return (
 <View style={{flex:6}}>
        <ImageBackground source={require('../../assets/images/onboarding.jpg')} style={{width:"100%", height:"100%"}}>
        <View style={{flex:4}}>
-       {/* {modalVisible && (
-                <Notification
-                  isVisible={modalVisible}
-                  color={"red"}
-                  // onClose={() => setModalVisible(false)}
-                />
-              )} */}
+      
        </View>
         <View style={{ flex:2, backgroundColor: "#FFFFFF", borderTopLeftRadius: 30, borderTopRightRadius: 30, height:"100%"}}>
         <View style={{display: "flex", flexDirection:"column", height:"100%", width:"100%"}}>
@@ -24,7 +18,7 @@ export default function Onboarding({navigation}) {
               <Text style={{ display:"flex", alignSelf:"flex-start", fontSize:32, fontFamily:"inter", fontWeight:"bold", width:"60%", height:"100%", color:'#000000', marginVertical:"2%",}}>Exclusive Tour Packages</Text>
              <TouchableOpacity
                activeOpacity={0.9}
-               onPress={() => setModalVisible(true) }>
+               onPress={() => navigation.navigate("Signin") }>
               <Text style={{justifyContent:"center",textAlign:"center", textAlignVertical:"center", alignSelf:"flex-end", fontSize:14, marginVertical:"7%", width:"40%", marginHorizontal:"11%",color:"grey", fontWeight:"800", height:"100%" }}>SKIP</Text>
               </TouchableOpacity>
               </View>                
