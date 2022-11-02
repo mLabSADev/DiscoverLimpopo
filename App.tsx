@@ -37,6 +37,9 @@ import SPECIALPACKAGEDETAILS from './src/pages/Specials/SpecialPackageDetails';
 import ACCOUNT from './src/pages/Account/Profile';
 
 import Icon from 'react-native-vector-icons/Foundation';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 //firebase
@@ -56,7 +59,9 @@ export default function App () {
 
   const Account = () => {
     return(
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={({navigation, route}) => ({
+      headerShown:false
+    })}>
       <Stack.Screen name='Account' component={Profile}/>
       <Stack.Screen name='Profile Details' component={ProfileDetails}/>
     </Stack.Navigator>
@@ -80,21 +85,29 @@ export default function App () {
   }
 
   const Booking = () => {
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={({navigation, route}) => ({
+      headerShown:false
+    })}>
       <Stack.Screen name='Booking' component={BOOKING}/>
       <Stack.Screen name='BookingDetails' component={BOOKINGDETAILS}/>
     </Stack.Navigator>
   }
 
   const Accomodation = () => {
-    <Stack.Navigator>
-      <Stack.Screen name='Accomodation' component={ACCOMODATION}/>
+    <Stack.Navigator screenOptions={({navigation, route}) => ({
+      headerShown:false
+    })}>
+      <Stack.Screen name='Accomodation' component={ACCOMODATION} screenOptions={({navigation, route}) => ({
+      headerShown:false
+    })}/>
       <Stack.Screen name='AccomodationDetails' component={ACCOMODATIONDETAILS}/>
     </Stack.Navigator>
   }
 
   const Special = () => {
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={({navigation, route}) => ({
+      headerShown:false
+    })}>
       <Stack.Screen name='SpecialPackages' component={SPECIALPACKAGE}/>
       <Stack.Screen name='SpecialPackagesDetails' component={SPECIALPACKAGEDETAILS}/>
     </Stack.Navigator>
@@ -171,98 +184,84 @@ export default function App () {
                 <Icon name="home" size={20} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
             </View>)
         },
-                 
+        drawerLabel(props: {color: string, size: number, focused: boolean}) {
+          return(
+            <>
+            <Text style={{color:props.focused ? "#FFFFFF" : "rgb(0,0,0)", marginHorizontal:"-15%", fontSize:16, fontWeight:"bold"}}>HOME</Text>
+          </>
+          )
+        }         
        })}/>
 
 
 
 <Drawer.Screen name='ACCOMODATION' component={Accomodation} options={({navigation, route}) => ({
-            headerShown:true,
+            headerShown:false,
             drawerIcon(props: {color: string, size: number, focused: boolean}) {
               return(<View>
-                  <Icon name="home" size={20} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
+                  <FontAwesome5 name="hotel" size={18} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
               </View>)
           },
-            headerStatusBarHeight:10,
-            headerTitle:'',
-            headerLeft(props) {
-              return(
-              <View style={{backgroundColor:"blue",borderBottomLeftRadius:30, borderTopLeftRadius:30 ,width:"100%", height:"100%", marginHorizontal:"13%", alignItems:"center" }}><Text style={{alignSelf:"flex-start"}}>Hello</Text></View>)},
-
-            headerRight(props) {
-                return(
-                <View style={{backgroundColor:"blue", borderBottomRightRadius:30, borderTopRightRadius:30 ,width:"100%", height:"100%", marginHorizontal:"7%"}}><Text style={{alignSelf:"flex-end"}}>Hello</Text></View>)
-            },
-            headerBackgroundContainerStyle:{
-              height:155,
-            },
-            headerStyle:{borderBottomRightRadius: 30, borderBottomLeftRadius:30, backgroundColor:"grey",}
-
+          drawerLabel(props: {color: string, size: number, focused: boolean}) {
+            return(
+              <>
+              <Text style={{color:props.focused ? "#FFFFFF" : "rgb(0,0,0)", marginHorizontal:"-15%", fontSize:16, fontWeight:"bold"}}>ACCOMODATION</Text>
+            </>
+            )
+          } 
            })}/>
 
 
 
 <Drawer.Screen name='BOOKING HISTORY' component={Booking} options={({navigation, route}) => ({
-            headerShown:true,
+            headerShown:false,
             drawerIcon(props: {color: string, size: number, focused: boolean}) {
               return(<View>
-                  <Icon name="home" size={20} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
+                  <Entypo name="back-in-time" size={20} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
               </View>)
           },
-            headerStatusBarHeight:10,
-            headerTitle:'',
-            headerLeft(props) {
-              return(
-              <View style={{backgroundColor:"blue",borderBottomLeftRadius:30, borderTopLeftRadius:30 ,width:"100%", height:"100%", marginHorizontal:"13%", alignItems:"center" }}><Text style={{alignSelf:"flex-start"}}>Hello</Text></View>)},
-
-            headerRight(props) {
-                return(
-                <View style={{backgroundColor:"blue", borderBottomRightRadius:30, borderTopRightRadius:30 ,width:"100%", height:"100%", marginHorizontal:"7%"}}><Text style={{alignSelf:"flex-end"}}>Hello</Text></View>)
-            },
-            headerBackgroundContainerStyle:{
-              height:155,
-            },
-            headerStyle:{borderBottomRightRadius: 30, borderBottomLeftRadius:30, backgroundColor:"grey",}
-            
+          drawerLabel(props: {color: string, size: number, focused: boolean}) {
+            return(
+              <>
+              <Text style={{color:props.focused ? "#FFFFFF" : "rgb(0,0,0)", marginHorizontal:"-15%", fontSize:16, fontWeight:"bold"}}>BOOKING HISTORY</Text>
+            </>
+            )
+          } 
             
            })}/>
 
 
-
         <Drawer.Screen name='SPECIAL PACKAGES' component={Special} options={({navigation, route}) => ({
-            headerShown:true,
+            headerShown:false,
             drawerIcon(props: {color: string, size: number, focused: boolean}) {
               return(<View>
-                  <Icon name="home" size={20} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
+                  <MaterialIcons name="folder-special" size={20} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
               </View>)
           },
-            headerStatusBarHeight:10,
-            headerTitle:'',
-            headerLeft(props) {
-              return(
-              <View style={{backgroundColor:"blue",borderBottomLeftRadius:30, borderTopLeftRadius:30 ,width:"100%", height:"100%", marginHorizontal:"13%", alignItems:"center" }}><Text style={{alignSelf:"flex-start"}}>Hello</Text></View>)},
-
-            headerRight(props) {
-                return(
-                <View style={{backgroundColor:"blue", borderBottomRightRadius:30, borderTopRightRadius:30 ,width:"100%", height:"100%", marginHorizontal:"7%"}}><Text style={{alignSelf:"flex-end"}}>Hello</Text></View>)
-            },
-            headerBackgroundContainerStyle:{
-              height:255,
-            },
-            headerStyle:{borderBottomRightRadius: 30, borderBottomLeftRadius:30, backgroundColor:"grey",}
-            
-
+          drawerLabel(props: {color: string, size: number, focused: boolean}) {
+            return(
+              <>
+              <Text style={{color:props.focused ? "#FFFFFF" : "rgb(0,0,0)", marginHorizontal:"-15%", fontSize:16, fontWeight:"bold"}}>SPECIAL PACKAGES</Text>
+            </>
+            )
+          } 
            })}/>
 
 
             <Drawer.Screen name='ACCOUNT' component={Account} options={({navigation, route}) => ({
-            headerShown:true,
+            headerShown:false,
             drawerIcon(props: {color: string, size: number, focused: boolean}) {
               return(<View>
-                  <Icon name="home" size={20} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
+                  <FontAwesome5 name="user-alt" size={20} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
               </View>)
           },
-           
+          drawerLabel(props: {color: string, size: number, focused: boolean}) {
+            return(
+              <>
+              <Text style={{color:props.focused ? "#FFFFFF" : "rgb(0,0,0)", marginHorizontal:"-15%", fontSize:16, fontWeight:"bold"}}>ACCOUNT</Text>
+            </>
+            )
+          } 
           })}
           />
 

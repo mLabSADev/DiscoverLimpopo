@@ -12,6 +12,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import LinearGradient from 'react-native-linear-gradient';
 import {DrawerActions, useIsFocused} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -44,7 +45,10 @@ const myIcon = <Icon name="rocket" size={30} color="#900" />;
         
       </DrawerContentScrollView>
       <View style={{flex:0.4}}>
-        <View style={{backgroundColor:"rgba(239, 172, 50, 0.05)", width:"90%", height:"90%", alignSelf:"center", borderRadius:20, borderWidth:1, borderColor:"rgb(239, 172, 50)"}} >
+      <LinearGradient 
+       start={{x: 0.25, y: 2.5}} end={{x: 1.8, y: 1.0}}
+       locations={[0.0,0.3,0.7]}
+      colors={['skyblue','rgba(239, 172, 50, 0.05)','#F0BF62']} style={{ width:"90%", height:"90%", alignSelf:"center", borderRadius:20, borderWidth:1, borderColor:"rgb(239, 172, 50)"}} >
                 <View style={{flexDirection:"column", marginHorizontal:"9%", marginVertical:"8%"}}>
                         <View style={{flexDirection:"row"}}>
                             <Icon name='announcement' size={22} color={'rgb(0, 0, 0)'} />
@@ -56,7 +60,7 @@ const myIcon = <Icon name="rocket" size={30} color="#900" />;
                             </Text>
                         </View>
                 </View>
-        </View>
+        </LinearGradient>
       </View>
 
     </SafeAreaView>
