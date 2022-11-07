@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "975683958137",
+    "project_id": "discover-limpopo",
+    "storage_bucket": "discover-limpopo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975683958137:android:bae8c1f0f1cfc5ab7d6ba8",
+        "android_client_info": {
+          "package_name": "com.discoverlimpopo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "975683958137-ec5tu9eh1p2ig28jc2ki0eb7hr7phabi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTZ3lWGJsNo3VsgYWZnvtXakEaTCaM4ms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975683958137-ec5tu9eh1p2ig28jc2ki0eb7hr7phabi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
