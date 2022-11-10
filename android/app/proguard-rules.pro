@@ -12,3 +12,5 @@
 -keep class com.facebook.jni.** { *; }
 -keep class com.swmansion.reanimated.** { *; }
 -keep class com.facebook.react.turbomodule.** { *; }
+-keep public class net.time4j.android.ApplicationStarter
+-keep public class net.time4j.PrettyTime

@@ -46,7 +46,7 @@ export default function Signin({navigation}) {
       .signInWithEmailAndPassword(email, password).then((userCredetial) => {
         Toast.show({type:"success", text2:"You're now logged in!"})
         const user = userCredetial.user;
-          navigation.navigate('Home', {user: user.uid});
+          // navigation.navigate('Home');
       }).catch((error) => {
         if(error.code === "auth/user-not-found"){
           Toast.show({type:'error', text2:"Email is not registered"});
@@ -104,8 +104,8 @@ const validateLink = () => {
         >
           <Toast />
           <View style={styles.modalView}>
-            <Text style={{alignSelf:"flex-start", fontSize:32, fontFamily:"inter", fontWeight:"bold", color:'#000000'}}>Reset Email</Text>
-            <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"inter", fontWeight:"600", color:'#000000', marginVertical:"3%"}}>Email</Text>  
+            <Text style={{alignSelf:"flex-start", fontSize:32, fontFamily:"Plus Jakarta Sans", fontWeight:"bold", color:'#000000'}}>Reset Email</Text>
+            <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"600", color:'#000000', marginVertical:"3%"}}>Email</Text>  
              <View style={{backgroundColor:"lightgrey", alignSelf:"flex-start", width:"100%", borderRadius: 30, height:50, flexDirection:"row", marginVertical:"3%", borderWidth:1, borderColor:border}}>
              <TextInput placeholder='Enter email address...' style={{alignSelf:"flex-start", width:"80%", marginHorizontal:"5%",}} 
              onChangeText={(password) => setResetPassword(password)}
@@ -117,12 +117,12 @@ const validateLink = () => {
               activeOpacity={0.9} 
                   onPress={() => validateLink()}
                   style={{alignSelf: "flex-start", backgroundColor:"rgb(239, 172, 50)", width:"100%", height:50, opacity:3 ,justifyContent:"center", borderRadius:30,}}>
-                      <Text style={{alignSelf:"center", color:"#FFFFFF", fontWeight:"bold", fontStyle:"inter", fontSize:14}}>SEND LINK</Text>
+                      <Text style={{alignSelf:"center", color:"#FFFFFF", fontWeight:"bold",fontFamily:"Plus Jakarta Sans", fontSize:14}}>SEND LINK</Text>
               </TouchableOpacity>
               <TouchableOpacity
               activeOpacity={0.9} 
                   onPress={() => { setModalVisible(!modalVisible)}}>
-            <Text style={{alignSelf:"center", fontSize:14, fontFamily:"inter", fontWeight:"700", color:'rgb(239, 172, 50)', marginVertical:"2%"}}>CANCEL</Text>                
+            <Text style={{alignSelf:"center", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"700", color:'rgb(239, 172, 50)', marginVertical:"2%"}}>CANCEL</Text>                
            </TouchableOpacity>
           </View>
       </Modal>        
@@ -131,11 +131,11 @@ const validateLink = () => {
          style={{ backgroundColor: "#FFFFFF", borderTopLeftRadius: 30, borderTopRightRadius: 30, height:"100%", flexDirection:"column",flexDirection:"column",}}
         >
          <View style={{alignSelf:"center",  width:"100%", alignItems:"center", }}>
-            <Text style={{alignSelf:"center", fontSize:32, fontFamily:"inter", fontWeight:"bold", color:'#000000'}}>Sign in</Text>             
-            <Text style={{alignSelf:"center", fontSize:14, fontFamily:"inter", fontWeight:"100", color:'#000000'}}>Welcome back</Text>                
+            <Text style={{alignSelf:"center", fontSize:32, fontFamily:"Plus Jakarta Sans", fontWeight:"bold", color:'#000000'}}>Sign in</Text>             
+            <Text style={{alignSelf:"center", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"100", color:'#000000'}}>Welcome back</Text>                
         </View>
         <View style={{alignSelf:"center",width:"100%", backgroundColor:"#FFFFFF", flexDirection:"column",}}>
-        <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"inter", fontWeight:"600", color:'#000000', marginVertical:"3%", marginHorizontal:"9%"}}>Email</Text>  
+        <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"600", color:'#000000', marginVertical:"3%", marginHorizontal:"9%"}}>Email</Text>  
        <View style={{display:"flex", backgroundColor:"lightgrey", alignSelf:"center", width:"90%", borderRadius: 30, height:50 }}>
 
        <TextInput placeholder='Email' style={{alignSelf:"flex-start", width:"80%", marginHorizontal:"5%"}} 
@@ -144,7 +144,7 @@ const validateLink = () => {
          value={email}
        />              
        </View>
-       <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"inter", fontWeight:"600", color:'#000000', marginVertical:"3%", marginHorizontal:"9%"}}>Password</Text>  
+       <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"600", color:'#000000', marginVertical:"3%", marginHorizontal:"9%"}}>Password</Text>  
                <View style={{backgroundColor:"lightgrey", alignSelf:"center", width:"90%", borderRadius: 30, height:50, flexDirection:"row"}}>
                <TextInput placeholder='Password' style={{alignSelf:"flex-start", width:"80%", marginHorizontal:"5%",}} 
                onChangeText={(password) => setPassword(password)}
@@ -154,16 +154,16 @@ const validateLink = () => {
                />              
                </View>
                <TouchableOpacity onPress={() => {setModalVisible(!modalVisible)}}>
-                <Text style={{alignSelf:"flex-end", fontSize:14, fontFamily:"inter", fontWeight:"bold", color:'grey', marginVertical:"3%", marginHorizontal:"10%"}}>FORGOT PASSWORD</Text>  
+                <Text style={{alignSelf:"flex-end", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"bold", color:'grey', marginVertical:"3%", marginHorizontal:"10%"}}>FORGOT PASSWORD</Text>  
                 </TouchableOpacity>
                 <TouchableOpacity
                 activeOpacity={0.9} 
                 onPress={() => {validate();}}
                     style={{alignSelf: "center", backgroundColor:"rgb(239, 172, 50)", width:"90%", height:50, opacity:3 ,justifyContent:"center", marginVertical:"1.3%", borderRadius:30,}}>
-                        <Text style={{alignSelf:"center", color:"#FFFFFF", fontWeight:"bold", fontStyle:"inter", fontSize:14}}>SIGN IN</Text>
+                        <Text style={{alignSelf:"center", color:"#FFFFFF", fontWeight:"bold",fontFamily:"Plus Jakarta Sans", fontSize:14}}>SIGN IN</Text>
                 </TouchableOpacity>
             {/* <View style={{ width:"90%", alignSelf:"center", justifyContent:"center", }}>
-             <Text style={{alignSelf:"center", fontSize:14, fontFamily:"inter", fontWeight:"100", color:'#000000'}}>or continue using</Text>                
+             <Text style={{alignSelf:"center", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"100", color:'#000000'}}>or continue using</Text>                
              <View style={{alignSelf:"center", flexDirection:"row", justifyContent:"space-between", width:"50%", marginVertical:"1.5%"}}>
              <TouchableOpacity activeOpacity={0.9} style={{ backgroundColor:'rgb(238, 68, 68)', borderRadius:50, width:50, height:50, justifyContent:"center"}}>
                         <Image source={require('../../assets/images/Google.png')}
@@ -182,7 +182,7 @@ const validateLink = () => {
             <TouchableOpacity
               activeOpacity={0.9} 
                   onPress={() => { return navigation.navigate('Signup')}}>
-            <Text style={{alignSelf:"center", fontSize:14, fontFamily:"inter", fontWeight:"700", color:'rgb(239, 172, 50)', marginVertical:"5%"}}>I DON'T HAVE AN ACCOUNT</Text>                
+            <Text style={{alignSelf:"center", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"700", color:'rgb(239, 172, 50)', marginVertical:"5%"}}>I DON'T HAVE AN ACCOUNT</Text>                
            </TouchableOpacity>
             </View>
         </ScrollView>

@@ -14,7 +14,7 @@ export default function Onboarding3 ({navigation}){
          <View style={{ flex:2, backgroundColor: "#FFFFFF", borderTopLeftRadius: 30, borderTopRightRadius: 30, height:"100%"}}>
          <View style={{flexDirection:"column", height:"100%", width:"100%"}}>
              <View style={{ flex:1, flexDirection:"row", width:"100%", height:"100%", justifyContent:"space-between"}}>
-               <Text style={{ alignSelf:"flex-start", fontSize:32, fontFamily:"inter", fontWeight:"bold", width:"100%", color:'#000000', marginVertical:"1.7%", marginHorizontal:"5%"}}>
+               <Text style={{ alignSelf:"flex-start", fontSize:32,fontFamily:"Plus Jakarta Sans", fontWeight:"bold", width:"100%", color:'#000000', marginVertical:"1.7%", marginHorizontal:"5%"}}>
                You can make a booking
                 </Text>
               {/* <TouchableWithoutFeedback
@@ -25,7 +25,7 @@ export default function Onboarding3 ({navigation}){
                </TouchableWithoutFeedback> */}
                </View>                
              <View style={{flex:1.5, flexDirection:"row", }}>
-                 <Text style={{display:"flex", alignSelf:"flex-start", fontSize:16, fontFamily:"inter", fontWeight:"100", width:"100%", height:"100%", color:'#2A2A2A', marginHorizontal:"5%"}}>
+                 <Text style={{display:"flex", alignSelf:"flex-start", fontSize:16,fontFamily:"Plus Jakarta Sans", fontWeight:"100", width:"100%", height:"100%", color:'#2A2A2A', marginHorizontal:"5%"}}>
                  If you're planning on travelling anytime soon, we accommodate booking trough the app to your most convenient location.</Text>               
                  </View>  
              <View style={{flex:1.5,  width:"100%", height:"100%"}}>
@@ -33,7 +33,7 @@ export default function Onboarding3 ({navigation}){
                activeOpacity={0.9}
                onPress={() => navigation.navigate('Signin')}
                style={{alignSelf: "center", opacity:0.8, backgroundColor:"rgb(239, 172, 50)", width:"90%", height:"65%", justifyContent:"center", borderRadius:30,}}>
-                 <Text style={{alignSelf:"center", color:"#FFFFFF", fontWeight:"800", font:"inter", fontSize:14}}>NEXT</Text>
+                 <Text style={{alignSelf:"center", color:"#FFFFFF", fontWeight:"800", fontFamily:"Plus Jakarta Sans", fontSize:14}}>NEXT</Text>
                  </TouchableOpacity>
                </View>                  
              </View>
