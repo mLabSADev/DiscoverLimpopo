@@ -1,89 +1,135 @@
-import React from 'react';
-import {View, Text, TouchableOpacity, SafeAreaView, Image, ScrollView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, Box, Image } from 'native-base';
+import { TouchableOpacity, SafeAreaView, ScrollView} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ReviewComponent from '../../Components/ReviewComponent';
+import { useAuth } from '../../context/auth.context';
+import moment from 'moment';
+import Magazines from '../../services/magazine';
+import  Toast  from 'react-native-toast-message';
 
 export default function MagazineDetails({navigation, route}) {
+
+  //  const {isUser, size} = route.params; 
+  const [magazine, setMagazines] = useState(route.params.item);
+  const [isUser, setIsUser] = useState();
+  const [size, setSize] = useState(route.params.size);
+  const [magazineId, setMAgazineId] = useState(`${route.params.item.magazineId}` || '')
+      //  console.log(route.params.size, 'the size', 'the user')
+  const {user} = useAuth();
+  
+
+  const onLikePress = () => {
+    Magazines.onLikePress(magazineId, user?.name, user?.uid).then(() => {
+      // Toast.show({type:'success'})
+      // console.log('like')
+        setIsUser(user?.uid);
+        const newSize = size + 1;
+        setSize(newSize)
+    })
+  } 
+  
+  const onDisLikePress = () => {
+    Magazines.onDislikePress(magazineId, user?.uid).then(() => {
+      // Toast.show({type:'error'})
+      // console.log('dislike')
+      setIsUser('')
+      const newSize = size - 1;
+        setSize(newSize)
+      console.log('user set to empty string')
+    })
+  }
+     
+  useEffect(() => {
+     const mag = () => {
+    Magazines.getLikes((isUser, size) => {
+      // console.log(isUser, );
+        setIsUser(isUser);
+        setSize(size);
+      })
+    }
+    return () => {mag()}
+  }, [isUser]);
+
+
   return (
     <>
     <SafeAreaView >
    <ScrollView style={{ backgroundColor:"#FFFFFF", width:"100%", height:"100%" }} showsVerticalScrollIndicator={false}>
-   <View style={{ height:265, backgroundColor:"grey", borderBottomLeftRadius:30, borderBottomRightRadius:30, width:"100%"}}>
-       <Image source={require('../../assets/images/Accomodation2.jpg')} resizeMode="cover" style={{width:"100%", height:"100%",  borderBottomLeftRadius:30, borderBottomRightRadius:30}}/>   
-   <View style={{width:"95%", borderRadius:30, flexDirection:"column", marginVertical:"-65%", height:"100%",marginHorizontal:"2%", justifyContent:"space-between", alignContent:"center", alignItems:"center"}}>
-  <View style={{width:"100%", borderRadius:30, flexDirection:"row", marginVertical:"5%",justifyContent:"space-between", alignContent:"center", alignItems:"center"}}>
-  <View>
+   <Box height={265} borderBottomLeftRadius={30} borderBottomRightRadius={30} width="100%">
+       <Image alt='magazineCover' source={{uri: magazine.imageCover}} resizeMode="cover" width="100%" height="100%"  borderBottomLeftRadius={30} borderBottomRightRadius={30}/>   
+   <Box width="95%" borderRadius={30} flexDirection="column" height="100%"
+   justifyContent="space-between" alignContent="center" alignItems="center"
+   style={{ marginVertical:"-65%",marginHorizontal:"2%",}}>
+  <Box width="100%" borderRadius={30} flexDirection="row" 
+     justifyContent="space-between" alignContent="center" alignItems="center"
+  style={{ marginVertical:"5%"}}>
+  <Box>
           <TouchableOpacity activeOpacity={2} onPress={() => navigation.goBack()} style={{backgroundColor:"rgb(239, 172, 50)", borderRadius:30, height:50, width:50, alignSelf:"center", justifyContent:"center"}}>
           <MaterialIcons name='keyboard-arrow-left' size={32} style={{alignSelf:"center",alignContent:"center" ,color:"#FFFFFF", marginHorizontal:"10%"}} />
           </TouchableOpacity>
-  </View>
-  <View style={{alignSelf:"flex-end"}}>
+  </Box>
+  <Box style={{alignSelf:"flex-end"}}>
     <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-       <Image source={require('../../assets/images/John-Doe.jpg')} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
+       <Image alt='user' source={{uri: user.imageUrl}} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
        </TouchableOpacity>
-  </View>  
-    </View>  
-   </View>
+  </Box>  
+    </Box>  
+   </Box>
    
-   </View>
+   </Box>
 {/*  */}
    
-   <View style={{width:"100%", height:100, flexDirection:"row"}}>
-      <View style={{flexDirection:"column", width:"75%", alignSelf:"flex-start", height:"100%"}}>
-          <Text style={{fontFamily:"Plus Jakarta Sans", marginHorizontal:"4%", marginVertical:"4%", color:"rgb(0,0,0)", fontSize:12}}>27 Jul, 202x</Text>
-          <Text style={{fontFamily:"Plus Jakarta Sans", marginHorizontal:"4%", marginVertical:"-2%", color:"rgb(0,0,0)", fontSize:24, fontWeight:"bold"}}>A perfect travel edition</Text>
-      </View>
-      <View style={{flexDirection:"column", width:"25%", alignSelf:"flex-end", height:"100%", alignItems:"center",}}>
-          <TouchableOpacity
+   <Box style={{width:"100%", height:100, flexDirection:"row"}}>
+      <Box style={{flexDirection:"column", width:"75%", alignSelf:"flex-start", height:"100%"}}>
+          <Text style={{fontFamily:"Plus Jakarta Sans", marginHorizontal:"4%", marginVertical:"4%", color:"rgb(0,0,0)", fontSize:12}}>{moment(magazine.timeStamp).format('DD MMMM, YYYY').toString()}</Text>
+          <Text style={{fontFamily:"Plus Jakarta Sans", marginHorizontal:"4%", marginVertical:"-2%", color:"rgb(0,0,0)", fontSize:24, fontWeight:"bold"}}>{magazine.title}</Text>
+      </Box>
+      <Box style={{flexDirection:"column", width:"25%", alignSelf:"flex-end", height:"100%", alignItems:"center",}}>
+        { isUser  === magazine.magazineId ? 
+           
+            <TouchableOpacity
           activeOpacity={0.9} 
-          style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor:"#F4FAFF", justifyContent:"center"}}>
+          onPress={onLikePress}
+          style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor:'#F4FAFF', justifyContent:"center"}}>
                 <AntDesign name='heart' size={20} color={'rgb(239, 172, 50)'} style={{alignSelf:"center"}}/>
           </TouchableOpacity>
-          <Text style={{fontFamily:"Plus Jakarta Sans", marginVertical:"-1%", color:"grey", fontSize:16, alignSelf:"center"}}>15k likes</Text>
-      </View>
-   </View>
+           : 
+           <TouchableOpacity
+            activeOpacity={0.9} 
+            onPress={onDisLikePress}
+            style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor:'rgb(239, 172, 50)', justifyContent:"center"}}>
+                  <AntDesign name='heart' size={20} color={'#F4FAFF'} style={{alignSelf:"center"}}/>
+            </TouchableOpacity>
+          }
+          <Text fontFamily="Plus Jakarta Sans" color="grey" fontSize={16} alignSelf="center" style={{ marginVertical:"-3%", }}>{size >= 1 ? (size > 1 ? `${size} likes` : `${size} like`) : `` }</Text>
+      </Box>
+   </Box>
 {/*  */}
-<View style={{flexDirection:"row", width:"100%", height:50, justifyContent:"flex-start"}}>
-    <Image source={require('../../assets/images/John-Doe.jpg')} style={{ marginHorizontal:"2%" ,width:40, height:40, borderRadius:50}}/>
-    <Text style={{fontFamily:"Plus Jakarta Sans", color:"grey", fontSize:12, marginHorizontal:"2%", marginVertical:"3%"}}>Name Surname</Text>
-</View>
+<Box flexDirection="row" width="100%" height={50} justifyContent="flex-start">
+    <Image alt='poster' source={{uri: magazine.posterDetails.image}} width={10} height={10} borderRadius={50} style={{ marginHorizontal:"2%",}}/>
+    <Text fontFamily="Plus Jakarta Sans" color="rgba(42, 42, 42, 0.7)" fontSize={12} style={{ marginVertical:"3%"}}>{magazine.posterDetails.name}</Text>
+</Box>
 {/*  */}
-    <View style={{with:"100%", flexDirection:"column"}}>
-    <Text style={{fontFamily:"Plus Jakarta Sans", color:"rgb(0,0,0)", fontSize:20, marginHorizontal:"2%", marginVertical:"3%", fontWeight:"bold"}}>Explore the tradition</Text>
-    <Text style={{fontFamily:"Plus Jakarta Sans", color:"rgb(0,0,0)", fontSize:14, marginHorizontal:"2%", marginVertical:"3%"}}>
-    In a commercial area off Golden Highway, 
-    this unassuming hotel is 5 km from Gold Reef City amusement park, 
-    9 km from Orlando Stadium and 12 km from Johannesburg's Central Business District.
-    The straightforward rooms have free Wi-Fi, TVs,
-     and tea and coffeemaking facilities, as well as desks.
-    Amenities include an outdoor pool and complimentary secure parking.
-    Breakfast is also available.
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-    Nullam feugiat, nulla a varius ullamcorper, risus risus hendrerit ipsum, 
-    et vulputate enim elit sit amet neque. Proin faucibus eros et elit commodo imperdiet faucibus a ligula.
-     In vulputate orci id lorem dapibus scelerisque. Phasellus molestie,
-      sapien sit amet efficitur vestibulum, eros orci dignissim sem, in blandit sem tellus et metus.
-       Pellentesque eget turpis vel ligula volutpat volutpat. Aliquam ut molestie dolor.
-        Morbi vestibulum leo et nunc suscipit, eget sagittis turpis consectetur.
-         Nunc id gravida sapien. Maecenas pellentesque justo quis ullamcorper ultricies.
-          Cras sodales leo ante, eu mattis mauris pretium at. Vestibulum ornare egestas ex,
-           non consectetur augue viverra non.
+    <Box with="100%" flexDirection="column">
+    {magazine.magazineDetails.map((item) => {
+      return(
+        <>
+        <Box key={item.id}>
+    <Text fontFamily="Plus Jakarta Sans" color="rgb(0,0,0)" fontSize={20} fontWeight="bold" style={{ marginHorizontal:"2%", marginVertical:"2%"}}>{item.title}</Text>
+    <Text fontFamily="Plus Jakarta Sans" color="rgb(0,0,0)" fontSize={14} style={{ marginHorizontal:"2%", marginVertical:"2%"}}>
+    {item.paragraph}
     </Text>
-
-    <Image source={require('../../assets/images/magazineDetailsImage1.jpg')} style={{width:"100%", height:250,}}/>
-
-    <Text style={{fontFamily:"Plus Jakarta Sans", color:"rgb(0,0,0)", fontSize:20, marginHorizontal:"2%", marginVertical:"3%", fontWeight:"bold"}}>Explore the tradition</Text>
-    <Text style={{fontFamily:"Plus Jakarta Sans", color:"rgb(0,0,0)", fontSize:14, marginHorizontal:"2%", marginVertical:"3%"}}>
-    In a commercial area off Golden Highway, this unassuming hotel is 5 km from Gold Reef City amusement park,
-     9 km from Orlando Stadium and 12 km from Johannesburg's Central Business District.
-    The straightforward rooms have free Wi-Fi, TVs, and tea and coffeemaking facilities, as well as desks.
-    Amenities include an outdoor pool and complimentary secure parking. Breakfast is also available.
-    </Text>
-    <Image source={require('../../assets/images/magazineDetailsImage2.jpg')} style={{width:"100%", height:250,}}/>
-    </View>
+    <Image alt='magazine detail' source={{uri: item.image}} width="100%" height={250}/>
+    </Box>
+  </>
+    )
+  })
+  }
+    </Box>
       </ScrollView>
    </SafeAreaView>
    </>

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, ImageBackground } from 'react-native';
 import { Box, Text, ScrollView, Image, TextField} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MasonryList from '@react-native-seoul/masonry-list';
 import RestaurantsComponent from '../../Components/restaurants/RestaurantsComponent';
+import Restaurant from '../../services/restaurant';
+import { useAuth } from '../../context/auth.context';
 
 
 const data = [{
@@ -30,12 +32,41 @@ const data = [{
 }];
 
 
-export default function Restaurants({navigation}) {
+const Restaurants = ({navigation, route}) => {
+
+  const {user} = useAuth();
 
   const [search, setSearch] = useState('');
+  const [restaurants, setRestaurants] = useState([]);
+  const [restoReview, setRestoReview] = useState([]);
+  const [specials, SetSpecial] = useState([]);
+  const [specialReview, setSpecialReview] = useState([]);
+
+
+  useEffect(() => {
+    // const getRestaurants = () => {
+      Restaurant.getRestaurant((restaurant, review) => {
+      setRestaurants(restaurant);
+      setRestoReview(review);
+    
+    })
+  // }
+    
+    // const getSpecials = () => {
+      Restaurant.getSpecials((details, reviews) => {
+      SetSpecial(details);
+      setSpecialReview(reviews);
+    })
+  // }
+
+
+  // return () => {
+  //   getRestaurants() 
+  //   getSpecials() 
+  // }
+  }, []);
 
   
-
   return (
     <>
        <KeyboardAvoidingView
@@ -43,13 +74,15 @@ export default function Restaurants({navigation}) {
       style={{flex:1, height:"100%"}}
       >
     <SafeAreaView  style={{ backgroundColor:"#F4FAFF", width:"100%", height:"100%" }}>
- <Box style={{height:170, backgroundColor:"#2B2B2B", borderBottomLeftRadius:30, borderBottomRightRadius:30}}>
-   <Box style={{width:"95%", backgroundColor:'rgba(239, 172, 50, 0.05)', borderRadius:30, flexDirection:"row", marginVertical:"3%", height:50,marginHorizontal:"2%", justifyContent:"space-between", alignContent:"center", alignItems:"center"}}>
+ <Box height={170} backgroundColor="#2B2B2B" borderBottomLeftRadius={30} borderBottomRightRadius={30}>
+   <Box width="95%" backgroundColor='rgba(239, 172, 50, 0.05)' borderRadius={30} flexDirection="row" height={50} 
+        justifyContent="space-between" alignContent="center" alignItems="center"
+        style={{marginVertical:"3%",marginHorizontal:"2%"}}>
        <TouchableOpacity activeOpacity={2} onPress={() => navigation.openDrawer('')}>
        <Feather name='menu' size={32} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)", marginHorizontal:"10%"}} />
        </TouchableOpacity>
        <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-       <Image alt='profile' source={require('../../assets/images/John-Doe.jpg')} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
+       <Image alt='profile' source={{uri: user?.imageUrl}} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
        </TouchableOpacity>        
    </Box>
 
@@ -75,65 +108,97 @@ export default function Restaurants({navigation}) {
                 </Box>
    </Box>
 <ScrollView showsVerticalScrollIndicator={false}>
-                <MasonryList
-                        style={{ width:"100%", height:"100%", alignSelf:"center"}}
-                        scrollEnabled={true}
-                        showsHorizontalScrollIndicator={false}
-                          data={data}
-                          keyExtractor={(item) => item.id}
-                          numColumns={1}
-                          showsVerticalScrollIndicator={false}
-                          renderItem={({item}) => {
-                            return(
-                              <>
-                              <TouchableOpacity activeOpacity={1}
-                              onPress={() => {navigation.navigate('RestaurantDetails', {item: item})}}
-                            style={{marginVertical:"2%"}}>
-                                      <RestaurantsComponent navigation={navigation} route={route}/>
-                            </TouchableOpacity>
-                            </>
-                        )
-                      }}
-                />
+{restaurants?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={150} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
+          <Text>
+            No available restaurant
+          </Text>
+    </Box> :
+    <Box width={'100%'}>
+      <MasonryList
+      horizontal={false}
+          style={{ width:"100%", height:"100%"}}  
+            data={restaurants}
+            numColumns={1}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => {
+              return(
+          <>
+          {/* <Text>tt</Text> */}
+          <TouchableOpacity activeOpacity={1}
+            key={item.magazineId}
+          onPress={() => {navigation.navigate('RestaurantDetails', {item: item})}}
+        style={{marginVertical:"2%", width:"100%"}}>
+          <RestaurantsComponent
+          name={item.name}
+          review={item.reviews}
+          location={item.location}
+          loggoImage={item.loggoImage}
+          availabilityOptions={item.availabilityOptions}
+          />
+        </TouchableOpacity>
+          </>
+        )
+      }}
+      keyExtractor={(item) => item.eventId}
+    />
+    </Box>
+}
                 
       <Box style={{marginVertical:"2%"}}>
             <ImageBackground style={{width:"100%", height:125}} source={require("../../assets/images/advert.jpg")}>
-              <Box style={{marginVertical:"2%", flexDirection:"column", marginHorizontal:"3%", height:"90%"}}>
+              <Box flexDirection="column" height="90%" style={{marginVertical:"2%", marginHorizontal:"3%", }}>
                       <Box style={{ borderWidth:1, borderColor:"rgb(239, 172, 50)", borderRadius:30, width:110, height:30 ,justifyContent:"center"}}>
-                          <Text style={{fontFamily:"Plus Jakarta Sans", color:"#FFFFFF", alignSelf:"center", }}>advertisement</Text>
+                          <Text fontFamily="Plus Jakarta Sans" color="#FFFFFF" alignSelf="center">advertisement</Text>
                       </Box>
                       <Box style={{width: "100%", flexDirection:"row", justifyContent:"center", height:"55%" }}>
-                          <Text style={{fontFamily:"Plus Jakarta Sans", width:"80%", fontSize:24, fontWeight:"bold", color:"#FFFFFF"}}>Buy 1 get 1 free special deals</Text>
-                          <Text style={{fontFamily:"Plus Jakarta Sans", color:"rgb(239, 172, 50)", width:"20%", alignSelf:"center", fontWeight:"bold"}}>VIEW</Text>
+                          <Text fontFamily="Plus Jakarta Sans" width="80%" height={40} fontSize={24} fontWeight="bold" color="#FFFFFF">Buy 1 get 1 free special deals</Text>
+                          <Text fontFamily="Plus Jakarta Sans" color="rgb(239, 172, 50)" width="20%" alignSelf="center" fontWeight="bold">VIEW</Text>
                       </Box>
-                      <Text  style={{fontFamily:"Plus Jakarta Sans", color:"#FFFFFF"}}>DISCOVER LIMPOPO</Text>
+                      <Text fontFamily="Plus Jakarta Sans" color="#FFFFFF" marginTop={1}>DISCOVER LIMPOPO</Text>
               </Box>
             </ImageBackground>
       </Box>
 
+{specials?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={150} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
+          <Text>
+            No available restaurant
+          </Text>
+    </Box> :
+    <Box width={'100%'}>
       <MasonryList
-                        style={{ width:"100%", height:"100%", alignSelf:"center"}}
-                        scrollEnabled={true}
-                        showsHorizontalScrollIndicator={false}
-                          data={data}
-                          keyExtractor={(item) => item.id}
-                          numColumns={1}
-                          showsVerticalScrollIndicator={false}
-                          renderItem={({item}) => {
-                            return(
-                              <>
-                              <TouchableOpacity activeOpacity={1}
-                              onPress={() => {navigation.navigate('RestaurantDetails', {item: item})}}
-                            style={{marginVertical:"2%"}}>
-                                      <RestaurantsComponent/>
-                            </TouchableOpacity>
-                            </>
-                        )
-                      }}
-                />
+      horizontal={false}
+          style={{ width:"100%", height:"100%"}}  
+            data={specials}
+            numColumns={1}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => {
+              return(
+          <>
+          {/* <Text>tt</Text> */}
+          <TouchableOpacity activeOpacity={1}
+            key={item.magazineId}
+          onPress={() => {navigation.navigate('RestaurantDetails', {item: item})}}
+        style={{marginVertical:"2%", width:"100%"}}>
+          <RestaurantsComponent
+          name={item.name}
+          review={item.reviews}
+          location={item.location}
+          loggoImage={item.loggoImage}
+          availabilityOptions={item.availabilityOptions}
+          />
+        </TouchableOpacity>
+          </>
+        )
+      }}
+      keyExtractor={(item) => item.eventId}
+    />
+    </Box>
+}
 </ScrollView>
     </SafeAreaView>
     </KeyboardAvoidingView>
     </>
   )
 }
+
+export default Restaurants;

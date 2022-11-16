@@ -12,6 +12,7 @@ import auth from '@react-native-firebase/auth';
 
 const EditProfileDetails = ({navigation, route}) => {
 
+    const {user} = route.params;
     const [displayName, setDisplayName] = useState(`${route.params.user.userName}`);
     const [name, SetName] = useState(`${route.params.user.name}`);
     const [email, SetEmail] = useState(`${route.params.user.email}`);
@@ -46,27 +47,21 @@ const EditProfileDetails = ({navigation, route}) => {
     }
 
     const updateDetails = () => {
+        console.log(user, 'this is the user')
         const userInfor = {
             name: name,
             email: email,
-            uid: route.params.user.uid,
+            uid: user.uid,
             userName: displayName,
             nationality: nationality,
             phoneNumber:phoneNumber,
             dateOfBirth:dateOfBirth,
         }
-        if (userInfor) {
-            const usersCollection = firestore().collection('users');
-             usersCollection.doc(userInfor.uid).update(userInfor).then(() => {
-                Toast.show({ type: "success", text2: "Profile successfully updated" });
-             }).then(() => {navigation.navigate('Account')}).catch((error) => {
-                console.log(error);
-             })
-                
-        }
-
-        
-    }
+        ProfileUpdate.profileUpdate(userInfor, user.uid).then(() => {
+            navigation.navigate('Account');
+        })          
+     }
+    
 
   return (
     <>
@@ -151,6 +146,7 @@ const EditProfileDetails = ({navigation, route}) => {
                <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"600", color:'#000000', marginVertical:"2%", marginHorizontal:"9%"}}>Nationality</Text>  
                <Box style={{backgroundColor:"lightgrey", alignSelf:"center", width:"90%", borderRadius: 30, height:50, justifyContent:"center"}}>
                <CountryPicker
+                         favoriteCountries={["ZA"]}
                textInputStyle={{backgroundColor:"transparent"}}
                textInputContainerStyle={{borderRadius:30,alignSelf:"center", width:"90%", height:50, backgroundColor:"transparent"}}
                     onSelect={(country) => {

@@ -4,7 +4,7 @@ import {View, Text, SafeAreaView, ImageBackground, Image, Button, TouchableOpaci
 export default function Onboarding2({navigation}) {
   return (
     <View style={{flex:6}}>
-       <ImageBackground source={require('../../assets/images/onboarding.jpg')} style={{width:"100%", height:"100%"}}>
+       <ImageBackground source={require('../../assets/images/Breakpoint-2.png')} style={{width:"100%", height:"100%"}}>
        <View style={{flex:4}}></View>
         <View style={{ flex:2, backgroundColor: "#FFFFFF", borderTopLeftRadius: 30, borderTopRightRadius: 30, height:"100%"}}>
         <View style={{display: "flex", flexDirection:"column", height:"100%", width:"100%"}}>

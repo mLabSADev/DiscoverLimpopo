@@ -5,9 +5,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../../context/auth.context';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import storage from '@react-native-firebase/storage';
-import firestore from '@react-native-firebase/firestore';
 import Toast  from 'react-native-toast-message';
+import ProfileUpdate from '../../services/profileUpdate';
 
 
 const Profile = ({navigation, route}) =>  {
@@ -27,7 +26,6 @@ const Profile = ({navigation, route}) =>  {
     };
   
     const gallery = launchImageLibrary(options, (response) => {
-  
          if (response.didCancel) {
           console.log(response.errorMessage);
           console.log('User cancelled image picker');
@@ -48,34 +46,9 @@ const Profile = ({navigation, route}) =>  {
 const uploadImageToStorage = () => {
          const imageName = image.substring(image.lastIndexOf('/'));
          const uploadUri = Platform.OS === 'ios' ? image.replace('file://', '') : image;
-
-      try {
-        setLoader(true);
-        storage().ref(imageName).putFile(uploadUri)
-        .then((snapshot) => {
-          //You can check the image is now uploaded in the storage bucket
-          // console.log(`${imageName} has been successfully uploaded.`);
-          storage().ref('/' + imageName).getDownloadURL().then((imageURL) => {
-            // console.log(`${imageURL} has been retrieved.`);
-          firestore().collection('users').doc(user.uid).update({
-            imageUrl: imageURL
-          }). then(() => {
-            setLoader(false);
-          }).catch((error) => {
-            console.log(error, 'Could not upload the image, check what happened');
-          })
-            // setImage(imageURL);
-          }).catch((e) => console.log('retrieving image error => ', e));
-           
-        })
-        .catch((e) => console.log('uploading image error => ', e));
-      setLoader(false);
-      
-      }
-      catch(e) {
-        console.error(e);
+         setLoader(true);
+        ProfileUpdate.updateImage(imageName, uploadUri);
         setLoader(false);
-      }
       setModalVisible(!modalVisible);
       Toast.show({type:"success", text2:"Image uploaded!"})
 }
@@ -105,12 +78,12 @@ const uploadImageToStorage = () => {
               activeOpacity={0.9} 
                   onPress={() => uploadImageToStorage()}
                   style={{alignSelf: "center",borderWidth:1, borderColor:"rgb(239, 172, 50)", width:"50%", height:50, opacity:3 ,justifyContent:"center", borderRadius:30, marginVertical:"5%"}}>
-                      <Text style={{alignSelf:"center", color:"rgb(239, 172, 50)", fontWeight:"bold", fontStyle:"inter", fontSize:14}}>UPDATE IMAGE</Text>
+                      <Text alignSelf="center" color="rgb(239, 172, 50)" fontWeight="bold" fontFamily="Plus Jakarta Sans" fontSize={14}>UPDATE IMAGE</Text>
               </TouchableOpacity>
               <TouchableOpacity
               activeOpacity={0.9} 
                   onPress={() => { setModalVisible(!modalVisible)}}>
-            <Text style={{alignSelf:"center", fontSize:14, fontFamily:"inter", fontWeight:"700", color:'rgb(239, 172, 50)', marginVertical:"2%"}}>CANCEL</Text>                
+            <Text alignSelf="center" fontSize={14} fontFamily="Plus Jakarta Sans" fontWeight="700" color='rgb(239, 172, 50)' style={{marginVertical:"2%"}}>CANCEL</Text>                
            </TouchableOpacity>
           </Box>
       </Modal>   
@@ -122,7 +95,7 @@ const uploadImageToStorage = () => {
             <Feather name='menu' size={32} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)", marginHorizontal:"10%"}} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-            <Image alt='profile1' source={{uri: user.imageUrl}} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
+            <Image alt='profile1' source={{uri: user.imageUrl}} width={38} height={38} alignSelf="flex-end" borderRadius={38} style={{ marginHorizontal:"10%"}}/>
             </TouchableOpacity>        
         </Box>
          <Text fontSize={34} color="#FFFFFF" fontWeight="bold" fontFamily="Plus Jakarta Sans" style={{marginHorizontal:"5%", marginVertical:"-1%", width:"80%"}}>Profile Details</Text>
@@ -135,29 +108,29 @@ const uploadImageToStorage = () => {
               style={{borderRadius:90, height:90, width:90}}/>
               </TouchableOpacity>
               <Box style={{marginHorizontal:"3%", marginVertical:"7%"}}>
-                <Text style={{fontSize:14, color:"grey", fontWeight:"bold",}}>Display Name</Text>
-                <Text style={{fontSize:18, color:"rgb(0,0,0)", fontWeight:"500", marginVertical:"1%"}}>{user.userName}</Text>
+                <Text fontSize={14} color="grey" fontWeight="bold">Display Name</Text>
+                <Text fontSize={16} color="rgb(0,0,0)" fontWeight="500" style={{ marginVertical:"1%"}}>{user.userName}</Text>
               </Box>
             </Box>
             <Box style={{marginHorizontal:"4%", marginVertical:"-3%"}}>
-                <Text style={{fontSize:14, color:"grey", fontWeight:"bold",}}>Name</Text>
-                <Text style={{fontSize:18, color:"rgb(0,0,0)", fontWeight:"500", marginVertical:"1%"}}>{user.name}</Text>
+                <Text fontSize={14} color="grey" fontWeight="bold">Name</Text>
+                <Text fontSize={16} color="rgb(0,0,0)" fontWeight="500" style={{ marginVertical:"1%"}}>{user.name}</Text>
               </Box>
               <Box style={{marginHorizontal:"4%", marginVertical:"3%"}}>
-                <Text style={{fontSize:14, color:"grey", fontWeight:"bold",}}>Email Address</Text>
-                <Text style={{fontSize:18, color:"rgb(0,0,0)", fontWeight:"500", marginVertical:"1%"}}>{user.email}</Text>
+                <Text fontSize={14} color="grey" fontWeight="bold">Email Address</Text>
+                <Text fontSize={16} color="rgb(0,0,0)" fontWeight="500" style={{ marginVertical:"1%"}}>{user.email}</Text>
               </Box>
-              <Box style={{marginHorizontal:"4%", marginVertical:"2%"}}>
-                <Text style={{fontSize:14, color:"grey", fontWeight:"bold",}}>Phone Number</Text>
-                <Text style={{fontSize:18, color:"rgb(0,0,0)", fontWeight:"500", marginVertical:"1%"}}>{user.phoneNumber}</Text>
+              <Box style={{marginHorizontal:"4%", marginVertical:"1%"}}>
+                <Text fontSize={14} color="grey" fontWeight="bold">Phone Number</Text>
+                <Text fontSize={16} color="rgb(0,0,0)" fontWeight="500" style={{ marginVertical:"1%"}}>{user.phoneNumber}</Text>
               </Box>
-              <Box style={{marginHorizontal:"4%", marginVertical:"0%"}}>
-                <Text style={{fontSize:14, color:"grey", fontWeight:"bold",}}>Date of Birth</Text>
-                <Text style={{fontSize:18, color:"rgb(0,0,0)", fontWeight:"500", marginVertical:"1%"}}>{user.dateOfBirth}</Text>
+              <Box style={{marginHorizontal:"4%", marginVertical:"1%"}}>
+                <Text fontSize={14} color="grey" fontWeight="bold">Date of Birth</Text>
+                <Text fontSize={16} color="rgb(0,0,0)" fontWeight="500" style={{ marginVertical:"1%"}}>{user.dateOfBirth}</Text>
               </Box>
-              <Box style={{marginHorizontal:"4%", marginVertical:"0%"}}>
-                <Text style={{fontSize:14, color:"grey", fontWeight:"bold",}}>Nationality</Text>
-                <Text style={{fontSize:18, color:"rgb(0,0,0)", fontWeight:"500", marginVertical:"1%"}}>{user.nationality}</Text>
+              <Box style={{marginHorizontal:"4%", marginVertical:"1%"}}>
+                <Text fontSize={14} color="grey" fontWeight="bold">Nationality</Text>
+                <Text fontSize={16} color="rgb(0,0,0)" fontWeight="500" style={{ marginVertical:"1%"}}>{user.nationality}</Text>
               </Box>
         </Box>
         <Box style={{flex:1}}></Box>
@@ -166,7 +139,7 @@ const uploadImageToStorage = () => {
           onPress={() => navigation.navigate('Profile Details', {user: user})}
           activeOpacity={1}
            style={{borderColor:"rgb(239, 172, 50)", borderWidth:1, width:"90%", height:40, alignSelf:"center", marginVertical:"5%", borderRadius:30, alignItems:"center", justifyContent:"center"}}>
-            <Text style={{fontSize:14, color:"rgb(239, 172, 50)", fontWeight:"500"}}>
+            <Text fontSize={14} color="rgb(239, 172, 50)" fontWeight="500">
               EDIT PROFILE
             </Text>
           </TouchableOpacity>

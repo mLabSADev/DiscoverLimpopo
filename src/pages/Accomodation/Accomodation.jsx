@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity, SafeAreaView, Image, TextInput, ScrollView } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MasonryList from '@react-native-seoul/masonry-list';
 import AccomodationComponent from '../../Components/restaurants/AccomodationComponent';
 import { Box, Center } from 'native-base';
+import Accomodations from '../../services/accomodation';
 
 const data = [{
     id: 1,
@@ -21,9 +22,20 @@ const data = [{
   }];
 
   
-export default function Accomodation({navigation, route}) {
-    const [search, setSearch] = useState('');
+const Accomodation = ({navigation, route}) => {
 
+    const [search, setSearch] = useState('');
+    const [accomodation, setAccomodation] = useState([]);
+
+    useEffect(() => {
+    
+      Accomodations.getAccomodation((accomodation, reviews) => {
+        setAccomodation(accomodation);
+  
+      })
+    
+    }, []);
+    
     return(
         <>
      <SafeAreaView  style={{ backgroundColor:"#F4FAFF", width:"100%", height:"100%" }}>
@@ -59,28 +71,44 @@ export default function Accomodation({navigation, route}) {
                  </View>
     </View>
  <ScrollView showsVerticalScrollIndicator={false}>
-       <MasonryList
-                         style={{ width:"100%", height:"100%", alignSelf:"center"}}
-                         scrollEnabled={true}
-                         showsHorizontalScrollIndicator={false}
-                           data={data}
-                           keyExtractor={(item) => item.id}
-                           numColumns={1}
-                           showsVerticalScrollIndicator={false}
-                           renderItem={({item}) => {
-                             return(
-                               <>
-                               <TouchableOpacity activeOpacity={1}
-                               onPress={() => {navigation.navigate('AccomodationDetails', {item: item})}}
-                             style={{marginVertical:"2%"}}>
-                                       <AccomodationComponent/>
-                             </TouchableOpacity>
-                             </>
-                         )
-                       }}
-                 />
+ {accomodation?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
+          <Text>
+            No available Accomodation
+          </Text>
+    </Box> :
+        <Box width='100%' height={300}>
+        <MasonryList
+            horizontal
+            data={accomodation}
+            style={{ width:"100%", height:"100%", alignSelf:"center"}}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            legacyImplementation={false}
+            // keyExtractor={(item) => item.id}
+            renderItem={({item}) =>(
+              <TouchableOpacity
+              activeOpacity={0.9} 
+              onPress={() => {navigation.navigate('AccomodationDetails', {item: item})}}
+              style={{width:310, height:300}}
+              key={item.accomodationId}>  
+              <AccomodationComponent
+              name={item.name}
+              amenities={item.amenities}
+              description={item.description}
+              image={item.accomodationImage}
+              loggoImage={item.accomodationLoggo}
+              />
+            </TouchableOpacity>
+            )
+          }
+          />
+           
+            </Box>
+}
  </ScrollView>
      </SafeAreaView>
      </>
     )
 }
+
+export default  Accomodation;

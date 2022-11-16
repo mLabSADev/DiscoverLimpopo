@@ -99,8 +99,8 @@ const navigation = () => {
        <Stack.Screen name='RestaurantDetails' component={RESTAURANTDETAILS}/>
        <Stack.Screen name='Magazine' component={MAGAZINES}/>
        <Stack.Screen name='MagazineDetails' component={MAGAZINESDETAILS}/>
-       {/* <Stack.Screen name='SpecialPackages' component={SPECIALPACKAGE}/>
-       <Stack.Screen name='SpecialPackagesDetails' component={SPECIALPACKAGEDETAILS}/> */}
+       <Stack.Screen name='Account' component={Profile} />
+       <Stack.Screen name='Profile Details' component={ProfileDetails}/>
      </Stack.Navigator>
        )
    }
@@ -112,6 +112,8 @@ const navigation = () => {
      })}>
        <Stack.Screen name='Booking' component={BOOKING}/>
        <Stack.Screen name='BookingDetails' component={BOOKINGDETAILS}/>
+       <Stack.Screen name='Account' component={Profile} />
+       <Stack.Screen name='Profile Details' component={ProfileDetails}/>
      </Stack.Navigator>
      )
    }
@@ -123,6 +125,8 @@ const navigation = () => {
      })}>
        <Stack.Screen name='Accomodation' component={ACCOMODATION} />
        <Stack.Screen name='AccomodationDetails' component={ACCOMODATIONDETAILS} />
+       <Stack.Screen name='Account' component={Profile} />
+       <Stack.Screen name='Profile Details' component={ProfileDetails}/>
      </Stack.Navigator>
      )
    }
@@ -152,7 +156,6 @@ const navigation = () => {
        }
        
         }}
-        
         drawerContent={(props) => <CustomSidebarMenu {...props}/>}
        >
 <Drawer.Screen name='HOME' component={Home} options={({navigation, route}) => ({
@@ -257,6 +260,8 @@ const navigation = () => {
      })} >
        <Stack.Screen name='SpecialPackages' component={SPECIALPACKAGE} user={user}/>
        <Stack.Screen name='SpecialPackagesDetails' component={SPECIALPACKAGEDETAILS} user={user}/>
+       <Stack.Screen name='Account' component={Profile} />
+       <Stack.Screen name='Profile Details' component={ProfileDetails}/>
      </Stack.Navigator>
      )
    }

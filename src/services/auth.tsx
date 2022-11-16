@@ -45,7 +45,7 @@ signup: async (name: string, email: string, password: string) => {
       userName: "",
       imageUrl: "",
       nationality:"",
-      phoneNumber:0,
+      phoneNumber:"",
       dateOfBirth:"",
     }
 
@@ -71,7 +71,7 @@ authState: (onStateChanged: (user: User | null) => void) => {
       if (user) {
         const usersCollection = firestore().collection('users')
 
-        usersCollection.doc(user.uid).get().then(result => {
+     return   usersCollection.doc(user.uid).get().then(result => {
             const data = result.data() as User;
             // console.log(data)
             onStateChanged(data)

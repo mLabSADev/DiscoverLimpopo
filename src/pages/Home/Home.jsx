@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Text, ScrollView, Image, FlatList} from 'native-base';
-import {SafeAreaView, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
+import {SafeAreaView, TouchableOpacity, ImageBackground, Dimensions, View } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import RestaurantsComponent from '../../Components/restaurants/RestaurantsComponent';
 import MasonryList from '@react-native-seoul/masonry-list';
-import Carousel from 'react-native-snap-carousel';
+// import Carousel from 'react-native-snap-carousel';
 import AccomodationComponent from '../../Components/restaurants/AccomodationComponent';
+import { useAuth } from '../../context/auth.context';
+import Homes from '../../services/home';
 
 
 const data = [{
@@ -35,8 +37,28 @@ const data = [{
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.8);
 
-const Home = ({navigation, route}: any) => {
+const Home = ({navigation, route}) => {
+
+  const {user} = useAuth();
+  const [restaurants, setRestaurants] = useState([]);
+  const [review, setReview] = useState([]);
+  const [accomodation, setAccomodation] = useState([]);
+
+  useEffect(() => {
+    Homes.getRestaurant((restaurant, review) => {
+      setRestaurants(restaurant);
+      setReview(review);
+      // console.log(restaurant)
+    })
+
+    Homes.getAccomodation((accomodation, reviews) => {
+      setAccomodation(accomodation);
+
+    })
   
+  }, []);
+  
+
   return (
     <SafeAreaView style={{ backgroundColor:"#F4FAFF", width:"100%", height:"100%" }}>
     <ScrollView width={'100%'} height={"100%"} scrollEnabled={true} showsVerticalScrollIndicator={false}>
@@ -47,10 +69,10 @@ const Home = ({navigation, route}: any) => {
                     <Text style={{fontFamily:"Plus Jakarta Sans", color:"#FFFFFF", alignSelf:"center", }}>advertisement</Text>
                 </Box>
                 <Box style={{width: "100%", flexDirection:"row", justifyContent:"center", height:"55%" }}>
-                    <Text style={{fontFamily:"Plus Jakarta Sans", width:"80%", fontSize:24, fontWeight:"bold", color:"#FFFFFF"}}>PEERMONT GIN & NOMALI GIN LAUNCH</Text>
+                    <Text fontFamily="Plus Jakarta Sans" width="80%" fontSize={24} fontWeight="bold" color="#FFFFFF" style={{ marginVertical:"-1%"}}>PEERMONT GIN & NOMALI GIN LAUNCH</Text>
                     <Text style={{fontFamily:"Plus Jakarta Sans", color:"rgb(239, 172, 50)", width:"20%", alignSelf:"center", fontWeight:"bold"}}>VIEW</Text>
                 </Box>
-                <Text  style={{fontFamily:"Plus Jakarta Sans", color:"#FFFFFF"}}>DISCOVER LIMPOPO</Text>
+                <Text  style={{fontFamily:"Plus Jakarta Sans", color:"#FFFFFF", marginVertical:".5%"}}>DISCOVER LIMPOPO</Text>
         </Box>
        </ImageBackground>
        </Box>
@@ -59,85 +81,104 @@ const Home = ({navigation, route}: any) => {
             <Feather name='menu' size={32} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)", marginHorizontal:"10%"}} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('SpecialPackages')}>
-            <Image source={require('../../assets/images/John-Doe.jpg')} alt={'profile'} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
+            <Image source={{uri : user?.imageUrl}} alt={'profile'} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
             </TouchableOpacity>        
         </Box>
         {/* Accomodation */}
-        <Box style={{width:"100%", flex:1}}>
+        <Box style={{width:"100%"}}>
         <Text style={{fontFamily:"Plus Jakarta Sans", fontWeight:"bold", fontSize:20, color:"rgb(0,0,0)", marginHorizontal:"3%"}}>Accomodation</Text>
-  
-        <Box style={{flexDirection:"row"}} width='100%' height={230}>
-          {/* <FlatList
-       
-          horizontal
-          data={data}
-          renderItem={({item, index}) => {return(
-            <TouchableOpacity activeOpacity={1}
-            key={item.id}
-        onPress={() => {navigation.navigate('AccomodationDetails', {item: item})}}
-        style={{marginVertical:"2%", marginHorizontal:"1%"}}>
-        <AccomodationComponent navigation={navigation} route={route}/>
-        </TouchableOpacity>
-          )}}
-          /> */}
-          
-        {data.map((item, index) => {
-          return(
-            <TouchableOpacity activeOpacity={1}
-            key={item.id}
-        onPress={() => {navigation.navigate('AccomodationDetails', {item: item})}}
-        style={{marginVertical:"2%", marginHorizontal:"1%"}}>
-        <AccomodationComponent navigation={navigation} route={route}/>
-        </TouchableOpacity>
-              )
-            })
-            }
+        {accomodation?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
+          <Text>
+            No available Accomodation
+          </Text>
+    </Box> :
+        <Box width='100%' height={300}>
+        <FlatList
+            horizontal
+            data={accomodation}
+            style={{width:"100%", marginVertical:".5%",}}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            legacyImplementation={false}
+            // keyExtractor={(item) => item.id}
+            renderItem={({item}) =>(
+              <TouchableOpacity
+              activeOpacity={0.9} 
+              onPress={() => {navigation.navigate('AccomodationDetails', {item: item})}}
+              style={{width:310, height:300}}
+              key={item.accomodationId}>  
+              <AccomodationComponent
+              name={item.name}
+              amenities={item.amenities}
+              description={item.description}
+              image={item.accomodationImage}
+              loggoImage={item.accomodationLoggo}
+              />
+            </TouchableOpacity>
+            )
+          }
+          />
            
             </Box>
+}
           <TouchableOpacity  onPress={() => {navigation.navigate('Accomodation')}}>
-         <Text style={{fontFamily:"Plus Jakarta Sans", alignSelf:"center", color:"rgb(239, 172, 50)", fontWeight:"bold"}}> VIEW MORE</Text>
+         <Text style={{fontFamily:"Plus Jakarta Sans", alignSelf:"center", color:"rgb(239, 172, 50)", fontWeight:"bold",}}> VIEW MORE</Text>
          </TouchableOpacity>
         </Box>
         {/* Restaurants */}
         <Box style={{width:"100%"}}>
         <Text style={{fontFamily:"Plus Jakarta Sans", fontWeight:"bold", fontSize:20, color:"rgb(0,0,0)", marginHorizontal:"3%"}}>Restaurant</Text>
-        <Box style={{marginVertical:"2%"}}>
-        <MasonryList
-          style={{ width:"100%", height:"100%"}}
-          scrollEnabled={true}
-          showsHorizontalScrollIndicator={false}
-            data={data}
-            keyExtractor={(item: { id: any; }) => item.id}
+        {restaurants?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={150} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
+          <Text>
+            No available restaurant
+          </Text>
+    </Box> :
+   (
+    <>
+    <Box width={'100%'}>
+      <MasonryList
+      horizontal={false}
+          style={{ width:"100%", height:"100%"}}  
+            data={restaurants}
             numColumns={1}
             showsVerticalScrollIndicator={false}
-            renderItem={(item: {item: any}) => {
+            renderItem={({item}) => {
               return(
           <>
+          {/* <Text>tt</Text> */}
           <TouchableOpacity activeOpacity={1}
-          onPress={() => {navigation.navigate('RestaurantDetails', {item: item})}}
-        style={{marginVertical:"2%",}}>
-                  <RestaurantsComponent navigation={navigation} route={route}/>
+            key={item.restuarantId}
+          onPress={() => {navigation.navigate('RestaurantDetails', {item: item, restuarantId: item.restuarantId})}}
+        style={{marginVertical:"2%", width:"100%"}}>
+          <RestaurantsComponent
+          name={item.name}
+          review={item.reviews}
+          location={item.location}
+          loggoImage={item.loggoImage}
+          availabilityOptions={item.availabilityOptions}
+          />
         </TouchableOpacity>
           </>
         )
       }}
-      // refreshing={isLoadingNext}
-      // onRefresh={() => refetch({first: ITEM_CNT})}
-      // onEndReachedThreshold={0.1}
-      // onEndReached={() => loadNext(ITEM_CNT)}
-      
+      keyExtractor={(item) => item.eventId}
     />
-    <TouchableOpacity onPress={() => {navigation.navigate('Restaurants')}}>
-    <Text style={{alignSelf:"center", color:"rgb(239, 172, 50)", fontWeight:"bold", marginVertical:"2%"}}>VIEW MORE</Text>
-    </TouchableOpacity>
-        </Box>
+    </Box>
+    <Box height={12}>
+    <TouchableOpacity  onPress={() => {navigation.navigate('Restaurants')}}>
+         <Text style={{fontFamily:"Plus Jakarta Sans", alignSelf:"center", color:"rgb(239, 172, 50)", fontWeight:"bold"}}> VIEW MORE</Text>
+         </TouchableOpacity>
+    </Box>
+    </> 
+    )
+}
         </Box>
 
         {/* Magazines */}
         <Box style={{marginVertical:"4%"}}>
         
           <Box
-          style={{ width:"95%", height: 290, backgroundColor:"rgba(42, 42, 42, 0.95)", alignSelf:"center", borderRadius:30}}>
+          style={{ width:"95%", height: 290, backgroundColor:"rgba(42, 42, 42, 0.95)", alignSelf:"center", borderRadius:30,}}>
          {/* <Carousel
          loop={false}
          style={{flex:0.9, marginVertical:"-5%",}}
