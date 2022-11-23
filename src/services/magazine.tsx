@@ -16,10 +16,10 @@ getMagazine: async (setMagazine: (magazines: Array<array> | null, size: number, 
                 const data = [documents.data()] as Array<array>;
                 const exist = documents.exists;
 
-                documents.ref.collection('likes').onSnapshot((snapS)  => {
+                documents.ref.collection('likes').where('magazineId', '==', documents.id).onSnapshot((snapS)  => {
                     const size = snapS.size;
                     snapS.docs.map((docs) => {
-                        if (docs.data().uid === user?.uid) {
+                        if (docs.exists) {
                             setMagazine(data, size, docs.id)
                         } else {
                             setMagazine(data, size, '')
@@ -33,32 +33,58 @@ getMagazine: async (setMagazine: (magazines: Array<array> | null, size: number, 
 
 onLikePress: async (magazineId: string, name: string, uid: string) => {
     try {
-        console.log(uid, 'the uid when like', magazineId)
-
-        return await firestore()
+       
+      return firestore()
             .collection("magazines")
             .doc(magazineId)
-            .collection("likes")
-            .doc(uid)
-            .set({
-                uid: uid,
-                name: name,
-                magazineId: magazineId
+            .collection("likes").where('uid', "==", uid).onSnapshot((snap) => {
+                snap.docs.map((doc) => {
+                    if(doc.exists === true || doc.data().magazineId === magazineId) {
+                        doc.ref.update({
+                            uid: uid,
+                            name: name,
+                            magazineId: ''
+                        })
+                    } else {
+                        doc.ref.update({
+                            uid: uid,
+                            name: name,
+                            magazineId: magazineId
+                        })
+                    }
+                })
             })
+           
+
+
+        // return await firestore()
+        //     .collection("magazines")
+        //     .doc(magazineId)
+        //     .collection("likes")
+        //     .doc(uid)
+        //     .set({
+        //         uid: uid,
+        //         name: name,
+        //         magazineId: magazineId
+        //     }).then(() => {
+        //         console.log(uid, 'went to backend', magazineId)
+        //     })
     } catch (error) { }
 },
 
- onDislikePress: async (magazineId: string, uid: string) => {
-    try {
-        console.log(uid, 'the uid', magazineId)
-        return await firestore()
-             .collection("magazines")
-             .doc(magazineId)
-             .collection("likes")
-             .doc(uid)
-             .delete()
-     } catch (error) { }
-},
+//  onDislikePress: async (magazineId: string, uid: string) => {
+//     try {
+//         return await firestore()
+//              .collection("magazines")
+//              .doc(magazineId)
+//              .collection("likes")
+//              .doc(uid)
+//              .delete().then(() => {
+//                 console.log(uid, 'now the button is dislike', magazineId)
+
+//              })
+//      } catch (error) { }
+// },
 
 onChangeLike: () => {
     const {user} = useAuth();

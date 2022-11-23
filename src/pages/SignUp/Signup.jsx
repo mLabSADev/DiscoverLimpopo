@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { View, TouchableOpacity, Text, KeyboardAvoidingView, TouchableWithoutFeedback, ImageBackground, ScrollView, TextInput, Keyboard, Image } from 'react-native';
+import {Image} from 'native-base';
+import { View, TouchableOpacity, Text, KeyboardAvoidingView, TouchableWithoutFeedback, ImageBackground, ScrollView, TextInput, Keyboard } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import Toast from 'react-native-toast-message';
 import AuthService from '../../services/auth';
@@ -21,20 +22,20 @@ export default function Signup ({navigation}) {
     const lenReg = new RegExp("^(?=.{8,})");
     const numReg = new RegExp("^(?=.*[0-9])");
 
-    if (email == "" && password == "") {
+    if (email.trim() == "" && password.trim() == "") {
     Toast.show({type: 'error', text2: 'Both fields are empty'})
       // alert("Both fields are empty");
-    } else if (reg.test(email) === false) { 
+    } else if (reg.test(email.trim()) === false) { 
         Toast.show({type: 'error', text2: 'Email is not valid'})
-    } else if(lenReg.test(password) === false) {
+    } else if(lenReg.test(password.trim()) === false) {
       Toast.show({type: 'error', text2: 'Password must contain min of 8 letters'})
-    }else if(lowReg.test(password) === false) {
+    }else if(lowReg.test(password.trim()) === false) {
       Toast.show({type: 'error', text2: 'Password must contain lowercase letter'})
-    }else if(uppReg.test(password) === false) {
+    }else if(uppReg.test(password.trim()) === false) {
       Toast.show({type: 'error', text2: 'Password must contain uppercase letter'})
-    }else if(numReg.test(password) === false) {
+    }else if(numReg.test(password.trim()) === false) {
       Toast.show({type: 'error', text2: 'Password must contain 1 numeric value'})
-    } else if(charReg.test(password) === false) {
+    } else if(charReg.test(password.trim()) === false) {
       Toast.show({type: 'error', text2: 'Password must contain 1 Character'})
     } else {
      singUp();
@@ -42,26 +43,31 @@ export default function Signup ({navigation}) {
 }
 
    const singUp = () => {
-      if (email !== "" && password !== "") {
-         auth()
-         .createUserWithEmailAndPassword(email, password).then((userCredetial) => {
-            Toast.show({type:"success", text2:"Email is successfully registered!"})
-           const user = userCredetial.user.email;
-             navigation.navigate("Signin", {user: user})
-         }).catch((error) => {
-           if(error.code === "auth/email-already-in-use"){
-             Toast.show({type:'error', text2:"email address is already in use!"});
-           } 
-           if (error.code === 'auth/invalid-email') {
-             console.log('That email address is invalid!');
-           }else {
-             console.log(error)
-           }
-         });  
+      if (email.trim() !== "" && password.trim() !== "") {
+        AuthService.signup('', email.trim(), password.trim()).then(() => {
+          navigation.navigate("Signin");
+        }).catch((error) => {
+          console.log(error);
+        })
+        //  auth()
+        //  .createUserWithEmailAndPassword(email.trim(), password.trim()).then((userCredetial) => {
+        //     Toast.show({type:"success", text2:"Email is successfully registered!"})
+        //    const user = userCredetial.user.email;
+        //      navigation.navigate("Signin", {user: user})
+        //  }).catch((error) => {
+        //    if(error.code === "auth/email-already-in-use"){
+        //      Toast.show({type:'error', text2:"email address is already in use!"});
+        //    } 
+        //    if (error.code === 'auth/invalid-email') {
+        //      console.log('That email address is invalid!');
+        //    }else {
+        //      console.log(error)
+        //    }
+        //  });  
      }
  
-   
 }
+
 
   return (
 
@@ -71,9 +77,10 @@ export default function Signup ({navigation}) {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ImageBackground source={require('../../assets/images/onboarding.jpg')} style={{width:"100%", height:"100%"}}>
-      <View style={{justifyContent: "center"}}>
-          <Image source={require("../../assets/images/discover-logo.png")} style={{width:"30%", height:"30%", alignSelf:"center"}}/>
-      </View>
+      <View style={{width:"100%", height:"40%", justifyContent:"center"}}>
+          <Image alt='loggo' source={require("../../assets/images/discover-logo.png")} style={{width:120, height:40, alignSelf:"center"}}/>            
+       </View>
+
       <ScrollView scrollEnabled={false} 
        style={{ backgroundColor: "#FFFFFF", borderTopLeftRadius: 30, borderTopRightRadius: 30, height:"100%", flexDirection:"column",flexDirection:"column", marginTop:40}}
       >
@@ -83,7 +90,7 @@ export default function Signup ({navigation}) {
       </View>
       <View style={{alignSelf:"center",width:"100%", backgroundColor:"#FFFFFF", flexDirection:"column"}}>
       <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"600", color:'#000000', marginVertical:"3%", marginHorizontal:"9%"}}>Email</Text>  
-     <View style={{display:"flex", backgroundColor:"lightgrey", alignSelf:"center", width:"90%", borderRadius: 30, height:50}}>
+     <View style={{display:"flex", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:50}}>
      <TextInput placeholder='Email' style={{alignSelf:"flex-start", width:"80%", marginHorizontal:"5%"}} 
        onChangeText={(email) => setEmail(email)}
        textContentType='emailAddress'
@@ -91,7 +98,7 @@ export default function Signup ({navigation}) {
      />              
      </View>
      <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"600", color:'#000000', marginVertical:"3%", marginHorizontal:"9%"}}>Password</Text>  
-             <View style={{backgroundColor:"lightgrey", alignSelf:"center", width:"90%", borderRadius: 30, height:50, flexDirection:"row"}}>
+             <View style={{backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:50, flexDirection:"row"}}>
              <TextInput placeholder='Password' style={{alignSelf:"flex-start", width:"80%", marginHorizontal:"5%",}} 
              onChangeText={(password) => setPassword(password)}
              textContentType="password"
@@ -102,13 +109,13 @@ export default function Signup ({navigation}) {
               <TouchableOpacity
               activeOpacity={0.9} 
                   onPress={() => validate()}
-                  style={{alignSelf: "center", backgroundColor:"rgb(239, 172, 50)", width:"90%", height:50, opacity:3 ,justifyContent:"center", marginVertical:"3%", borderRadius:30,}}>
+                  style={{alignSelf: "center", backgroundColor:"rgb(239, 172, 50)", width:"90%", height:50, opacity:3 ,justifyContent:"center", marginVertical:"4%", borderRadius:30,}}>
                       <Text style={{alignSelf:"center", color:"#FFFFFF", fontWeight:"bold", fontFamily:"Plus Jakarta Sans", fontSize:14}}>SIGN UP</Text>
               </TouchableOpacity>
           <TouchableOpacity
               activeOpacity={0.9} 
                   onPress={() => { return navigation.navigate('Signin')}}>
-          <Text style={{alignSelf:"center", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"700", color:'rgb(239, 172, 50)', marginVertical:"5%"}}>I ALREADY HAVE AN ACCOUNT</Text>                
+          <Text style={{alignSelf:"center", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"700", color:'rgb(239, 172, 50)', marginVertical:"-1%"}}>I ALREADY HAVE AN ACCOUNT</Text>                
          </TouchableOpacity>
           </View>
       </ScrollView>

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import {View, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, ImageBackground } from 'react-native';
-import { Box, Text, ScrollView, Image, TextField} from 'native-base';
+import {View, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, ImageBackground, Linking } from 'react-native';
+import { Box, Text, ScrollView, Image, TextField, FlatLis,} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MasonryList from '@react-native-seoul/masonry-list';
 import RestaurantsComponent from '../../Components/restaurants/RestaurantsComponent';
 import Restaurant from '../../services/restaurant';
 import { useAuth } from '../../context/auth.context';
+import Toast from 'react-native-toast-message';
+
 
 
 const data = [{
@@ -35,37 +37,61 @@ const data = [{
 const Restaurants = ({navigation, route}) => {
 
   const {user} = useAuth();
+  const [restaurant] = route.params.item;
 
   const [search, setSearch] = useState('');
-  const [restaurants, setRestaurants] = useState([]);
-  const [restoReview, setRestoReview] = useState([]);
-  const [specials, SetSpecial] = useState([]);
-  const [specialReview, setSpecialReview] = useState([]);
+  const [restaurants, setRestaurants] = useState([restaurant]);
+  const [restoReview, setRestoReview] = useState(0);
+  const [specials, SetSpecial] = useState([restaurant]);
+  const [specialReview, setSpecialReview] = useState(0);
 
+  // console.log(restaurant, 'resto ntwana yahm');
+
+  // const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [masterDataSource, setMasterDataSource] = useState([]);
+
+  const searchFilterFunction = (text) => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = masterDataSource.filter((item) => {
+          const itemData = item.name
+            ? item.name.toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+      });
+      setRestaurants(newData);
+      setSearch(text);
+      if(text === '') {
+        Toast.show({type:"warn", text2:"no results"})
+        // setRestaurants(masterDataSource);
+      }
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setRestaurants(masterDataSource);
+      setSearch(text);
+    }
+  };
 
   useEffect(() => {
-    // const getRestaurants = () => {
       Restaurant.getRestaurant((restaurant, review) => {
       setRestaurants(restaurant);
       setRestoReview(review);
-    
+      // setFilteredDataSource(restaurant);
+        setMasterDataSource(restaurant);
     })
-  // }
-    
-    // const getSpecials = () => {
+
       Restaurant.getSpecials((details, reviews) => {
       SetSpecial(details);
       setSpecialReview(reviews);
     })
-  // }
 
-
-  // return () => {
-  //   getRestaurants() 
-  //   getSpecials() 
-  // }
   }, []);
-
+  
   
   return (
     <>
@@ -97,12 +123,16 @@ const Restaurants = ({navigation, route}) => {
                 <Box style={{backgroundColor:"rgba(120, 120, 120, 0.1)", alignSelf:"center", width:"90%", borderRadius: 30, height:50, flexDirection:"row"}}>
                 <Box style={{backgroundColor:"rgba(120, 120, 120, 0.1)", alignSelf:"center", width:"85%", borderRadius: 30, height:50, flexDirection:"row", justifyContent:"center"}}>
                 <TextInput placeholder='Search' style={{alignSelf:"flex-start", width:"95%", }} 
-                onChangeText={(search) => setSearch(search)}
+                onChangeText={(search) => {
+                  searchFilterFunction(search);
+                  setSearch(search);
+                }}
                 value={search}
                 textContentType="search"
                 /> 
                 </Box>
-                <Ionicons name='ios-search-outline' size={20} style={{alignSelf:"flex-start", color:"rgb(34, 149, 59)", alignSelf:"center", marginHorizontal:"4%"}} />
+                <Ionicons name='ios-search-outline' size={20} style={{alignSelf:"flex-start", color:"rgb(34, 149, 59)", alignSelf:"center", marginHorizontal:"4%"}} 
+                onPress={() => {searchFilterFunction(search)}}/>
                 </Box>
                 <Ionicons name='filter' size={20} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)",marginHorizontal:"2%",alignSelf:"center" }} />
                 </Box>
@@ -130,7 +160,7 @@ const Restaurants = ({navigation, route}) => {
         style={{marginVertical:"2%", width:"100%"}}>
           <RestaurantsComponent
           name={item.name}
-          review={item.reviews}
+          review={restoReview}
           location={item.location}
           loggoImage={item.loggoImage}
           availabilityOptions={item.availabilityOptions}
@@ -145,7 +175,7 @@ const Restaurants = ({navigation, route}) => {
 }
                 
       <Box style={{marginVertical:"2%"}}>
-            <ImageBackground style={{width:"100%", height:125}} source={require("../../assets/images/advert.jpg")}>
+            <ImageBackground style={{width:"100%", height:125}} source={require("../../assets/images/advert.jpg")} blurRadius={3} >
               <Box flexDirection="column" height="90%" style={{marginVertical:"2%", marginHorizontal:"3%", }}>
                       <Box style={{ borderWidth:1, borderColor:"rgb(239, 172, 50)", borderRadius:30, width:110, height:30 ,justifyContent:"center"}}>
                           <Text fontFamily="Plus Jakarta Sans" color="#FFFFFF" alignSelf="center">advertisement</Text>
@@ -169,19 +199,18 @@ const Restaurants = ({navigation, route}) => {
       horizontal={false}
           style={{ width:"100%", height:"100%"}}  
             data={specials}
-            numColumns={1}
+             numColumns={1}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               return(
           <>
-          {/* <Text>tt</Text> */}
           <TouchableOpacity activeOpacity={1}
             key={item.magazineId}
           onPress={() => {navigation.navigate('RestaurantDetails', {item: item})}}
         style={{marginVertical:"2%", width:"100%"}}>
           <RestaurantsComponent
           name={item.name}
-          review={item.reviews}
+          review={specialReview}
           location={item.location}
           loggoImage={item.loggoImage}
           availabilityOptions={item.availabilityOptions}

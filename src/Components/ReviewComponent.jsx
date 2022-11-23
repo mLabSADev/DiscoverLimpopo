@@ -30,7 +30,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
                     </Box>
                     <Box style={{width:"100%", height:"70%"}}>
                         <Text fontFamily="Plus Jakarta Sans" fontSize={16} color="rgb(51, 51, 51)">
-                        {review}
+                        {reviewDescription}
                         </Text>
                     </Box>
                 </Box>

@@ -6,6 +6,7 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import AccomodationComponent from '../../Components/restaurants/AccomodationComponent';
 import { Box, Center } from 'native-base';
 import Accomodations from '../../services/accomodation';
+import { useAuth } from '../../context/auth.context';
 
 const data = [{
     id: 1,
@@ -24,14 +25,48 @@ const data = [{
   
 const Accomodation = ({navigation, route}) => {
 
+  
+    const {user} = useAuth();
     const [search, setSearch] = useState('');
+    const [masterDataSource, setMasterDataSource] = useState([]);
     const [accomodation, setAccomodation] = useState([]);
+    const [reviewAccomodation, setReviewAccomodation] = useState(0);
+
+
+    const searchFilterFunction = (text) => {
+      // Check if searched text is not blank
+      if (text) {
+        // Inserted text is not blank
+        // Filter the masterDataSource
+        // Update FilteredDataSource
+        const newData = masterDataSource.filter((item) => {
+            const itemData = item.name
+              ? item.name.toUpperCase()
+              : ''.toUpperCase();
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData) > -1;
+        });
+        setAccomodation(newData);
+        setSearch(text);
+        if(text === '') {
+          Toast.show({type:"warn", text2:"no results"})
+          // setRestaurants(masterDataSource);
+        }
+      } else {
+        // Inserted text is blank
+        // Update FilteredDataSource with masterDataSource
+        setAccomodation(masterDataSource);
+        setSearch(text);
+      }
+    };
+
 
     useEffect(() => {
     
       Accomodations.getAccomodation((accomodation, reviews) => {
         setAccomodation(accomodation);
-  
+        setReviewAccomodation(reviews);
+        setMasterDataSource(accomodation);
       })
     
     }, []);
@@ -45,7 +80,7 @@ const Accomodation = ({navigation, route}) => {
         <Feather name='menu' size={32} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)", marginHorizontal:"10%"}} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-        <Image source={require('../../assets/images/John-Doe.jpg')} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
+        <Image source={{uri: user.imageUrl}} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
         </TouchableOpacity>        
     </Center>
  
@@ -60,12 +95,16 @@ const Accomodation = ({navigation, route}) => {
                  <View style={{backgroundColor:"rgba(120, 120, 120, 0.1)", alignSelf:"center", width:"90%", borderRadius: 30, height:50, flexDirection:"row"}}>
                  <View style={{backgroundColor:"rgba(120, 120, 120, 0.1)", alignSelf:"center", width:"85%", borderRadius: 30, height:50, flexDirection:"row", justifyContent:"center"}}>
                  <TextInput placeholder='Search' style={{alignSelf:"flex-start", width:"95%", }} 
-                 onChangeText={(search) => setSearch(search)}
+                 onChangeText={(search) => {
+                  searchFilterFunction(search);
+                  setSearch(search);
+                }}
                  value={search}
                  textContentType="search"
                  /> 
                  </View>
-                 <Ionicons name='ios-search-outline' size={20} style={{alignSelf:"flex-start", color:"rgb(34, 149, 59)", alignSelf:"center", marginHorizontal:"4%"}} />
+                 <Ionicons name='ios-search-outline' size={20} style={{alignSelf:"flex-start", color:"rgb(34, 149, 59)", alignSelf:"center", marginHorizontal:"4%"}} 
+                    onPress={() => {searchFilterFunction(search)}}/>
                  </View>
                  <Ionicons name='filter' size={20} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)",marginHorizontal:"2%",alignSelf:"center" }} />
                  </View>
@@ -76,12 +115,13 @@ const Accomodation = ({navigation, route}) => {
             No available Accomodation
           </Text>
     </Box> :
-        <Box width='100%' height={300}>
+        <Box width='100%' height='100%' flexDirection='column'>
         <MasonryList
-            horizontal
+            horizontal={false}
             data={accomodation}
             style={{ width:"100%", height:"100%", alignSelf:"center"}}
             pagingEnabled={true}
+            numColumns={1}
             showsHorizontalScrollIndicator={false}
             legacyImplementation={false}
             // keyExtractor={(item) => item.id}
@@ -89,10 +129,11 @@ const Accomodation = ({navigation, route}) => {
               <TouchableOpacity
               activeOpacity={0.9} 
               onPress={() => {navigation.navigate('AccomodationDetails', {item: item})}}
-              style={{width:310, height:300}}
+              style={{marginVertical:"2%",}}
               key={item.accomodationId}>  
               <AccomodationComponent
               name={item.name}
+              review={reviewAccomodation}
               amenities={item.amenities}
               description={item.description}
               image={item.accomodationImage}

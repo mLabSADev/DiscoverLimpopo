@@ -9,7 +9,7 @@ type array = []
 
 const Accomodations = {
 
-    getAccomodation:  async (setAccomoodation: (accomodation: Array<array> | null, reviews: Array<array> | null) => void) => {
+    getAccomodation:  async (setAccomoodation: (accomodation: Array<array> | null, reviews: number) => void) => {
         const user = auth()?.currentUser;
        
         const restaurantsCollection = firestore().collection('accomodation');
@@ -18,33 +18,52 @@ const Accomodations = {
                     const data = [documents.data()] as Array<array>;
                     const exist = documents.exists;
     
-                    // if(exist) {
-                    //     setRestaurants(data)
-                    // } else {
-                    //     setRestaurants(null);
-                    // }
-                return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
+                    return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
                         const size = snapS.size;
+                        const rates = snapS.docs.map((rate) => parseFloat(rate.data().review));
+                        // console.log(size, 'the size of the size', snapShot.size)
                         snapS.docs.map((docs) => {
-                            const review = [documents.data()] as Array<array>;
+                            const rate = rates.reduce((total, val) => total + val) / size;
                             const exist1 = documents.exists;
         
                             if (exist) {
     
-                                setAccomoodation(data, null)
+                                setAccomoodation(data, rate)
                             } else if (exist && exist1) {
     
-                                setAccomoodation(data, review)
+                                setAccomoodation(data, rate)
                             } else {
     
-                                setAccomoodation(null, null)
+                                setAccomoodation(null, 0)
                             }
                         })
                     })
                  })
          })
     
-    }
+    },
+
+getReview: async (accomodationId: string, setReviews: (reviews: Array<array> | null, rating: number) => void) => {
+        return firestore().collection("accomodation").where('accomodationId', '==', accomodationId)
+            .onSnapshot((snapShot) => {
+                return snapShot.docs.map((snaps) => {
+                    snaps.ref.collection("reviews").onSnapshot((doc) => {
+                        const rates = doc.docs.map((rate) => parseFloat(rate.data().review));
+                        doc.docs.map((document) => {
+                            const rate = rates.reduce((total, val) => total + val) / doc.size;
+                            if(document.exists) {
+                                const review = [document.data()] as Array<array>;
+                                    // console.log(rate, 'the total rates', rates)
+                                setReviews(review, rate)
+                            } else {
+                                setReviews([], rate);
+                            }
+                        })
+                    })
+                })
+            })
+},
+
 }
 
 export default Accomodations;

@@ -62,3 +62,4 @@ updateImage: (imageName: string, uploadUri: string) => {
 }
 
 export default ProfileUpdate;
+

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, SafeAreaView, } from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
+import { TouchableOpacity, SafeAreaView, Modal, StyleSheet} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -9,35 +8,63 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import { Box, Image, Text, ScrollView, FlatList } from 'native-base';
 import { useAuth } from '../../context/auth.context';
 import Accomodations from '../../services/accomodation';
-import Amenities from '../../Components/Amenities';
-import Amenities2 from '../../Components/Amenities2';
+import Amenities from '../../Components/accomodation/Amenities';
+import Amenities2 from '../../Components/accomodation/Amenities2';
 
+const profile = 'https://media.istockphoto.com/id/1364105164/photo/hologram-human-head-deep-learning-and-artificial-intelligence-abstract-background.jpg?b=1&s=170667a&w=0&k=20&c=i9-oulHCR0LCxqzqUW2Q7bKt3RrdbCZU0OXqXV2gw-o=';
 
 const AccomodationDetails = ({navigation, route})  => {
 
   const {user} = useAuth();
 const [accomodation, setAccomodation] = useState(route.params.item);
 const [images, setImages] = useState(accomodation.images[0]);
-const [reviews, setReviews] = useState([route.params.reviews]);
-// const restuarantId = route.params.item.restuarantId;
+const [reviews, setReviews] = useState([]);
+const [rating, setRating] = useState(0);
+const [modalVisible, setModalVisible] = useState(false);
+
 const { restuarantId } = route.params;
 
+const paymentData = {
+      merchant_id: 10027888,
+      merchant_key: 'm24urqvjpy2gb',
+      amount: 60.00,
+      item_name: 'Booking'
+  };
+  
+
 useEffect(() => {
-    // const review = () => {
-    //  Accomodations.getReview(accomodation?.accomodationId, (review => {
-    //     setReviews(review)
-    //     console.log(review)
-    // }))
-    // }
-    // return () => {
-    //     review();
-    // }
+     Accomodations.getReview(accomodation?.accomodationId,((review, rating )=> {
+        setReviews(review)
+        setRating(rating)
+    }))
+    
 }, []);
 
 
   return (
     
     <>
+     <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            // Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+          style={styles.centeredBox}
+        >
+         
+            <Box flex={3}></Box>
+          <Box style={styles.modalView}>
+              <Box style={{width:"80%", height:30, borderColor: 'rgb(239, 172, 50)', borderWidth:1, }}>
+                <SafeAreaView>
+                {/* <PayFastWebView title={'Pay Now'} data={paymentData} />                */}
+                 </SafeAreaView>
+              </Box>
+            </Box>
+
+      </Modal>
     <SafeAreaView >
    <ScrollView style={{ backgroundColor:"#FFFFFF", width:"100%", height:"100%" }} showsVerticalScrollIndicator={false}>
    <Box style={{ height:390, backgroundColor:"grey", borderBottomLeftRadius:30, borderBottomRightRadius:30, width:"100%"}}>
@@ -51,7 +78,7 @@ useEffect(() => {
   </Box>
   <Box style={{alignSelf:"flex-end"}}>
     <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-       <Image alt='profile' source={{uri:user?.imageUrl}} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
+       <Image alt='profile' source={{uri:user?.imageUrl ? user?.imageUrl : profile}} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
        </TouchableOpacity>
   </Box>  
     </Box>  
@@ -69,16 +96,16 @@ useEffect(() => {
    <Box style={{width:"100%", marginHorizontal:"4%", marginVertical:"5%" }}>
        <Text fontFamily="Plus Jakarta Sans" fontSize={34} color="rgb(0,0,0)" fontWeight="bold">{accomodation.name}</Text>
        <Box style={{marginVertical:"4%", flexDirection:"row"}}>
-                   <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:20, color:"rgb(0,0,0)" }}>5.5</Text>
+                   <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:20, color:"rgb(0,0,0)" }}>{reviews.length ? rating : 'not reviewed'}</Text>
                    <Box style={{flexDirection:"row", marginHorizontal:"2%"}}>
-                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"rgba(120, 120, 120, 0.5)"}}/>
-                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"rgba(120, 120, 120, 0.5)"}}/>
-                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"rgba(120, 120, 120, 0.5)"}}/>
-                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"rgba(120, 120, 120, 0.5)"}}/>
-                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"rgba(120, 120, 120, 0.5)"}}/>
+                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:rating >= 1 ? "rgb(239, 172, 50)" :"rgba(120, 120, 120, 0.5)"}}/>
+                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", colorrating: rating >= 2 ? "rgb(239, 172, 50)" :"rgba(120, 120, 120, 0.5)"}}/>
+                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", colorrating: rating >= 3 ? "rgb(239, 172, 50)" :"rgba(120, 120, 120, 0.5)"}}/>
+                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", colorrating: rating >= 4 ? "rgb(239, 172, 50)" :"rgba(120, 120, 120, 0.5)"}}/>
+                   <AntDesign name='star' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", colorrating: rating >= 5 ? "rgb(239, 172, 50)" :"rgba(120, 120, 120, 0.5)"}}/>
                  
-                   <Entypo name='dot-single' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"rgba(120, 120, 120, 0.5)"}}/>
-                   <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:20, color:"rgb(239, 172, 50)", justifyContent:"center" }}>300 reviews</Text>
+                   <Entypo name='dot-single' size={20} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", colorrating: rating >= 1 ? "rgb(239, 172, 50)" :"rgba(120, 120, 120, 0.5)"}}/>
+                   <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:20, color:"rgb(239, 172, 50)", justifyContent:"center" }}>{reviews.length >= 1 ? (reviews.length > 1 ? `${reviews.length} Reviews` : `${reviews.length} Review`) : `` }</Text>
                    </Box>
        </Box>
        <Box style={{flexDirection:"row"}}>
@@ -102,7 +129,7 @@ useEffect(() => {
 
    <TouchableOpacity
                    activeOpacity={0.9} 
-                   onPress={() => {}}
+                   onPress={() => {setModalVisible(!modalVisible)}}
                        style={{alignSelf: "center", backgroundColor:"rgb(239, 172, 50)", width:"90%", height:50, opacity:3 ,justifyContent:"center", borderRadius:30,}}>
                            <Text style={{alignSelf:"center", color:"#FFFFFF", fontWeight:"bold", fontFamily:"Plus Jakarta Sans", fontSize:14}}>CHECK IN</Text>
    </TouchableOpacity>
@@ -155,21 +182,128 @@ useEffect(() => {
 </Box>
    <Box style={{width:"100%", marginHorizontal:"4%", marginVertical:"4%"}}>
    <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:24, color:"rgb(0,0,0)", fontWeight:"bold"}}>Reviews</Text>
-       <Box style={{height:110, marginVertical:"4%", marginHorizontal:"-3%"}}>
-           <ReviewComponent/>
-       </Box>
+   <Box style={{height:110, marginVertical:"4%", marginHorizontal:"-3%"}}>
+        {/* <ReviewComponent
+
+        /> */}
+         {reviews?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={150} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
+          <Text>
+            Be the first one to add a review
+          </Text>
+    </Box> :
+   (
+    <>
+    <Box width={'100%'} height={'100%'}>
+      <MasonryList
+      scrollEnabled={true}
+          style={{ width:"100%", height:"100%"}}  
+            data={reviews}
+            numColumns={1}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => {
+              return(
+          <>
+          <TouchableOpacity activeOpacity={1}
+            key={item.reviewId}
+          >
+            <ReviewComponent
+                image={item.image}
+                name={item.name}
+                review={item.review}
+                reviewDescription={item.reviewDescription}
+                />
+        </TouchableOpacity>
+          </>
+        )
+      }}
+    />
+    </Box>
+    </>)
+
+}
+    </Box>
    </Box>
 
 
-   <Box>
+   <Box style={{marginVertical:"5%"}}>
      <TouchableOpacity
            activeOpacity={0.9} 
                onPress={() => {}}>
-       <Text style={{alignSelf:"center", fontSize:14,fontFamily:"Plus Jakarta Sans",  fontWeight:"700", color:'rgb(239, 172, 50)', marginVertical:"-1%"}}>LOAD MORE</Text>                
+       <Text style={{alignSelf:"center", fontSize:14,fontFamily:"Plus Jakarta Sans",  fontWeight:"700", color:'rgb(239, 172, 50)'}}>LOAD MORE</Text>                
        </TouchableOpacity>
    </Box>
     </ScrollView></SafeAreaView></>
   )
 }
+
+const styles = StyleSheet.create({
+  centeredBox: {
+    justifyContent: "center",
+    alignItems: "center",
+    width:"100%",
+    height:"100%",
+    
+  },
+  modalBox: {
+    width:"100%",
+    height:"100%",
+    justifyContent:"center",
+
+    flexDirection:"column",
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    alignItems: "center",
+    shadowColor: "transparent",
+   
+    shadowOpacity: 0.25,
+    elevation: 5
+  },
+  image:{
+    
+    borderRadius:300,
+     height:"100%",
+     width:"100%",
+     justifyContent:"center",
+     alignItems:"center"
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  modalView:{
+  width:"90%",
+  height:322,
+  margin: 20,
+  flexDirection:"column",
+  backgroundColor: "white",
+  borderRadius: 20,
+  alignItems: "center",
+  shadowColor: "#000",
+  shadowOffset: {
+  width: 0,
+  height: 2
+},
+shadowOpacity: 0.25,
+shadowRadius: 4,
+elevation: 5
+  }
+
+});
+
 
 export default AccomodationDetails;

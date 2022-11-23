@@ -21,15 +21,15 @@ const RestaurantsComponent = ({
     <>
     <Box style={{width:"95%", height: 125,alignSelf:"center", flexDirection:"row", borderRadius:30, backgroundColor:"#FFFFFF"}}>
             <Box style={{width: "80%", height:"100%", flexDirection:"column"}}>
-                <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:20, fontWeight:"bold", color:"rgb(0,0,0)", marginHorizontal:"6%", marginVertical:"4%"}}>{name}</Text>
+                <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:20, fontWeight:"bold", color:"rgb(0,0,0)", width:"100%", marginHorizontal:"6%", marginVertical:"4%"}}>{name}</Text>
               <Box style={{marginHorizontal:"6%", marginVertical:"-4%", flexDirection:"row"}}>
-                <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:12, color:"rgb(0,0,0)" }}>5.5</Text>
+                <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:12, color:"rgb(0,0,0)" }}>{review ? review : 'not reviewed'}</Text>
                 <Box style={{flexDirection:"row", marginVertical:"2%", marginHorizontal:"2%"}}>
-                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"lightgrey"}}/>
-                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"lightgrey"}}/>
-                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"lightgrey"}}/>
-                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"lightgrey"}}/>
-                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color:"lightgrey"}}/>
+                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 1  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
+                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 2  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
+                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 3  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
+                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 4  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
+                <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 5  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
                 </Box>
 
               </Box>

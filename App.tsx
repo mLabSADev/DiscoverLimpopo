@@ -25,6 +25,8 @@ import {
   Animated
 } from 'react-native';
 import Toast, { BaseToast, BaseToastProps, ErrorToast } from 'react-native-toast-message';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 
 
 import Navigation from './src/Components/navigation/navigation';
@@ -71,6 +73,18 @@ const toastConfig = {
       }}
       text2Style={{fontSize: 13, color: 'red', fontFamily:"Plus Jakarta Sans"}}
     />
+  ),
+  star: (props: JSX.IntrinsicAttributes & BaseToastProps) => (
+    <BaseToast
+      {...props}
+      text1Style={{
+        fontSize: 17,
+      }}
+      
+      text2Style={{fontSize: 14, color: 'rgb(239, 172, 50)', fontFamily:"Plus Jakarta Sans"}}
+    />
+
+
   )
 };
 
@@ -80,7 +94,7 @@ export default function App () {
   return (
     <>
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar backgroundColor={colorTheme.primary[50]} />
+      <StatusBar backgroundColor={colorTheme.primary[50]} translucent={false}/>
       <NativeBaseProvider theme={theme}>
           <LoadingProvider>
                 <AuthProvider>

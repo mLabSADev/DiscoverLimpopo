@@ -15,7 +15,7 @@ export default function MagazineDetails({navigation, route}) {
 
   //  const {isUser, size} = route.params; 
   const [magazine, setMagazines] = useState(route.params.item);
-  const [isUser, setIsUser] = useState();
+  const [isUser, setIsUser] = useState('');
   const [size, setSize] = useState(route.params.size);
   const [magazineId, setMAgazineId] = useState(`${route.params.item.magazineId}` || '')
       //  console.log(route.params.size, 'the size', 'the user')
@@ -23,25 +23,27 @@ export default function MagazineDetails({navigation, route}) {
   
 
   const onLikePress = () => {
-    Magazines.onLikePress(magazineId, user?.name, user?.uid).then(() => {
-      // Toast.show({type:'success'})
-      // console.log('like')
-        setIsUser(user?.uid);
-        const newSize = size + 1;
-        setSize(newSize)
-    })
+    Magazines.onLikePress(magazineId, user?.name, user?.uid);
+    // .then(() => {
+    //   // Toast.show({type:'success'})
+    //   // console.log('like')
+    //     setIsUser(user?.uid);
+    //     const newSize = size + 1;
+    //     setSize(newSize)
+    // })
   } 
   
-  const onDisLikePress = () => {
-    Magazines.onDislikePress(magazineId, user?.uid).then(() => {
-      // Toast.show({type:'error'})
-      // console.log('dislike')
-      setIsUser('')
-      const newSize = size - 1;
-        setSize(newSize)
-      console.log('user set to empty string')
-    })
-  }
+  // const onDisLikePress = () => {
+  //   Magazines.onDislikePress(magazineId, user?.uid)
+  //   // .then(() => {
+  //   //   // Toast.show({type:'error'})
+  //   //   // console.log('dislike')
+  //   //   setIsUser('')
+  //   //   const newSize = size - 1;
+  //   //     setSize(newSize)
+  //   //   console.log('user set to empty string')
+  //   // })
+  // }
      
   useEffect(() => {
      const mag = () => {
@@ -100,7 +102,7 @@ export default function MagazineDetails({navigation, route}) {
            : 
            <TouchableOpacity
             activeOpacity={0.9} 
-            onPress={onDisLikePress}
+            onPress={onLikePress}
             style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor:'rgb(239, 172, 50)', justifyContent:"center"}}>
                   <AntDesign name='heart' size={20} color={'#F4FAFF'} style={{alignSelf:"center"}}/>
             </TouchableOpacity>

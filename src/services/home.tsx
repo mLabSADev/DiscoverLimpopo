@@ -6,7 +6,7 @@ type array = []
 
 
 const Homes = {
-getRestaurant: async (setRestaurants: (restaurants: Array<array> | null, reviews: Array<array> | null) => void) => {
+getRestaurant: async (setRestaurants: (restaurants: Array<array> | null, numOfReview: number) => void) => {
    
     const user = auth()?.currentUser;
    
@@ -16,26 +16,23 @@ getRestaurant: async (setRestaurants: (restaurants: Array<array> | null, reviews
                 const data = [documents.data()] as Array<array>;
                 const exist = documents.exists;
 
-                // if(exist) {
-                //     setRestaurants(data)
-                // } else {
-                //     setRestaurants(null);
-                // }
             return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
                     const size = snapS.size;
+                    const rates = snapS.docs.map((rate) => parseFloat(rate.data().review));
+                    // console.log(size, 'the size of the size', snapShot.size)
                     snapS.docs.map((docs) => {
-                        const review = [documents.data()] as Array<array>;
+                        const rate = rates.reduce((total, val) => total + val) / size;
                         const exist1 = documents.exists;
-    
                         if (exist) {
 
-                            setRestaurants(data, null)
+                            
+                            setRestaurants(data, rate);
                         } else if (exist && exist1) {
 
-                            setRestaurants(data, review)
+                            setRestaurants(data, rate);
                         } else {
 
-                            setRestaurants(null, null)
+                            setRestaurants(null, 0);
                         }
                     })
                 })
@@ -43,7 +40,7 @@ getRestaurant: async (setRestaurants: (restaurants: Array<array> | null, reviews
      })
 },
 
-getAccomodation:  async (setAccomoodation: (accomodation: Array<array> | null, reviews: Array<array> | null) => void) => {
+getAccomodation:  async (setAccomoodation: (accomodation: Array<array> | null, numOfReview: number) => void) => {
     const user = auth()?.currentUser;
    
     const restaurantsCollection = firestore().collection('accomodation').limit(3);
@@ -52,34 +49,31 @@ getAccomodation:  async (setAccomoodation: (accomodation: Array<array> | null, r
                 const data = [documents.data()] as Array<array>;
                 const exist = documents.exists;
 
-                // if(exist) {
-                //     setRestaurants(data)
-                // } else {
-                //     setRestaurants(null);
-                // }
-            return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
+             
+                return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
                     const size = snapS.size;
+                    const rates = snapS.docs.map((rate) => parseFloat(rate.data().review));
+                    // console.log(size, 'the size of the size', snapShot.size)
                     snapS.docs.map((docs) => {
-                        const review = [documents.data()] as Array<array>;
+                        const rate = rates.reduce((total, val) => total + val) / size;
                         const exist1 = documents.exists;
     
                         if (exist) {
 
-                            setAccomoodation(data, null)
+                            setAccomoodation(data, rate)
                         } else if (exist && exist1) {
 
-                            setAccomoodation(data, review)
+                            setAccomoodation(data, rate)
                         } else {
 
-                            setAccomoodation(null, null)
+                            setAccomoodation(null, 0)
                         }
                     })
                 })
              })
      })
 
-}
-
+},
 
 
 }

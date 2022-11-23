@@ -70,6 +70,20 @@ export default function SpecialPackages({navigation, routes}) {
     </Box>
 }  
       </SafeAreaView>
+
+{/* 
+
+keytool -genkeypair -v -storetype PKCS12 -keystore discover-limpopo.keystore -alias discover-limpopo -keyalg RSA -keysize 2048 -validity 10000
+keystore password: Discover123
+first: Discover
+last: Limpopo
+organization unit: mlab
+What is the name of your organization?: mlab
+What is the name of your City or Locality?: johannesburg
+What is the name of your State or Province?: Gauteng
+What is the two-letter country code for this unit?: ZA
+*/}
+
       </>
     )
 }

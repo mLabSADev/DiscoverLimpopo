@@ -2,9 +2,7 @@ import auth from "@react-native-firebase/auth";
 import { User } from '../models/user';
 import firestore from '@react-native-firebase/firestore';
 import Toast  from "react-native-toast-message";
-// import { useNavigation } from "@react-navigation/native";
 
-// const navigation = useNavigation();
 
 const AuthService = {
   
@@ -12,7 +10,7 @@ const AuthService = {
   signin: async (email: string, password: string) => {
     // const { user } = 
     await auth().signInWithEmailAndPassword(email, password).then( async (userCredetial) => {
-      Toast.show({type:"success", text2:"You're now logged in!"})
+      // Toast.show({type:"success", text2:"You're now logged in!"})
       const user = userCredetial.user;
       const usersCollection = firestore().collection('users');
      usersCollection.doc(user.uid).onSnapshot((snapShot) => {
@@ -34,7 +32,7 @@ const AuthService = {
 
 signup: async (name: string, email: string, password: string) => {
   return await auth().createUserWithEmailAndPassword(email, password).then((userCredetial) => {
-    Toast.show({type:"success", text2:"You're now logged in!"})
+    // Toast.show({type:"success", text2:"You're now logged in!"})
     const usersCollection = firestore().collection('users')
 
     const user: User = {

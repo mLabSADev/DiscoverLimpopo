@@ -20,7 +20,7 @@ const SpecialEvents = ({
         <Text fontFamily="Plus Jakarta Sans" fontWeight="500" color="#878787" fontSize={14}>{subTitle} </Text>
         <Text fontFamily="Plus Jakarta Sans" fontWeight="500" color="rgb(0,0,0)" fontSize={16} style={{marginVertical:"2%"}}>{title}</Text>
         <Box flexDirection="row" justifyContent="space-between">
-        <Text color="rgb(239, 172, 50)" fontFamily="Plus Jakarta Sans">{moment(date).format('DD MMMM, YYYY, DDDD').toString()}</Text>
+        <Text color="rgb(239, 172, 50)" fontFamily="Plus Jakarta Sans">{moment(date).format('DD MMMM, YYYY').toString()}</Text>
         <Text color="rgb(239, 172, 50)" fontFamily="Plus Jakarta Sans">{email}</Text>
             </Box>  
     </Box>
