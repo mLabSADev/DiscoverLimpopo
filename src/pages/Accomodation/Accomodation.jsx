@@ -61,14 +61,13 @@ const Accomodation = ({navigation, route}) => {
 
 
     useEffect(() => {
-      return () => {
         Accomodations.getAccomodation((accomodation) => {
           setAccomodation(accomodation);
           setMasterDataSource(accomodation);
         });
-      }
     }, []);
     
+
     return(
         <>
      <SafeAreaView  style={{ backgroundColor:"#F4FAFF", width:"100%", height:"100%" }}>
@@ -131,13 +130,12 @@ const Accomodation = ({navigation, route}) => {
               key={item.accomodationId}>  
               <AccomodationComponent
               name={item.name}
-              review={item.review}
+              review={item.overAllReview}
               amenities={item.amenities}
               description={item.description}
               image={item.accomodationImage}
               loggoImage={item.accomodationLoggo}
               />
-              {console.log(item.review)}
             </TouchableOpacity>
             )
           }

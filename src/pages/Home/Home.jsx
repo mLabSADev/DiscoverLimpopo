@@ -62,7 +62,7 @@ const fetchAccomodation = async () => {
  await  Homes.getAccomodation((accomodation) => {
       setAccomodation(accomodation);
    // setReviewAccomodation(reviews)
-   console.log(accomodation, 'the aaray')
+  //  console.log(accomodation, 'the aaray')
  });;
 
 }
@@ -144,7 +144,7 @@ const fetchMagazines = async () => {
                       description={item.description}
                       image={item.accomodationImage}
                       loggoImage={item.accomodationLoggo}
-                      review={item.review}
+                      review={item.overAllReview}
                     />
                   </TouchableOpacity>
                 )
@@ -188,7 +188,7 @@ const fetchMagazines = async () => {
                             style={{ marginVertical: "2%", width: "100%" }}>
                             <RestaurantsComponent
                               name={item.name}
-                              review={reviewRestuarant}
+                              review={item.overAllReview}
                               location={item.location}
                               loggoImage={item.loggoImage}
                               availabilityOptions={item.availabilityOptions}

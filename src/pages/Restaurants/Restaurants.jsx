@@ -42,7 +42,7 @@ const Restaurants = ({navigation, route}) => {
   const [search, setSearch] = useState('');
   const [restaurants, setRestaurants] = useState([restaurant]);
   const [restoReview, setRestoReview] = useState(0);
-  const [specials, SetSpecial] = useState([restaurant]);
+  const [specials, SetSpecial] = useState([]);
   const [specialReview, setSpecialReview] = useState(0);
 
   // console.log(restaurant, 'resto ntwana yahm');
@@ -85,13 +85,12 @@ const Restaurants = ({navigation, route}) => {
         setMasterDataSource(restaurant);
     })
 
-      Restaurant.getSpecials((details, reviews) => {
+      Restaurant.getSpecials((details) => {
       SetSpecial(details);
-      setSpecialReview(reviews);
+      console.log({details})
     })
 
   }, []);
-  
   
   return (
     <>
@@ -160,7 +159,7 @@ const Restaurants = ({navigation, route}) => {
         style={{marginVertical:"2%", width:"100%"}}>
           <RestaurantsComponent
           name={item.name}
-          review={restoReview}
+          review={item.review}
           location={item.location}
           loggoImage={item.loggoImage}
           availabilityOptions={item.availabilityOptions}
@@ -209,7 +208,7 @@ const Restaurants = ({navigation, route}) => {
         style={{marginVertical:"2%", width:"100%"}}>
           <RestaurantsComponent
           name={item.name}
-          review={specialReview}
+          review={item.review}
           location={item.location}
           loggoImage={item.loggoImage}
           availabilityOptions={item.availabilityOptions}

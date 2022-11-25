@@ -21,12 +21,12 @@ const RestaurantDetails = ({ navigation, route }) => {
   const [images, setImages] = useState(restaurant.images[0]);
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
-  const { restuarantId } = route.params.item;
+  const [restaurantId, setRestaurantId] = useState(route.params.item.restaurantId);
   const [stars, setStars] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState('');
 
-
+console.log(route.params.item.id, 'id is this value')
 
   const openMap = (address) => {
     const permission = PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
@@ -82,36 +82,28 @@ const RestaurantDetails = ({ navigation, route }) => {
   }
 
   const handleStars = (star) => {
-
-    setTimeout(() => {
-      if (message !== "") {
+      if (message !== "" && star === stars) {
         Restaurants.sendRestaurantReview(
-          user?.userName, user?.imageUrl, message, true, star, restuarantId, user?.uid
+          user.userName, user.imageUrl, message, true, stars, route.params.item.id, user.uid
         ).then(() => {
           setModalVisible(!modalVisible);
-          setTimeout(() => { Toast.show({ type: "success", text2: 'Your review has been submitted!' }); }, 1000)
+          setTimeout(() => { Toast.show({ type: "success", text2: 'Your review has been submitted!' }); }, 500)
         }).catch((error) => {
-          console.log(error, 'after calling update booking review');
+          console.log(star, 'after calling update booking review');
+          console.log( user.userName, user.imageUrl, message, true, star, route.params.item.id, user.uid
+            )
         })
 
-      } else {
-
-        Restaurants.sendRestaurantReview(
-          user?.userName, user?.imageUrl, '', false, star, restuarantId, user?.uid
-        ).then(() => {
-          // Toast.show({type:"success", text2: 'Your review has been submitted!'});
-        }).catch((error) => {
-          console.log(error, 'after calling update booking review');
-        })
+      } else if (star === 0) {
+        Toast.show({text2:"Please leave a message"});
       }
-    }, 2000)
   }
 
-
   useEffect(() => {
-    Restaurants.getReview(restuarantId, ((review) => {
+    Restaurants.getReview(route.params.item.id, (review) => {
       setReviews(review)
-    }))
+      console.log({review})
+    })
 
   }, []);
 
@@ -143,33 +135,57 @@ const RestaurantDetails = ({ navigation, route }) => {
             <Box style={{ flexDirection: "row", marginVertical: "3%", marginHorizontal: "10%" }}>
               <TouchableOpacity activeOpacity={0.9}>
                 <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 1 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-                  setStars(1)
-                  handleStars(1)
+                  try {
+                    setStars(1);
+                    handleStars(1);
+                   }
+                    catch(error) {
+                      
+                    }
                 }} />
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.9}>
                 <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 2 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-                  setStars(2)
-                  handleStars(2)
+                 try {
+                  setStars(2);
+                  handleStars(2);
+                 }
+                  catch(error) {
+                    
+                  }
                 }} />
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.9}>
                 <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 3 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-                 setStars(3)
-                 handleStars(3)
+                  try {
+                    setStars(3);
+                    handleStars(3);
+                   }
+                    catch(error) {
+                      
+                    }
                 }} />
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.9}>
                 <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 4 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-                  
-                  setStars(4)
-                  handleStars(4)
+                   try {
+                    setStars(4);
+                    handleStars(4);
+                   }
+                    catch(error) {
+                      
+                    }
                 }} />
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.9}>
                 <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 5 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-                  setStars(5)
-                  handleStars(5)
+                   try {
+                    setStars(5);
+                    handleStars(5);
+                   }
+                    catch(error) {
+                      
+                    }
                 }} />
               </TouchableOpacity>
             </Box>
@@ -215,16 +231,16 @@ const RestaurantDetails = ({ navigation, route }) => {
           <Box style={{ width: "100%", marginHorizontal: "4%", marginVertical: "5%" }}>
             <Text fontFamily="Plus Jakarta Sans" fontSize={34} color="rgb(0,0,0)" fontWeight="bold">{restaurant.name}</Text>
             <Box style={{ marginVertical: "4%", flexDirection: "row" }}>
-              <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)" }}>{reviews.length ? rating : 'not reviewed'}</Text>
+              <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)" }}>{restaurant.review ? restaurant.review : 'not reviewed'}</Text>
               <Box style={{ flexDirection: "row", marginHorizontal: "2%" }}>
-                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: rating >= 1 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: rating >= 2 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: rating >= 3 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: rating >= 4 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: rating >= 5 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: restaurant.review >= 1 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: restaurant.review >= 2 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: restaurant.review >= 3 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: restaurant.review >= 4 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: restaurant.review >= 5 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
 
-                <Entypo name='dot-single' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: rating >= 1 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(239, 172, 50)", justifyContent: "center" }}>{reviews.length >= 1 ? (reviews.length > 1 ? `${reviews.length} Reviews` : `${reviews.length} Review`) : ``}</Text>
+                <Entypo name='dot-single' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: restaurant.review >= 1 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(239, 172, 50)", justifyContent: "center" }}>{restaurant.size >= 1 ? (restaurant.size > 1 ? `${restaurant.size} Reviews` : `${restaurant.size} Review`) : ``}</Text>
               </Box>
             </Box>
             <Box style={{ flexDirection: "row" }}>
@@ -321,9 +337,9 @@ const RestaurantDetails = ({ navigation, route }) => {
               </>)
 
           }
+            <Box height={15}></Box>
 
           <Box>
-            <Box height={15}></Box>
 
             <TouchableOpacity
               activeOpacity={0.9}

@@ -69,7 +69,7 @@ export default function Magazines({navigation, routes}) {
             No available Magazines!
           </Text>
     </Box> :
-    <Box width={'100%'} height='100%'>
+    <Box width={'100%'} height='100%' style={{marginVertical:"2%"}}>
       <MasonryList
       horizontal={false}
           style={{ width:"100%", height:"100%"}}  

@@ -7,64 +7,42 @@ type array = []
 
 const Accomodations = {
 
-    getAccomodation: async (setAccomoodation: (accomodation: any | null) => void) => {
-        const user = auth()?.currentUser;
-        const restaurantsCollection = firestore().collection('accomodation');
-        restaurantsCollection.onSnapshot((snapShot) => {
-            return new Promise<Event[]>(resolve => {
-                const accomodation = snapShot.docs.map((document) => {
-                    const obj = document.data();
-                    obj.id = document.id;
-                    document.ref.collection('reviews').onSnapshot((snapS) => {
-                        return new Promise<Event[]>(resolve => {
-                            const size = snapS.size;
-                            const rates = snapS.docs.map((documents) => parseFloat(documents.data().review));
-                            const rate = snapS.docs.map((doc) => doc.data().accomodationId);
-                            const rating = rates.reduce((total, val) => total + val) / size;
-                            obj.review = rating;
-                            obj.size = rates.length;
-                            const review = rating as Event;
-                            setAccomoodation(accomodation);
-                            
-                            return accomodation;
-                        })
-                    })
-                    const newObj = obj as Event;
-                    return newObj;
-                });
-                resolve(accomodation);
+getAccomodation: async (setAccomoodation: (accomodation: any | null) => void) => {
+        const snapchot = await firestore().collection('accomodation').get();
+        return new Promise <Event[]> (resolve => {
+            const v = snapchot.docs.map(x => {
+                const obj = x.data();
+                obj.id = x.id;
+                return obj as Event;
             });
-        })
+            resolve(v);
+            setAccomoodation([...v])
+            // console.log({...v})
+        });
     },
+    
+    
+getReview: async (accomodationId: string, setReviews: (reviews: any | null) => void) => {
 
-    getReview: async (accomodationId: string, setReviews: (reviews: any | null) => void) => {
-        return firestore().collection("accomodation").where('accomodationId', '==', accomodationId)
+    const snapchot = await firestore().collection('accomodation').where('accomodationId', '==', accomodationId).get();
+    const snap = snapchot.docs.map((document) => {
+    const withinSnap = document.ref.collection('reviews').get();
+    const snapping = withinSnap.then((documents) => {
+        return new Promise <Event[]> (resolve => {
+            const v = documents.docs.map(x => {
+                const obj = x.data();
+                obj.id = x.id;
+                return obj as Event;
+            });
+            resolve(v);
+            setReviews([...v])
+            // console.log({...v})
+        });
+    } )
+    
+    });
 
-            .onSnapshot((snapShot) => {
-                return new Promise<Event[]>(resolve => {
-                    const reviews = snapShot.docs.map((document) => {
-                        const obj = document.data();
-                        obj.id = document.id;
-
-                        document.ref.collection('reviews').onSnapshot((snapS) => {
-                            return new Promise<Event[]>(resolve => {
-                                const size = snapS.size;
-                                const rates = snapS.docs.map((documents) => documents.data());
-                                obj.size = rates.length;
-                                const review = rates as Event;
-                                setReviews(review);
-                                return review;
-                            })
-                        })
-                        const newObj = obj as Event;
-                        // console.log({newObj})
-                        return newObj;
-                    });
-                    resolve(reviews);
-                });
-                
-            })
-    },
+},
 
 }
 

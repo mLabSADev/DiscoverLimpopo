@@ -21,10 +21,9 @@ const AccomodationDetails = ({ navigation, route }) => {
   const [images, setImages] = useState(accomodation.images[0]);
   const [reviews, setReviews] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [accomodationId, setAccomodationId] = useState(route.params.item.accomodationId)
+  // console.log(accomodationId);
 
-  const { restuarantId } = route.params;
-
-  console.log(accomodation, 'the accomo')
   const paymentData = {
     merchant_id: 10027888,
     merchant_key: 'm24urqvjpy2gb',
@@ -32,17 +31,12 @@ const AccomodationDetails = ({ navigation, route }) => {
     item_name: 'Booking'
   };
 
-  const fetchReviews = async () => {
-  await  Accomodations.getReview(route.params.item.id, (review) => {
-      setReviews(review)
-      console.log({review})
-    })
-  }
-
   useEffect(() => {
-    return () => {
-      fetchReviews();
-    }
+
+    Accomodations.getReview(accomodationId, (review) => {
+      setReviews(review)
+      //  console.log({review})
+    })
   }, []);
 
 
@@ -71,7 +65,7 @@ const AccomodationDetails = ({ navigation, route }) => {
             <Box style={{ width: "95%", borderRadius: 30, flexDirection: "column", marginVertical: "-95%", height: "100%", marginHorizontal: "2%", justifyContent: "space-between", alignContent: "center", alignItems: "center" }}>
               <Box style={{ width: "100%", borderRadius: 30, flexDirection: "row", marginVertical: "5%", justifyContent: "space-between", alignContent: "center", alignItems: "center" }}>
                 <Box>
-                  <TouchableOpacity activeOpacity={2} onPress={() => navigation.navigate('Home')} style={{ backgroundColor: "rgb(239, 172, 50)", borderRadius: 30, height: 50, width: 50, alignSelf: "center", justifyContent: "center" }}>
+                  <TouchableOpacity activeOpacity={2} onPress={() => navigation.goBack()} style={{ backgroundColor: "rgb(239, 172, 50)", borderRadius: 30, height: 50, width: 50, alignSelf: "center", justifyContent: "center" }}>
                     <MaterialIcons name='keyboard-arrow-left' size={32} style={{ alignSelf: "center", alignContent: "center", color: "#FFFFFF", marginHorizontal: "10%" }} />
                   </TouchableOpacity>
                 </Box>
@@ -97,18 +91,17 @@ const AccomodationDetails = ({ navigation, route }) => {
               <Text fontFamily="Plus Jakarta Sans" fontSize={34} color="rgb(0,0,0)" fontWeight="bold">{accomodation.name}</Text>
               <Box style={{ marginVertical: "4%", flexDirection: "row" }}>
                 <Box>
-                <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)" }}>{accomodation.review ? accomodation.review : 'not reviewed'}</Text>
+                <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)" }}>{accomodation.overAllReview ? accomodation.overAllReview : 'not reviewed'}</Text>
                 </Box>
-                {console.log(accomodation.review)}
-                {accomodation?.review ?
+                {accomodation?.overAllReview ?
                 <Box style={{ flexDirection: "row", marginHorizontal: "2%" }}>
-                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: accomodation.review >= 1 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: accomodation.review >= 2 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: accomodation.review >= 3 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: accomodation.review >= 4 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: accomodation.review >= 5 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                  <Entypo name='dot-single' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", colorrating: accomodation.size >= 1 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
-                  <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(239, 172, 50)", justifyContent: "center" }}>{accomodation.size >= 1 ? (accomodation.size > 1 ? `${accomodation.size} Reviews` : `${accomodation.size} Review`) : ``}</Text>
+                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: accomodation.overAllReview >= 1 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: accomodation.overAllReview >= 2 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: accomodation.overAllReview >= 3 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: accomodation.overAllReview >= 4 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                  <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: accomodation.overAllReview >= 5 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                  <Entypo name='dot-single' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: accomodation.reviewSize > 1 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
+                  <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(239, 172, 50)", justifyContent: "center" }}>{accomodation.reviewSize >= 1 ? (accomodation.reviewSize > 1 ? `${accomodation.reviewSize} Reviews` : `${accomodation.reviewSize} Review`) : ``}</Text>
                 </Box>
                   : null}
               </Box>
@@ -197,15 +190,15 @@ const AccomodationDetails = ({ navigation, route }) => {
               </Box>:
                 (
                   <>
-                    <Box width={'100%'} height={'100%'} style={{marginVertical: "4%", marginHorizontal: "3%"}}>
+                    <Box width={'100%'} style={{marginVertical: "2%", marginHorizontal: "3%", height:300, backgroundColor:"grey"}}>
                       <MasonryList
                         scrollEnabled={true}
-                        style={{ width: "100%", height: "100%" }}
+                        style={{ width: "100%" }}
                         data={reviews}
                         numColumns={1}
                         showsVerticalScrollIndicator={false}
-                        renderItem={({ item }) => {
-                          return (
+                        renderItem={({ item}) => 
+                         (
                             <>
                               <TouchableOpacity activeOpacity={1}
                                 key={item.reviewId}
@@ -219,7 +212,7 @@ const AccomodationDetails = ({ navigation, route }) => {
                               </TouchableOpacity>
                             </>
                           )
-                        }}
+                        }
                       />
                     </Box>
                   </>)
