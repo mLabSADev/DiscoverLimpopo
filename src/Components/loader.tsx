@@ -11,8 +11,8 @@ const Loader = ({
 }: LoaderProps) => {
 
     return (
-        <Box display={isLoading ? 'flex' : 'none'} position={'absolute'} left={0} top={0} bottom={0} right={0} backgroundColor='rgba(0,0,0,0.8)' alignItems={'center'} justifyContent='center' zIndex={100}>
-            <Spinner  size={30} color={colorTheme.primary[500]} />
+        <Box display={isLoading ? 'flex' : 'none'} backgroundColor='F4FAFF' alignItems={'center'} justifyContent='center' alignContent={'center'} style={{width:"100%", height:"100%"}}>
+            <Spinner  size={30} color={colorTheme.primary[900]} />
         </Box>
     )
 }

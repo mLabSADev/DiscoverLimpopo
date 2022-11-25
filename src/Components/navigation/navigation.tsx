@@ -20,17 +20,10 @@
    StatusBar,
    StyleSheet,
    useColorScheme,
-   Animated
+   Animated,
+   View,
  } from 'react-native';
- 
- import {
-   Colors,
-   DebugInstructions,
-   Header,
-   LearnMoreLinks,
-   ReloadInstructions,
- } from 'react-native/Libraries/NewAppScreen';
- 
+
  //Screen
  import Onboarding   from '../../pages/Onboarding/Onboarding';
  import Onboarding2 from '../../pages/Onboarding/Onboarding2';
@@ -55,8 +48,8 @@
  import Icon from 'react-native-vector-icons/Foundation';
  import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
  import Entypo from 'react-native-vector-icons/Entypo';
+ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
  import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
- 
  
  //firebase
  import auth from '@react-native-firebase/auth';
@@ -65,6 +58,8 @@
  import AccomodationDetails from '../../pages/Accomodation/AccomodationDetails';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useAuth } from '../../context/auth.context';
+import Loader from '../loader';
+import BookingProcess from '../../pages/Accomodation/BookingProcess';
  
  
  
@@ -101,6 +96,7 @@ const navigation = () => {
        <Stack.Screen name='MagazineDetails' component={MAGAZINESDETAILS}/>
        <Stack.Screen name='Account' component={Profile} />
        <Stack.Screen name='Profile Details' component={ProfileDetails}/>
+       <Stack.Screen name='BookingProcess' component={BookingProcess}/>
      </Stack.Navigator>
        )
    }
@@ -127,6 +123,7 @@ const navigation = () => {
        <Stack.Screen name='AccomodationDetails' component={ACCOMODATIONDETAILS} />
        <Stack.Screen name='Account' component={Profile} />
        <Stack.Screen name='Profile Details' component={ProfileDetails}/>
+       <Stack.Screen name='BookingProcess' component={BookingProcess}/>
      </Stack.Navigator>
      )
    }
@@ -168,7 +165,7 @@ const navigation = () => {
       drawerLabel(props: {color: string, size: number, focused: boolean}) {
         return(
           <>
-          <Text fontSize={14} fontWeight="700" color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} fontFamily="Plus Jakarta Sans" style={{ marginHorizontal:"-15%"}}>HOME</Text>
+          <Text fontSize={14} fontWeight="700" color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} fontFamily="Plus Jakarta Sans" style={{ marginHorizontal:"-12%"}}>HOME</Text>
         </>
         )
       }         
@@ -177,7 +174,7 @@ const navigation = () => {
           headerShown:false,
           drawerIcon(props: {color: string, size: number, focused: boolean}) {
             return(<Box>
-                <FontAwesome5 name="hotel" size={18} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
+                <MaterialIcons name="business" size={18} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
             </Box>)
         },
         drawerLabel(props: {color: string, size: number, focused: boolean}) {
@@ -208,7 +205,7 @@ const navigation = () => {
           headerShown:false,
           drawerIcon(props: {color: string, size: number, focused: boolean}) {
             return(<Box>
-                <MaterialIcons name="folder-special" size={18} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
+                <MaterialCommunityIcons name="auto-fix" size={18} color={props.focused ? "#FFFFFF" : "rgb(0,0,0)"} />
             </Box>)
         },
         drawerLabel(props: {color: string, size: number, focused: boolean}) {
@@ -266,13 +263,20 @@ const navigation = () => {
      )
    }
  
+   const LoaderComponent = () => {
+    return(
+      <View>
+          <Loader isLoading={true}/>
+      </View>
+    )
+   }
  
    const InitStack = () => {
     return (
       <Stack.Navigator screenOptions={{
         headerShown: false
     }}>
-        <Stack.Screen name="Init" component={Onboarding3} />
+        <Stack.Screen name="Init" component={LoaderComponent} />
       </Stack.Navigator>
     )
   }

@@ -10,14 +10,12 @@ const AuthService = {
   signin: async (email: string, password: string) => {
     // const { user } = 
     await auth().signInWithEmailAndPassword(email, password).then( async (userCredetial) => {
-      // Toast.show({type:"success", text2:"You're now logged in!"})
       const user = userCredetial.user;
       const usersCollection = firestore().collection('users');
      usersCollection.doc(user.uid).onSnapshot((snapShot) => {
       const data = snapShot.data();
       return data as User;
     });
-        // navigation.navigate('Home', {user: user.uid});
     }).catch((error) => {
       if(error.code === "auth/user-not-found"){
         Toast.show({type:'error', text2:"Email is not registered"});
@@ -32,24 +30,23 @@ const AuthService = {
 
 signup: async (name: string, email: string, password: string) => {
   return await auth().createUserWithEmailAndPassword(email, password).then((userCredetial) => {
-    // Toast.show({type:"success", text2:"You're now logged in!"})
+    Toast.show({type:"success", text2:"You're now registered!"})
     const usersCollection = firestore().collection('users')
 
     const user: User = {
-      name: name,
+      name: name ? name : "name",
       email: email,
       createdAt: firestore.Timestamp.now(),
-      uid: "",
-      userName: "",
-      imageUrl: "",
-      nationality:"",
-      phoneNumber:"",
-      dateOfBirth:"",
+      uid: userCredetial.user?.uid,
+      userName: 'display name',
+      imageUrl: 'https://media.istockphoto.com/id/1364105164/photo/hologram-human-head-deep-learning-and-artificial-intelligence-abstract-background.jpg?b=1&s=170667a&w=0&k=20&c=i9-oulHCR0LCxqzqUW2Q7bKt3RrdbCZU0OXqXV2gw-o=',
+      nationality:"South African",
+      phoneNumber:"0123456789",
+      dateOfBirth:"DD-MM-YYYY",
     }
 
     return usersCollection.doc(userCredetial.user.uid).set(user)
 
-      // navigation.navigate('Home', {user: user.uid});
   }).catch((error) => {
     if(error.code === "auth/email-already-in-use"){
       Toast.show({type:'error', text2:"email address is already in use!"});

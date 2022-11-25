@@ -5,64 +5,66 @@ import { useAuth } from "../context/auth.context";
 type array = []
 
 
-
-
 const Accomodations = {
 
-    getAccomodation:  async (setAccomoodation: (accomodation: Array<array> | null, reviews: number) => void) => {
+    getAccomodation: async (setAccomoodation: (accomodation: any | null) => void) => {
         const user = auth()?.currentUser;
-       
         const restaurantsCollection = firestore().collection('accomodation');
-        return restaurantsCollection.onSnapshot((snapShot) => {
-              snapShot.docs.map((documents) => {
-                    const data = [documents.data()] as Array<array>;
-                    const exist = documents.exists;
-    
-                    return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
-                        const size = snapS.size;
-                        const rates = snapS.docs.map((rate) => parseFloat(rate.data().review));
-                        // console.log(size, 'the size of the size', snapShot.size)
-                        snapS.docs.map((docs) => {
-                            const rate = rates.reduce((total, val) => total + val) / size;
-                            const exist1 = documents.exists;
-        
-                            if (exist) {
-    
-                                setAccomoodation(data, rate)
-                            } else if (exist && exist1) {
-    
-                                setAccomoodation(data, rate)
-                            } else {
-    
-                                setAccomoodation(null, 0)
-                            }
+        restaurantsCollection.onSnapshot((snapShot) => {
+            return new Promise<Event[]>(resolve => {
+                const accomodation = snapShot.docs.map((document) => {
+                    const obj = document.data();
+                    obj.id = document.id;
+                    document.ref.collection('reviews').onSnapshot((snapS) => {
+                        return new Promise<Event[]>(resolve => {
+                            const size = snapS.size;
+                            const rates = snapS.docs.map((documents) => parseFloat(documents.data().review));
+                            const rate = snapS.docs.map((doc) => doc.data().accomodationId);
+                            const rating = rates.reduce((total, val) => total + val) / size;
+                            obj.review = rating;
+                            obj.size = rates.length;
+                            const review = rating as Event;
+                            setAccomoodation(accomodation);
+                            
+                            return accomodation;
                         })
                     })
-                 })
-         })
-    
+                    const newObj = obj as Event;
+                    return newObj;
+                });
+                resolve(accomodation);
+            });
+        })
     },
 
-getReview: async (accomodationId: string, setReviews: (reviews: Array<array> | null, rating: number) => void) => {
+    getReview: async (accomodationId: string, setReviews: (reviews: any | null) => void) => {
         return firestore().collection("accomodation").where('accomodationId', '==', accomodationId)
+
             .onSnapshot((snapShot) => {
-                return snapShot.docs.map((snaps) => {
-                    snaps.ref.collection("reviews").onSnapshot((doc) => {
-                        const rates = doc.docs.map((rate) => parseFloat(rate.data().review));
-                        doc.docs.map((document) => {
-                            const rate = rates.reduce((total, val) => total + val) / doc.size;
-                            if(document.exists) {
-                                const review = [document.data()] as Array<array>;
-                                    // console.log(rate, 'the total rates', rates)
-                                setReviews(review, rate)
-                            } else {
-                                setReviews([], rate);
-                            }
+                return new Promise<Event[]>(resolve => {
+                    const reviews = snapShot.docs.map((document) => {
+                        const obj = document.data();
+                        obj.id = document.id;
+
+                        document.ref.collection('reviews').onSnapshot((snapS) => {
+                            return new Promise<Event[]>(resolve => {
+                                const size = snapS.size;
+                                const rates = snapS.docs.map((documents) => documents.data());
+                                obj.size = rates.length;
+                                const review = rates as Event;
+                                setReviews(review);
+                                return review;
+                            })
                         })
-                    })
-                })
+                        const newObj = obj as Event;
+                        // console.log({newObj})
+                        return newObj;
+                    });
+                    resolve(reviews);
+                });
+                
             })
-},
+    },
 
 }
 

@@ -6,74 +6,100 @@ type array = []
 
 
 const Homes = {
-getRestaurant: async (setRestaurants: (restaurants: Array<array> | null, numOfReview: number) => void) => {
-   
-    const user = auth()?.currentUser;
-   
-    const restaurantsCollection = firestore().collection('restaurants').limit(3);
-    return restaurantsCollection.onSnapshot((snapShot) => {
-          snapShot.docs.map((documents) => {
-                const data = [documents.data()] as Array<array>;
-                const exist = documents.exists;
+    getRestaurant: async (setRestaurants: (restaurants: any | null) => void) => {
 
-            return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
-                    const size = snapS.size;
-                    const rates = snapS.docs.map((rate) => parseFloat(rate.data().review));
-                    // console.log(size, 'the size of the size', snapShot.size)
-                    snapS.docs.map((docs) => {
-                        const rate = rates.reduce((total, val) => total + val) / size;
-                        const exist1 = documents.exists;
-                        if (exist) {
+        const user = auth()?.currentUser;
+        const restaurantsCollection = firestore().collection('restaurants').limit(3);
+        restaurantsCollection.onSnapshot((snapShot) => {
 
-                            
-                            setRestaurants(data, rate);
-                        } else if (exist && exist1) {
+            return new Promise<Event[]>(resolve => {
+                const restaurants = snapShot.docs.map((document) => {
 
-                            setRestaurants(data, rate);
-                        } else {
+                    const obj = document.data();
+                    obj.id = document.id;
 
-                            setRestaurants(null, 0);
-                        }
+                    document.ref.collection('reviews').onSnapshot((snapS) => {
+
+                        return new Promise<Number[]>(resolve => {
+                            const size = snapS.size;
+
+                            const rates = snapS.docs.map((documents) => parseFloat(documents.data().review));
+                            // console.log(rates, size)
+                            const rating = rates.reduce((total, val) => total + val) / size;
+
+                            obj.review = rating; //total rates
+                            obj.size = rates.length; //total reviews
+                            const review = rating as Number;
+
+                            //   const accom = accomodation as array;
+                            //  console.log(review); => correct number that should be pushed
+                            setRestaurants(restaurants);
+                            //   console.log(accom)
+                            resolve(rates)
+                            return review;
+
+                        })
+
                     })
-                })
-             })
-     })
-},
 
-getAccomodation:  async (setAccomoodation: (accomodation: Array<array> | null, numOfReview: number) => void) => {
-    const user = auth()?.currentUser;
-   
-    const restaurantsCollection = firestore().collection('accomodation').limit(3);
-    return restaurantsCollection.onSnapshot((snapShot) => {
-          snapShot.docs.map((documents) => {
-                const data = [documents.data()] as Array<array>;
-                const exist = documents.exists;
+                    const newObj = obj as Event;
+                    return newObj;
 
-             
-                return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
-                    const size = snapS.size;
-                    const rates = snapS.docs.map((rate) => parseFloat(rate.data().review));
-                    // console.log(size, 'the size of the size', snapShot.size)
-                    snapS.docs.map((docs) => {
-                        const rate = rates.reduce((total, val) => total + val) / size;
-                        const exist1 = documents.exists;
-    
-                        if (exist) {
+                });
+                resolve(restaurants);
+                // console.log({...v})
+            });
+        })
+    },
 
-                            setAccomoodation(data, rate)
-                        } else if (exist && exist1) {
+    getAccomodation: async (setAccomoodation: (accomodation: any | null) => void) => {
 
-                            setAccomoodation(data, rate)
-                        } else {
+        const user = auth()?.currentUser;
+        const restaurantsCollection = firestore().collection('accomodation').limit(3);
+        restaurantsCollection.onSnapshot((snapShot) => {
 
-                            setAccomoodation(null, 0)
-                        }
+            return new Promise<Event[]>(resolve => {
+                const accomodation = snapShot.docs.map((document) => {
+
+                    const obj = document.data();
+                    obj.id = document.id;
+
+                    document.ref.collection('reviews').onSnapshot((snapS) => {
+
+                        return new Promise<Number[]>(resolve => {
+                            const size = snapS.size;
+
+                            const rates = snapS.docs.map((documents) => parseFloat(documents.data().review));
+                            // console.log(rates, size)
+                            const rating = rates.reduce((total, val) => total + val) / size;
+
+                            obj.review = rating; //total rates
+                            obj.size = rates.length; //total reviews
+                            const review = rating as Number;
+
+                            //   const accom = accomodation as array;
+                            //  console.log(review); => correct number that should be pushed
+                            setAccomoodation(accomodation);
+                            //   console.log(accom)
+                            resolve(rates)
+                            return review;
+
+                        })
+
                     })
-                })
-             })
-     })
 
-},
+                    const newObj = obj as Event;
+                    return newObj;
+
+                });
+                resolve(accomodation);
+                // console.log({...v})
+            });
+
+
+        })
+
+    },
 
 
 }

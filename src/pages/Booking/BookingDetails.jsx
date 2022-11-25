@@ -12,7 +12,6 @@ import ReviewComponent from '../../Components/ReviewComponent';
 
 const BookingDetails = ({navigation, route}) => {
 
-
       const { user } = useAuth();
       const [booking, setBooking] = useState(route.params.booking); 
       const [stars, setStars] = useState(0);
@@ -80,25 +79,30 @@ const BookingDetails = ({navigation, route}) => {
             handleStars(1)}}/>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.9}>
-        <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=2 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            setStars(2)
-            handleStars(2)}}/>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.9}>
-        <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=3 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            handleStars(3)}}/>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.9}>
-        <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=4 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            const star = 4;
-            setStars(star)
-            handleStars(star)}}/>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.9}>
-        <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=5 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            setStars(5)
-            handleStars(5)}}/>
-        </TouchableOpacity>
+                <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 2 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
+                  setStars(2)
+                  handleStars(2)
+                }} />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.9}>
+                <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 3 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
+                 setStars(3)
+                 handleStars(3)
+                }} />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.9}>
+                <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 4 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
+                  
+                  setStars(4)
+                  handleStars(4)
+                }} />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.9}>
+                <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 5 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
+                  setStars(5)
+                  handleStars(5)
+                }} />
+              </TouchableOpacity>
             </Box>
             
              <TextArea placeholder='Write your review...' alignSelf="center" width="90%" marginHorizontal="5%" height={150} 

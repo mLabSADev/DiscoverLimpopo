@@ -6,73 +6,95 @@ type array = []
 
 
 const Restaurants = {
-getRestaurant: async (setRestaurants: (restaurants: Array<array> | null,numOfReview: number) => void) => {
-   
-    const user = auth()?.currentUser;
-   
-    const restaurantsCollection = firestore().collection('restaurants').limit(3);
-    return restaurantsCollection.onSnapshot((snapShot) => {
-          snapShot.docs.map((documents) => {
-                const data = [documents.data()] as Array<array>;
-                const exist = documents.exists;
-                // console.log({data})
+    getRestaurant: async (setRestaurants: (restaurants: any | null) => void) => {
+        const user = auth()?.currentUser;
+        const restaurantsCollection = firestore().collection('restaurants');
+        restaurantsCollection.onSnapshot((snapShot) => {
 
-                return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
-                    const size = snapS.size;
-                    const rates = snapS.docs.map((rate) => parseFloat(rate.data().review));
-                    // console.log(size, 'the size of the size', snapShot.size)
-                    snapS.docs.map((docs) => {
-                        const rate = rates.reduce((total, val) => total + val) / size;
-                        const exist1 = documents.exists;
-                        if (exist) {
+            return new Promise<Event[]>(resolve => {
+                const restaurants = snapShot.docs.map((document) => {
 
-                            setRestaurants(data, rate);
-                        } else if (exist && exist1) {
+                    const obj = document.data();
+                    obj.id = document.id;
 
-                            setRestaurants(data, rate);
-                        } else {
+                    document.ref.collection('reviews').onSnapshot((snapS) => {
 
-                            setRestaurants(null, 0);
-                        }
+                        return new Promise<Event[]>(resolve => {
+                            const size = snapS.size;
+
+                            const rates = snapS.docs.map((documents) => parseFloat(documents.data().review));
+                            // console.log(rates, size)
+                            const rating = rates.reduce((total, val) => total + val) / size;
+
+                            obj.review = rating; //total rates
+                            obj.size = rates.length; //total reviews
+                            const review = rating as Event;
+
+                            //   const accom = accomodation as array;
+                            //  console.log(review); => correct number that should be pushed
+                            setRestaurants(restaurants);
+                            //   console.log(accom)
+                            resolve(rates)
+                            return review;
+
+                        })
+
                     })
-                })
-             })
-     })
-},
 
-getSpecials: async (setSpecials: (specials: Array<array> | null, numOfReview: number) => void) => {
+                    const newObj = obj as Event;
+                    return newObj;
+
+                });
+                resolve(restaurants);
+                // console.log({...v})
+            });
+        })
+    },
+
+getSpecials: async (setSpecials: (specials: any | null) => void) => {
 
     const user = auth()?.currentUser;
-   
-    const specialCollection = firestore().collection('restaurants').limit(3).where('isSpecial', '==', true);
-    return specialCollection.onSnapshot((snapShot) => {
-          snapShot.docs.map((documents) => {
-                const data = [documents.data()] as Array<array>;
-                const exist = documents.exists;
-             return documents.ref.collection('reviews').onSnapshot((snapS)  => {
-                const size = snapS.size;
-                const rates = snapS.docs.map((rate) => parseFloat(rate.data().review));
-                // console.log(size, 'the size of the size', snapShot.size)
-                snapS.docs.map((docs) => {
-                    const rate = rates.reduce((total, val) => total + val) / size;
-                    const exist1 = documents.exists;
-                        if (exist) {
+    const restaurantsCollection = firestore().collection('restaurants').where('isSpecial', '==', true);
+    restaurantsCollection.onSnapshot((snapShot) => {
 
-                            setSpecials(data, rate)
+        return new Promise<Event[]>(resolve => {
+            const restaurants = snapShot.docs.map((document) => {
 
-                        } else if (exist && exist1) {
+                const obj = document.data();
+                obj.id = document.id;
 
-                                    console.log(exist1)
+                document.ref.collection('reviews').onSnapshot((snapS) => {
 
-                            setSpecials(data, rate)
+                    return new Promise<Event[]>(resolve => {
+                        const size = snapS.size;
 
-                        } else {
-                            setSpecials(null, 0)
-                        }
+                        const rates = snapS.docs.map((documents) => parseFloat(documents.data().review));
+                        // console.log(rates, size)
+                        const rating = rates.reduce((total, val) => total + val) / size;
+
+                        obj.review = rating; //total rates
+                        obj.size = rates.length; //total reviews
+                        const review = rating as Event;
+
+                        //   const accom = accomodation as array;
+                        //  console.log(review); => correct number that should be pushed
+                        setSpecials(restaurants);
+                        //   console.log(accom)
+                        resolve(rates)
+                        return review;
+
                     })
+
                 })
-          })
-     })
+
+                const newObj = obj as Event;
+                return newObj;
+
+            });
+            resolve(restaurants);
+            // console.log({...v})
+        });
+    })
 },
 
 getReview: async (accomodationId: string, setReviews: (reviews: Array<array> | null, rating: number) => void) => {
@@ -96,6 +118,30 @@ getReview: async (accomodationId: string, setReviews: (reviews: Array<array> | n
         })
 },
 
+sendRestaurantReview: async (
+    userName: string,
+    image: string,
+    description: string,
+    isMessage: boolean, 
+    review: number, 
+    restaurantId: string, 
+    uid: string,
+    // sendReview: (booking: Array<array> | null) => void
+    ) => {
+        return await firestore().collection('restaurants').doc(restaurantId).collection('reviews').add({
+            name: userName,
+            image: image,
+            review: review,
+            reviewDescription: description,
+            isMessage: isMessage,
+            uid: uid,
+            restaurantId: restaurantId,
+        }).then(() => {
+            console.log({
+                userName, image, review, description, isMessage, uid, restaurantId
+            })
+        }).catch((error) => {console.log(error, 'this error is in update booking review method')})
+},
 
 }
 

@@ -21,10 +21,10 @@ export default function SpecialPackages({navigation, routes}) {
   return (
     <>
     <SafeAreaView  style={{ backgroundColor:"#F4FAFF", width:"100%", height:"100%" }}>
-    <Box height={130} backgroundColor="#2B2B2B" borderBottomLeftRadius={30} borderBottomRightRadius={30}>
+    <Box height={130} backgroundColor="#2B2B2B" borderBottomLeftRadius={30} borderBottomRightRadius={30} style={{ elevation:.3}}>
       <Box width="95%" backgroundColor='rgba(239, 172, 50, 0.05)' borderRadius={30} flexDirection="row" 
       justifyContent="space-between" alignContent="center" alignItems="center" height={50}
-      style={{ marginVertical:"3%",marginHorizontal:"2%"}}>
+      style={{ marginVertical:"3%",marginHorizontal:"2%",  elevation:.3}}>
           <TouchableOpacity activeOpacity={2} onPress={() => navigation.openDrawer('', {isScreen: true})}>
           <Feather name='menu' size={32} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)", marginHorizontal:"10%"}} />
           </TouchableOpacity>
@@ -45,6 +45,7 @@ export default function SpecialPackages({navigation, routes}) {
       horizontal={false}
           style={{ width:"100%", height:"100%"}}  
             data={events}
+            
             numColumns={1}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
@@ -53,7 +54,7 @@ export default function SpecialPackages({navigation, routes}) {
           <TouchableOpacity activeOpacity={1}
           key={item?.eventId}
           onPress={() => {navigation.navigate('SpecialPackagesDetails', {item: item})}}
-        style={{marginVertical:"2%", marginHorizontal:"4%"}}>
+        style={{marginVertical:"2%", marginHorizontal:"4%", elevation:5,}}>
                <SpecialEvents
                image={item.image}
                title={item.title}

@@ -24,7 +24,6 @@ const data = [{
 
   
 const Accomodation = ({navigation, route}) => {
-
   
     const {user} = useAuth();
     const [search, setSearch] = useState('');
@@ -62,13 +61,12 @@ const Accomodation = ({navigation, route}) => {
 
 
     useEffect(() => {
-    
-      Accomodations.getAccomodation((accomodation, reviews) => {
-        setAccomodation(accomodation);
-        setReviewAccomodation(reviews);
-        setMasterDataSource(accomodation);
-      })
-    
+      return () => {
+        Accomodations.getAccomodation((accomodation) => {
+          setAccomodation(accomodation);
+          setMasterDataSource(accomodation);
+        });
+      }
     }, []);
     
     return(
@@ -133,17 +131,17 @@ const Accomodation = ({navigation, route}) => {
               key={item.accomodationId}>  
               <AccomodationComponent
               name={item.name}
-              review={reviewAccomodation}
+              review={item.review}
               amenities={item.amenities}
               description={item.description}
               image={item.accomodationImage}
               loggoImage={item.accomodationLoggo}
               />
+              {console.log(item.review)}
             </TouchableOpacity>
             )
           }
           />
-           
             </Box>
 }
  </ScrollView>

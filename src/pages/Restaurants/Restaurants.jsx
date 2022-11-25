@@ -173,7 +173,6 @@ const Restaurants = ({navigation, route}) => {
     />
     </Box>
 }
-                
       <Box style={{marginVertical:"2%"}}>
             <ImageBackground style={{width:"100%", height:125}} source={require("../../assets/images/advert.jpg")} blurRadius={3} >
               <Box flexDirection="column" height="90%" style={{marginVertical:"2%", marginHorizontal:"3%", }}>

@@ -24,11 +24,15 @@ const AccomodationComponent = ({
           <Box style={{marginHorizontal:"6%", marginVertical:"-3%", flexDirection:"row"}}>
                 <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:12, color:"rgb(0,0,0)" }}>{review ? review : 'not reviewed'}</Text>
                 <Box style={{flexDirection:"row", marginVertical:"2%", marginHorizontal:"2%"}}>
+                { review > 0 ? 
+                <>
                 <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 1  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
                 <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 2  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
                 <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 3  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
                 <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 4  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
                 <AntDesign name='star' size={7} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center", color: review >= 5  ? "rgb(239, 172, 50)" : "lightgrey"}}/>
+                </>
+                : <Box></Box>}
                 </Box>
           </Box>
           
