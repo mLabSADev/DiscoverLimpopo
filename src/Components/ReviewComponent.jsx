@@ -12,7 +12,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 }) => {
   return (
         <>
-            <Box style={{width:"80%", height:"100%", flexDirection:"row"}}>
+            <Box style={{width:"100%", height:150, flexDirection:"row",}}>
                 <Box style={{width:"20%", height:"30%", alignItems:"center",}}>
                      <Image alt='profile' source={{uri: image}} style={{width:34, height:34, borderRadius:34}} />
                 </Box>
@@ -21,7 +21,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
                         <Box >
                         <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:20, color:"rgb(0,0,0)", fontWeight:"bold" }}>{name}</Text>
                         </Box>
-                        <Box style={{flexDirection:"row", marginHorizontal:"5%", height:"100%"}}>
+                        <Box style={{flexDirection:"row", marginHorizontal:"5%", height:"100%", marginVertical:"-2%"}}>
                         <AntDesign name='star' size={7} style={{fontWeight:"500", alignSelf:"center", color:`${review >= 1? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)"}`}}/>
                         <AntDesign name='star' size={7} style={{fontWeight:"500", alignSelf:"center", color:`${review >= 2? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)"}`}}/>
                         <AntDesign name='star' size={7} style={{fontWeight:"500", alignSelf:"center", color:`${review >= 3? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)"}`}}/>

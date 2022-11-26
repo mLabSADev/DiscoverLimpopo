@@ -142,7 +142,7 @@ const Restaurants = ({navigation, route}) => {
             No available restaurant
           </Text>
     </Box> :
-    <Box width={'100%'}>
+    <Box width={'100%'} style={{ height: 300 }}>
       <MasonryList
       horizontal={false}
           style={{ width:"100%", height:"100%"}}  
@@ -159,7 +159,7 @@ const Restaurants = ({navigation, route}) => {
         style={{marginVertical:"2%", width:"100%"}}>
           <RestaurantsComponent
           name={item.name}
-          review={item.review}
+          review={item.overAllReview}
           location={item.location}
           loggoImage={item.loggoImage}
           availabilityOptions={item.availabilityOptions}
@@ -192,7 +192,7 @@ const Restaurants = ({navigation, route}) => {
             No available restaurant
           </Text>
     </Box> :
-    <Box width={'100%'}>
+    <Box width={'100%'} style={{ height: 300 }}>
       <MasonryList
       horizontal={false}
           style={{ width:"100%", height:"100%"}}  
@@ -208,7 +208,7 @@ const Restaurants = ({navigation, route}) => {
         style={{marginVertical:"2%", width:"100%"}}>
           <RestaurantsComponent
           name={item.name}
-          review={item.review}
+          review={item.overAllReview}
           location={item.location}
           loggoImage={item.loggoImage}
           availabilityOptions={item.availabilityOptions}

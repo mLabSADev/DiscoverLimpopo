@@ -100,7 +100,7 @@ const Restaurants = {
                 });
                 resolve(v);
                 setReviews([...v])
-                 console.log({...v}, restaurantId,"the id is null")
+                 console.log({...v},"the id is null")
             });
         } )
         

@@ -309,7 +309,7 @@ console.log(route.params.item.id, 'id is this value')
           </Box> :
             (
               <>
-                <Box width={'100%'} height={'100%'}>
+                <Box width={'100%'} style={{height:300}}>
                   <MasonryList
                     scrollEnabled={true}
                     style={{ width: "100%", height: "100%" }}
@@ -340,7 +340,6 @@ console.log(route.params.item.id, 'id is this value')
             <Box height={15}></Box>
 
           <Box>
-
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => { }}>

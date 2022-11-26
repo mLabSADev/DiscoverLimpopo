@@ -37,6 +37,7 @@ const AccomodationDetails = ({ navigation, route }) => {
       setReviews(review)
       //  console.log({review})
     })
+
   }, []);
 
 
@@ -126,7 +127,7 @@ const AccomodationDetails = ({ navigation, route }) => {
 
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => navigation.navigate('BookingProcess')}
+              onPress={() => navigation.navigate('BookingProcess', {accomodationId: accomodationId})}
               style={{ alignSelf: "center", backgroundColor: "rgb(239, 172, 50)", width: "90%", height: 50, opacity: 3, justifyContent: "center", borderRadius: 30, }}>
               <Text style={{ alignSelf: "center", color: "#FFFFFF", fontWeight: "bold", fontFamily: "Plus Jakarta Sans", fontSize: 14 }}>CHECK IN</Text>
             </TouchableOpacity>
@@ -185,23 +186,24 @@ const AccomodationDetails = ({ navigation, route }) => {
         /> */}
               {reviews?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"2%"} height={140} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
                 <Text>
-                  Be the first one to add a review
+                  Be the first one to add a review {console.log({reviews}, 'this the review')}
                 </Text>
               </Box>:
-                (
+                
                   <>
-                    <Box width={'100%'} style={{marginVertical: "2%", marginHorizontal: "3%", height:300, backgroundColor:"grey"}}>
+                    <Box width={'90%'} style={{marginVertical: "2%", marginHorizontal: "3%", height:300,}}>
                       <MasonryList
                         scrollEnabled={true}
                         style={{ width: "100%" }}
                         data={reviews}
                         numColumns={1}
                         showsVerticalScrollIndicator={false}
-                        renderItem={({ item}) => 
-                         (
+                        renderItem={({ item}) => {
+                          return(
                             <>
                               <TouchableOpacity activeOpacity={1}
                                 key={item.reviewId}
+                                style={{marginVertical:10}}
                               >
                                 <ReviewComponent
                                   image={item.image}
@@ -209,13 +211,15 @@ const AccomodationDetails = ({ navigation, route }) => {
                                   review={item.review}
                                   reviewDescription={item.reviewDescription}
                                 />
+
                               </TouchableOpacity>
                             </>
                           )
+                          }
                         }
                       />
                     </Box>
-                  </>)
+                  </>
               }
             
           <Box style={{ marginVertical: "5%" }}>
