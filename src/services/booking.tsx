@@ -7,34 +7,19 @@ type array = []
 const BookingService = {
 
 
-getBooking:  async (setBooking: (booking: Array<array> | null) => void) => {
-    const user = auth()?.currentUser;
-    
-    const restaurantsCollection = firestore().collection('bookings').where('uid', '==', user?.uid)
-    return restaurantsCollection.onSnapshot((snapShot) => {
-            snapShot.docs.map((documents) => {
-                const data = [documents.data()] as Array<array>;
-                const exist = documents.exists;
+getBooking:  async (setBooking: (booking: any | null) => void) => {
 
-                setBooking(data, );
-            // return  documents.ref.collection('reviews').onSnapshot((snapS)  => {
-            //         const size = snapS.size;
-            //         snapS.docs.map((docs) => {
-            //             const review = [documents.data()] as Array<array>;
-            //             const exist1 = documents.exists;
-    
-            //             if (exist) {
-            //                 setBooking(data, null)
-            //             } else if (exist && exist1) {
-            //                 console.log({data});
-            //                 setBooking(data, review)
-            //             } else {
-            //                 setBooking(null, null)
-            //             }
-            //         })
-            //     })
-                 })
-        })
+    const snapchot = await firestore().collection('bookings').where('uid', '==', auth()?.currentUser?.uid).get();
+    return new Promise <Event[]> (resolve => {
+        const v = snapchot.docs.map(x => {
+            const obj = x.data();
+            obj.id = x.id;
+            return obj as Event;
+        });
+        resolve(v);
+        setBooking([...v])
+        console.log({...v})
+    });
 },
 
 
@@ -54,6 +39,7 @@ updateBookingReview: async(
         isMessage: isMessage,
         review: review,
     }).then(() => {
+
         BookingService.sendBookingReview(userName, image, description, isMessage, review, accomodationId, bookingId);
     }).catch((error) => {console.log(error, 'this error is in update booking review method')})
 },
@@ -68,6 +54,7 @@ sendBookingReview: async (
     bookingId: string,
     // sendReview: (booking: Array<array> | null) => void
     ) => {
+
         return await firestore().collection('accomodation').doc(accomodationId).collection('reviews').doc(bookingId).set({
             name: userName,
             image: image,
@@ -77,6 +64,10 @@ sendBookingReview: async (
             isMessage: isMessage,
         }).then(() => {}).catch((error) => {console.log(error, 'this error is in update booking review method')})
 },
+
+bookRoom: () => {
+
+}
 
 }
 

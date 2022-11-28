@@ -186,7 +186,7 @@ const AccomodationDetails = ({ navigation, route }) => {
         /> */}
               {reviews?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"2%"} height={140} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
                 <Text>
-                  Be the first one to add a review {console.log({reviews}, 'this the review')}
+                  Be the first one to add a review
                 </Text>
               </Box>:
                 

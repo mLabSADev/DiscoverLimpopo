@@ -40,9 +40,7 @@ export default function Magazines({navigation, routes}) {
   useEffect(() => {
       Magazine.getMagazine((magazin, size, isUser) => {
         setMagazines(magazin);
-        setIsUser(isUser);
-        setSize(size);
-      // console.log(size, 'the size', isUser, 'the user')
+      // console.log(magazin)
       })
   },[]);
 
@@ -53,7 +51,7 @@ export default function Magazines({navigation, routes}) {
         <Box width="95%" backgroundColor='rgba(239, 172, 50, 0.05)' borderRadius={30} height={50} 
              justifyContent="space-between" alignContent="center" alignItems="center" flexDirection="row"
               style={{ marginVertical:"3%",marginHorizontal:"2%"}}>
-            <TouchableOpacity activeOpacity={2} onPress={() => navigation.openDrawer('', {isScreen: true})}>
+            <TouchableOpacity activeOpacity={2} onPress={() => navigation.openDrawer('')}>
             <Feather name='menu' size={32} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)", marginHorizontal:"10%"}} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Account')}>
@@ -81,7 +79,7 @@ export default function Magazines({navigation, routes}) {
           <>
           <TouchableOpacity activeOpacity={1}
             key={item.magazineId}
-          onPress={() => {navigation.navigate('MagazineDetails', {item: item, size:size, isUser: isUser})}}
+          onPress={() => {navigation.navigate('MagazineDetails', {item: item})}}
         style={{marginVertical:"2%", marginHorizontal:"4%"}}>
           <Box height={200} width="100%" backgroundColor="grey" borderRadius={20}>
                 <Image source={{uri: item.imageCover

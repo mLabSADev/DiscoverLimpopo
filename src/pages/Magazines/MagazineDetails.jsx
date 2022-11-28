@@ -13,48 +13,25 @@ import  Toast  from 'react-native-toast-message';
 
 export default function MagazineDetails({navigation, route}) {
 
-  //  const {isUser, size} = route.params; 
   const [magazine, setMagazines] = useState(route.params.item);
   const [isUser, setIsUser] = useState('');
-  const [size, setSize] = useState(route.params.size);
   const [magazineId, setMAgazineId] = useState(`${route.params.item.magazineId}` || '')
-      //  console.log(route.params.size, 'the size', 'the user')
   const {user} = useAuth();
   
 
   const onLikePress = () => {
-    Magazines.onLikePress(magazineId, user?.name, user?.uid);
-    // .then(() => {
-    //   // Toast.show({type:'success'})
-    //   // console.log('like')
-    //     setIsUser(user?.uid);
-    //     const newSize = size + 1;
-    //     setSize(newSize)
-    // })
+    Magazines.onLikePress(route.params.item.magazineId, route.params.item.like,  (like) => {
+      setIsUser(like);
+    });
   } 
   
-  // const onDisLikePress = () => {
-  //   Magazines.onDislikePress(magazineId, user?.uid)
-  //   // .then(() => {
-  //   //   // Toast.show({type:'error'})
-  //   //   // console.log('dislike')
-  //   //   setIsUser('')
-  //   //   const newSize = size - 1;
-  //   //     setSize(newSize)
-  //   //   console.log('user set to empty string')
-  //   // })
-  // }
-     
+ 
   useEffect(() => {
-     const mag = () => {
-    Magazines.getLikes((isUser, size) => {
-      // console.log(isUser, );
-        setIsUser(isUser);
-        setSize(size);
+    Magazines.getLikes(route.params.item.magazineId, like => {
+        setIsUser(like);
+        console.log(like)
       })
-    }
-    return () => {mag()}
-  }, [isUser]);
+  }, []);
 
 
   return (
@@ -91,23 +68,23 @@ export default function MagazineDetails({navigation, route}) {
           <Text style={{fontFamily:"Plus Jakarta Sans", marginHorizontal:"4%", marginVertical:"-2%", color:"rgb(0,0,0)", fontSize:24, fontWeight:"bold"}}>{magazine.title}</Text>
       </Box>
       <Box style={{flexDirection:"column", width:"25%", alignSelf:"flex-end", height:"100%", alignItems:"center",}}>
-        { isUser  === magazine.magazineId ? 
+        {  
            
             <TouchableOpacity
           activeOpacity={0.9} 
           onPress={onLikePress}
-          style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor:'#F4FAFF', justifyContent:"center"}}>
-                <AntDesign name='heart' size={20} color={'rgb(239, 172, 50)'} style={{alignSelf:"center"}}/>
+          style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor: magazine.magazineId === isUser ? 'rgb(239, 172, 50)' : '#F4FAFF', justifyContent:"center"}}>
+                <AntDesign name='heart' size={20} color={ magazine.magazineId === isUser ? '#F4FAFF' : 'rgb(239, 172, 50)'} style={{alignSelf:"center"}}/>
           </TouchableOpacity>
-           : 
-           <TouchableOpacity
-            activeOpacity={0.9} 
-            onPress={onLikePress}
-            style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor:'rgb(239, 172, 50)', justifyContent:"center"}}>
-                  <AntDesign name='heart' size={20} color={'#F4FAFF'} style={{alignSelf:"center"}}/>
-            </TouchableOpacity>
+          //  : 
+          //  <TouchableOpacity
+          //   activeOpacity={0.9} 
+          //   onPress={onLikePress}
+          //   style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor:'rgb(239, 172, 50)', justifyContent:"center"}}>
+          //         <AntDesign name='heart' size={20} color={'#F4FAFF'} style={{alignSelf:"center"}}/>
+          //   </TouchableOpacity>
           }
-          <Text fontFamily="Plus Jakarta Sans" color="grey" fontSize={16} alignSelf="center" style={{ marginVertical:"-3%", }}>{size >= 1 ? (size > 1 ? `${size} likes` : `${size} like`) : `` }</Text>
+          <Text fontFamily="Plus Jakarta Sans" color="grey" fontSize={16} alignSelf="center" style={{ marginVertical:"-3%", }}>{magazine.like >= 1 ? (magazine.like > 1 ? `${magazine.like} likes` : `${magazine.like} like`) : `` }</Text>
       </Box>
    </Box>
 {/*  */}
@@ -117,10 +94,10 @@ export default function MagazineDetails({navigation, route}) {
 </Box>
 {/*  */}
     <Box with="100%" flexDirection="column">
-    {magazine.magazineDetails.map((item) => {
+    {magazine.magazineDetails.map((item, index) => {
       return(
         <>
-        <Box key={item.id}>
+        <Box key={item[index]}>
     <Text fontFamily="Plus Jakarta Sans" color="rgb(0,0,0)" fontSize={20} fontWeight="bold" style={{ marginHorizontal:"2%", marginVertical:"2%"}}>{item.title}</Text>
     <Text fontFamily="Plus Jakarta Sans" color="rgb(0,0,0)" fontSize={14} style={{ marginHorizontal:"2%", marginVertical:"2%"}}>
     {item.paragraph}

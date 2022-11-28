@@ -1,136 +1,89 @@
 import firestore from "@react-native-firebase/firestore";
 import auth from '@react-native-firebase/auth';
-import { useAuth } from "../context/auth.context";
 
 type array = []
 
 const Magazines = {
 
-getMagazine: async (setMagazine: (magazines: Array<array> | null, size: number, uid: string) => void) => {
-   
-    const user = auth()?.currentUser;
-   
-    const magazineCollection = firestore().collection('magazines');
-    return magazineCollection.onSnapshot((snapShot) => {
-          snapShot.docs.map((documents) => {
-                const data = [documents.data()] as Array<array>;
-                const exist = documents.exists;
-
-                documents.ref.collection('likes').where('magazineId', '==', documents.id).onSnapshot((snapS)  => {
-                    const size = snapS.size;
-                    snapS.docs.map((docs) => {
-                        if (docs.exists) {
-                            setMagazine(data, size, docs.id)
-                        } else {
-                            setMagazine(data, size, '')
-                        }
-                        //   console.log(docs.data().uid === user?.uid, 'yes they are the same')
-                    })
-                })
-             })
-     })
+getMagazine: async (setMagazine: (magazines: any| null) => void) => {
+    const snapchot = await firestore().collection('magazines').get();
+    return new Promise <Event[]> (resolve => {
+        const v = snapchot.docs.map(x => {
+            const obj = x.data();
+            obj.id = x.id;
+            return obj as Event;
+        });
+        resolve(v);
+        setMagazine([...v])
+        // console.log({...v})
+    });
 },
 
-onLikePress: async (magazineId: string, name: string, uid: string) => {
-    try {
-       
-      return firestore()
-            .collection("magazines")
-            .doc(magazineId)
-            .collection("likes").where('uid', "==", uid).onSnapshot((snap) => {
-                snap.docs.map((doc) => {
-                    if(doc.exists === true || doc.data().magazineId === magazineId) {
-                        doc.ref.update({
-                            uid: uid,
-                            name: name,
-                            magazineId: ''
-                        })
-                    } else {
-                        doc.ref.update({
-                            uid: uid,
-                            name: name,
-                            magazineId: magazineId
-                        })
-                    }
+onLikePress: async (magazineId: string, likes: number, setLike: (like: any | null) => void) => {
+        const like = firestore().collection('magazines').doc(magazineId).get();
+        like.then((snapShot) => {
+                const withinSnap = snapShot.ref.collection("likes").where('uid', "==", auth()?.currentUser?.uid).get();
+                withinSnap.then((doc2) => {
+                    return new Promise <Event[]> (resolve => {
+                        const v = doc2.docs.map(x => {
+                            const obj = x.data().magazineId;
+                            obj.id = x.id;
+                            if (x.exists) {
+                                if (magazineId === "") {
+                                    snapShot.ref.update({
+                                       like: likes + 1,
+                                    })
+                                    setLike(magazineId)
+                                } else {
+                                    snapShot.ref.update({
+                                        like: likes - 1,
+                                    })
+                                    setLike('')
+                                }
+                             } else {
+                                 x.ref.set({
+                                    magazineId: magazineId,
+                                    uid: auth()?.currentUser?.uid,
+                                 }).then(() => {
+                                    snapShot.ref.update({
+                                        like: likes + 1,
+                                     })           
+                                     setLike(magazineId)        
+                                 })
+                             }
+                            return obj as Event;
+                        });
+                        resolve(v);
+                        // setMagazine([...v])
+                        console.log({...v})
+                    });
                 })
             })
-           
-
-
-        // return await firestore()
-        //     .collection("magazines")
-        //     .doc(magazineId)
-        //     .collection("likes")
-        //     .doc(uid)
-        //     .set({
-        //         uid: uid,
-        //         name: name,
-        //         magazineId: magazineId
-        //     }).then(() => {
-        //         console.log(uid, 'went to backend', magazineId)
-        //     })
-    } catch (error) { }
 },
 
-//  onDislikePress: async (magazineId: string, uid: string) => {
-//     try {
-//         return await firestore()
-//              .collection("magazines")
-//              .doc(magazineId)
-//              .collection("likes")
-//              .doc(uid)
-//              .delete().then(() => {
-//                 console.log(uid, 'now the button is dislike', magazineId)
 
-//              })
-//      } catch (error) { }
-// },
+getLikes: async (magazineId: string, setLike: (isUser : string) => void) => {
+    const like = firestore().collection('magazines').doc(magazineId).get();
+    like.then((snapShot) => {
+            const withinSnap = snapShot.ref.collection("likes").where('uid', "==", auth()?.currentUser?.uid).get();
+            withinSnap.then((doc2) => {
+                    doc2.docs.map(x => {
+                        const obj = x.data();
+                        obj.id = x.id;
+                        if (x.exists) {
+                           setLike(x.data().magazineId)
 
-onChangeLike: () => {
-    const {user} = useAuth();
-    const eventCollection = firestore().collection('magazines');
-    return eventCollection.onSnapshot((snapShot) => {
-          snapShot.docs.map((documents) => {
-                documents.ref.collection('likes').where('uid', '==', user?.uid).onSnapshot((snapS) => {
-                    snapS.docs.map((docs) => {
-                        if (docs.exists) {
-                            documents.ref.collection('likes').doc(user?.uid).delete();
                         } else {
-                            documents.ref.collection('likes').doc(user?.uid).set({
-                                uid: user?.uid,
-                                name: user?.name,
-                            })
+                            setLike('');
                         }
-                        //   console.log(docs.data().uid === user?.uid, 'yes they are the same')
-                    })
-                })
-                      
-             })  
-     })
-},
+                        console.log(obj);
+                    });
+                    
+                    // console.log({...v})
+                });
+            })
 
-getLikes: async (setLike: (isUser : string, size: number ) => void) => {
-    const user = auth()?.currentUser;
-    const eventCollection = firestore().collection('magazines');
-    return eventCollection.onSnapshot((snapShot) => {
-          snapShot.docs.map((documents) => {
-              return  documents.ref.collection('likes').where('uid', '==', user?.uid).onSnapshot((snapS) => {
-                    const size = snapS.size;
-                    snapS.docs.map((docs) => {
-                        if (docs.exists) {
-                            const magazineId = docs.data().magazineId;
-                            setLike(magazineId, size);
-                        } else {
-                            setLike('', size);
-                        }
-                        //   console.log(docs.data().uid === user?.uid, 'yes they are the same')
-                    })
-                })
-                      
-             })  
-     })
 }
-
 }
 
 export default Magazines;
