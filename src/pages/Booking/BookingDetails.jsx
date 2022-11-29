@@ -9,6 +9,7 @@ import Toast from 'react-native-toast-message';
 import BookingService from '../../services/booking';
 import { TextInput } from 'react-native-gesture-handler';
 import ReviewComponent from '../../Components/ReviewComponent';
+import moment from 'moment';
 
 const BookingDetails = ({navigation, route}) => {
 
@@ -43,7 +44,6 @@ const BookingDetails = ({navigation, route}) => {
             }                      
             }, 2000)
       }
-
 
 
   return (
@@ -143,9 +143,9 @@ const BookingDetails = ({navigation, route}) => {
    <MaterialIcons name='access-time' size={18} style={{alignSelf:"center",alignContent:"center" ,color:"rgb(0,0,0)", marginHorizontal:"2%"}} />
             {/* <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:16, color:"rgb(0,0,0)", fontWeight:"700",}}>Hotel Monica</Text> */}
            <Box style={{flexDirection:"row"}}>
-            <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:16, color:"rgb(0,0,0)",}}>{booking.checkIn}</Text> 
+            <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:16, color:"rgb(0,0,0)",}}>{moment(booking.checkIn).format("DD MMM, YYYY").toString()}</Text> 
             <AntDesign name='arrowright' size={16} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}}/>
-            <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:16, color:"rgb(0,0,0)",}}>  {booking.checkOut}</Text>
+            <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:16, color:"rgb(0,0,0)",}}>  {moment(booking.checkOut).format("DD MMM, YYYY").toString()}</Text>
             </Box>
       </Box>
 
@@ -198,7 +198,9 @@ const BookingDetails = ({navigation, route}) => {
             <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:16, color:"rgb(0,0,0)", marginHorizontal:"1%"}}>Payment Method</Text> 
             </Box>
             <Box style={{width:"40%", justifyContent:"flex-end", alignContent:"flex-end", alignItems:"flex-end"}}>
+              { booking.isPaid ?
             <Image alt='yoco' source={require('../../assets/images/yocologo.png')} style={{resizeMode:"contain" ,width:"100%", height:30, alignSelf:"flex-end", alignContent:"flex-end"}}/>
+              : <Text style={{marginHorizontal:"15%"}}>Not Paid</Text>}
             </Box>
             
       </Box>
@@ -216,28 +218,48 @@ const BookingDetails = ({navigation, route}) => {
         <Box style={{flexDirection:"row", marginVertical:"2%", marginHorizontal:"10%"}}>
         <TouchableOpacity activeOpacity={0.9}>
         <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=1 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            setStars(1)
-            handleStars(1)}}/>
+            try{setStars(1)
+              handleStars(1)
+              } catch(error) {
+                
+              }
+            }}/>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.9}>
         <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=2 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            setStars(2)
-            handleStars(2)}}/>
+             try{setStars(2)
+              handleStars(2)
+              } catch(error) {
+                
+              }
+            }}/>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.9}>
         <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=3 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            handleStars(3)}}/>
+           try{setStars(3)
+            handleStars(3)
+            } catch(error) {
+              
+            }
+            }}/>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.9}>
         <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=4 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            const star = 4;
-            setStars(star)
-            handleStars(star)}}/>
+            try{setStars(4)
+              handleStars(4)
+              } catch(error) {
+                
+              }
+            }}/>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.9}>
         <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=5 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            setStars(5)
-            handleStars(5)}}/>
+            try{setStars(5)
+            handleStars(5)
+            } catch(error) {
+
+            }
+            }}/>
         </TouchableOpacity>
         </Box>
 
@@ -256,7 +278,6 @@ const BookingDetails = ({navigation, route}) => {
           <>
           <Box style={{marginVertical:"3%"}}>
             <ReviewComponent
-            
             image={booking.image}
             name={booking.userName}
             review={booking.review}

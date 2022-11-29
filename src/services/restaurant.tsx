@@ -125,7 +125,10 @@ const Restaurants = {
             isMessage: isMessage,
             uid: uid,
             restaurantId: restaurantId,
-        }).then(() => {
+        }).then((docum) => {
+            docum.update({
+                reviewId: docum.id
+            })
             Restaurants.updateReview(restaurantId)
         }).catch((error) => { console.log(error, 'this error is in update booking review method') })
     },
@@ -139,14 +142,17 @@ updateReview: async (restaurantId: string,) => {
                 new Promise<Event[]>(resolve => {
                     const size = docuSnap.size;
                     const rates = docuSnap.docs.map((documents) => parseFloat(documents.data().review));
-                    const rating = rates.reduce((total, val) => total + val) / size;
+                    const rating = (rates.reduce((total, val) => total + val) / size).toFixed(1);
+                    
                     snapchot.ref.update({
-                        overAllReview: rating,
+                        overAllReview: parseFloat(rating),
                         reviewSize: size,
                     }).then(() => {console.log('done')}).catch((error) => {console.log(error, 'cant update the overall and size')})
+                   
                     resolve(rates)
                 })
             })
+            snapchot.ref
         })
 }
 }

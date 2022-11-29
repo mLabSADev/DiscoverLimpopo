@@ -92,7 +92,7 @@ const AccomodationDetails = ({ navigation, route }) => {
               <Text fontFamily="Plus Jakarta Sans" fontSize={34} color="rgb(0,0,0)" fontWeight="bold">{accomodation.name}</Text>
               <Box style={{ marginVertical: "4%", flexDirection: "row" }}>
                 <Box>
-                <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)" }}>{accomodation.overAllReview ? accomodation.overAllReview : 'not reviewed'}</Text>
+                <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)" }}>{parseFloat(accomodation.overAllReview).toFixed(1) ? parseFloat(accomodation.overAllReview).toFixed(1) : 'not reviewed'}</Text>
                 </Box>
                 {accomodation?.overAllReview ?
                 <Box style={{ flexDirection: "row", marginHorizontal: "2%" }}>
@@ -127,7 +127,7 @@ const AccomodationDetails = ({ navigation, route }) => {
 
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => navigation.navigate('BookingProcess', {accomodationId: accomodationId})}
+              onPress={() => navigation.navigate('BookingProcess', {accomodation: accomodation})}
               style={{ alignSelf: "center", backgroundColor: "rgb(239, 172, 50)", width: "90%", height: 50, opacity: 3, justifyContent: "center", borderRadius: 30, }}>
               <Text style={{ alignSelf: "center", color: "#FFFFFF", fontWeight: "bold", fontFamily: "Plus Jakarta Sans", fontSize: 14 }}>CHECK IN</Text>
             </TouchableOpacity>

@@ -81,8 +81,8 @@ console.log(route.params.item.id, 'id is this value')
 
   }
 
-  const handleStars = (star) => {
-      if (message !== "" && star === stars) {
+  const handleStars = (star, isPressed) => {
+      if (message !== "" && star === stars && isPressed === true) {
         Restaurants.sendRestaurantReview(
           user.userName, user.imageUrl, message, true, stars, route.params.item.id, user.uid
         ).then(() => {
@@ -199,7 +199,7 @@ console.log(route.params.item.id, 'id is this value')
 
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => { handleStars() }}
+              onPress={() => { handleStars(stars, true) }}
               style={{ alignSelf: "center", backgroundColor: "rgb(239, 172, 50)", width: "90%", height: 45, opacity: 3, justifyContent: "center", borderRadius: 30, marginVertical: "5%" }}>
               <Text alignSelf="center" color="#FFFFFF" fontWeight="bold" fontFamily="Plus Jakarta Sans" fontSize={14}>SUBMIT</Text>
             </TouchableOpacity>
@@ -231,7 +231,7 @@ console.log(route.params.item.id, 'id is this value')
           <Box style={{ width: "100%", marginHorizontal: "4%", marginVertical: "5%" }}>
             <Text fontFamily="Plus Jakarta Sans" fontSize={34} color="rgb(0,0,0)" fontWeight="bold">{restaurant.name}</Text>
             <Box style={{ marginVertical: "4%", flexDirection: "row" }}>
-              <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)" }}>{restaurant.review ? restaurant.review : 'not reviewed'}</Text>
+              <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)" }}>{parseFloat(restaurant.review).toFixed(1) ? parseFloat(restaurant.review).toFixed(1) : 'not reviewed'}</Text>
               <Box style={{ flexDirection: "row", marginHorizontal: "2%" }}>
                 <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: restaurant.review >= 1 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />
                 <AntDesign name='star' size={20} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center", color: restaurant.review >= 2 ? "rgb(239, 172, 50)" : "rgba(120, 120, 120, 0.5)" }} />

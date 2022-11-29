@@ -9,7 +9,8 @@ const BookingService = {
 
 getBooking:  async (setBooking: (booking: any | null) => void) => {
 
-    const snapchot = await firestore().collection('bookings').where('uid', '==', auth()?.currentUser?.uid).get();
+    const user = auth()?.currentUser?.uid;
+    const snapchot = await firestore().collection('bookings').where('userDetails.uid', '==', user).get();
     return new Promise <Event[]> (resolve => {
         const v = snapchot.docs.map(x => {
             const obj = x.data();
@@ -33,7 +34,7 @@ updateBookingReview: async(
     bookingId: string,
 ) => {
     return await firestore().collection('bookings').doc(bookingId).update({
-        userName: userName,
+        name: userName,
         image: image,
         description: description,
         isMessage: isMessage,
@@ -65,10 +66,52 @@ sendBookingReview: async (
         }).then(() => {}).catch((error) => {console.log(error, 'this error is in update booking review method')})
 },
 
-bookRoom: () => {
+bookRoom: async ( 
+    accomodationId: string, 
+    accomodationName: string, 
+    checkIn: string, 
+    checkOut:string,
+    guest: number,
+    nights: number,
+    roomId: string,
+    roomName: string,
+    roomPrice: string,
+    isPaid: boolean,
+    totalAmount: number,
+    user: {},
+    setBookingId: (bookingId: string | null) => void
+    ) => {
+
+    return await firestore().collection('bookings').add({
+        accomodationId: accomodationId,
+        accomodationName: accomodationName,
+        checkIn: checkIn,
+        checkOut: checkOut,
+        guest: guest,
+        nights: nights,
+        roomId: roomId,
+        roomName: roomName,
+        roomPrice:roomPrice,
+        isPaid: isPaid,
+        totalAmount:totalAmount,
+        userDetails: user
+    }).then((doc) => {
+        doc.update({
+            bookingId: doc.id
+        }).then(() => {setBookingId(doc.id)})
+    }).catch((error) => {console.log({error})})
+
+},
+
+// getReview: (bookingId : string, setBookingReview : (review: any | null) => void) => {
+//           return firestore().collection('bookings').where("bookingId", "==", bookingId).get().then((querySnap) => {
+//             querySnap.docs.map((document) => {
+//                 if(document.exists) {
+//                     setBookingReview(document.data())
+//                 }
+//             })
+//           })
+// }
 
 }
-
-}
-
 export default BookingService;

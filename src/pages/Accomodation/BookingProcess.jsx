@@ -10,6 +10,7 @@ import { DropDown1, DropDown2 } from '../../Components/Dropdowns';
 import Accomodations from '../../services/accomodation';
 import Toast from 'react-native-toast-message';
 import { useAuth } from '../../context/auth.context';
+import BookingService from '../../services/booking';
 
 const CUSTOM_LOCALE = {
     monthNames: [
@@ -47,6 +48,7 @@ const BookingProcess = ({ navigation, route }) => {
 
     const {user} = useAuth();
 
+    const [accomodation, setAccomodation] = useState(route.params.accomodation);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date().getTime() + 24 * 60 * 60 * 1000);
     const [people, SetPeople] = useState(0);
@@ -54,32 +56,51 @@ const BookingProcess = ({ navigation, route }) => {
     const [value, setValue] = useState(null);
     const [roomValue, setRoomValue] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [bookingId, setBookingId] = useState("");
 
 
 
 
     const bookRoom = () => {
+
+        const numOfDays = moment(startDate).format("D").toString()
+            const numOfDays2 = moment(endDate).format("D").toString()
+            const totalNumOfDays = numOfDays2 - numOfDays;
+            const totalAmount = totalNumOfDays * roomValue.price;
+
         if(roomValue.length <= 0) {
             Toast.show({type:"error", text2:"Please select your desired room"})
         } else if(people === 0) {
             Toast.show({type:"error", text2:"Please select the number of guest(s)"})
         } else {
-            // console.log(roomValue, 'this is room values')
-            const numOfDays = moment(startDate).format("D").toString()
-            const numOfDays2 = moment(endDate).format("D").toString()
-            const totalNumOfDays = numOfDays2 - numOfDays - 1;
-            const totalAmount = totalNumOfDays * roomValue.price;
 
-           console.log(totalAmount, 'the number of night')
-            console.log(people)
-
-
+           console.log(totalAmount, 'the total amount per stay')
+            console.log({roomValue})
+            BookingService.bookRoom(
+                accomodation.accomodationId, 
+                accomodation.name,
+                startDate, 
+                endDate, 
+                people,
+                totalNumOfDays,
+                roomValue.id,
+                roomValue.name,
+                roomValue.price,
+                false,
+                totalAmount,
+                user,
+                (book) => setBookingId(book)
+                ).then(() => {
+                    Toast.show({type:"success", text2:"Your booking has been reserved"})
+                    navigation.goBack()
+                    console.log({bookingId})
+            })
         }
         
     }
 
     useEffect(() => {
-        Accomodations.getRooms(route.params.accomodationId, (room) => {
+        Accomodations.getRooms(route.params.accomodation.accomodationId, (room) => {
             setRoom(room);
             // console.log(room)
           })

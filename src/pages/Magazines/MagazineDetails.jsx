@@ -14,22 +14,30 @@ import  Toast  from 'react-native-toast-message';
 export default function MagazineDetails({navigation, route}) {
 
   const [magazine, setMagazines] = useState(route.params.item);
-  const [isUser, setIsUser] = useState('');
-  const [magazineId, setMAgazineId] = useState(`${route.params.item.magazineId}` || '')
+  const [isLike, setLike] = useState('');
+  const [magazineId, setMAgazineId] = useState(route.params.item.magazineId)
+  const [likess, setLikess] = useState(route.params.item.like);
   const {user} = useAuth();
   
 
-  const onLikePress = () => {
-    Magazines.onLikePress(route.params.item.magazineId, route.params.item.like,  (like) => {
-      setIsUser(like);
-    });
-  } 
+const onLikePress = () => {
+    if(isLike === "") {
+      setLike(magazineId)
+      const newLike = likess + 1;
+      setLikess(newLike);
+      Magazines.onLikePress(magazineId, magazineId, newLike);
+    } else {
+      setLike("")
+      const newLike = likess - 1;
+      setLikess(newLike);
+      Magazines.onLikePress("", magazineId, newLike);
+    }
+} 
   
- 
   useEffect(() => {
     Magazines.getLikes(route.params.item.magazineId, like => {
-        setIsUser(like);
-        console.log(like)
+        setLike(like);
+        console.log({like})
       })
   }, []);
 
@@ -72,9 +80,9 @@ export default function MagazineDetails({navigation, route}) {
            
             <TouchableOpacity
           activeOpacity={0.9} 
-          onPress={onLikePress}
-          style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor: magazine.magazineId === isUser ? 'rgb(239, 172, 50)' : '#F4FAFF', justifyContent:"center"}}>
-                <AntDesign name='heart' size={20} color={ magazine.magazineId === isUser ? '#F4FAFF' : 'rgb(239, 172, 50)'} style={{alignSelf:"center"}}/>
+          onPress={() => onLikePress()}
+          style={{ width:40, height:40, borderRadius:40, marginVertical:"10%", backgroundColor: magazine.magazineId === isLike ? 'rgb(239, 172, 50)' : '#F4FAFF', justifyContent:"center"}}>
+                <AntDesign name='heart' size={20} color={ magazine.magazineId === isLike ? '#F4FAFF' : 'rgb(239, 172, 50)'} style={{alignSelf:"center"}}/>
           </TouchableOpacity>
           //  : 
           //  <TouchableOpacity
@@ -84,7 +92,7 @@ export default function MagazineDetails({navigation, route}) {
           //         <AntDesign name='heart' size={20} color={'#F4FAFF'} style={{alignSelf:"center"}}/>
           //   </TouchableOpacity>
           }
-          <Text fontFamily="Plus Jakarta Sans" color="grey" fontSize={16} alignSelf="center" style={{ marginVertical:"-3%", }}>{magazine.like >= 1 ? (magazine.like > 1 ? `${magazine.like} likes` : `${magazine.like} like`) : `` }</Text>
+          <Text fontFamily="Plus Jakarta Sans" color="grey" fontSize={16} alignSelf="center" style={{ marginVertical:"-3%", }}>{likess >= 1 ? (likess > 1 ? `${likess} likes` : `${likess} like`) : `` }</Text>
       </Box>
    </Box>
 {/*  */}

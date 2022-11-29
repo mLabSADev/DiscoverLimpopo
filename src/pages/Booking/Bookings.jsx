@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../../context/auth.context';
+import moment from 'moment';
 import BookingService from '../../services/booking';
 
 const profile = 'https://media.istockphoto.com/id/1364105164/photo/hologram-human-head-deep-learning-and-artificial-intelligence-abstract-background.jpg?b=1&s=170667a&w=0&k=20&c=i9-oulHCR0LCxqzqUW2Q7bKt3RrdbCZU0OXqXV2gw-o=';
@@ -120,9 +121,9 @@ export default function Bookings({navigation, routes}) {
       <Box style={{flexDirection:"column", width:"70%", height:"100%",justifyContent:"center"}}>
             <Text fontFamily="Plus Jakarta Sans" fontSize={16} color="rgb(0,0,0)" fontWeight="700">{item.accomodationName}</Text>
            <Box style={{flexDirection:"row"}}>
-            <Text>{item.checkIn}</Text> 
+            <Text>{moment(item.checkIn).format("DD MMM, YYYY").toString()}</Text> 
             <AntDesign name='arrowright' size={20} style={{fontWeight:"500"}}/>
-            <Text>{item.checkOut}</Text>
+            <Text>{moment(item.checkIn).format("DD MMM, YYYY").toString()}</Text>
             </Box>
       </Box>
       <Box style={{width:"20%", height:"100%", justifyContent:"center"}}>
