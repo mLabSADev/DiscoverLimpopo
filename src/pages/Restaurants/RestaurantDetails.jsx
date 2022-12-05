@@ -8,7 +8,6 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import ReviewComponent from '../../Components/ReviewComponent';
 import { useAuth } from '../../context/auth.context';
 import Restaurants from '../../services/restaurant';
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import Geolocation from 'react-native-geolocation-service';
 import Toast from 'react-native-toast-message';
 import geocoder from 'react-native-geocoder-reborn';

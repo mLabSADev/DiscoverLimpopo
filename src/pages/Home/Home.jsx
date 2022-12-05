@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Text, ScrollView, Image, FlatList } from 'native-base';
-import { SafeAreaView, TouchableOpacity, ImageBackground, Dimensions, View } from 'react-native';
+import { SafeAreaView, TouchableOpacity, ImageBackground, Dimensions, View, ActivityIndicator } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import RestaurantsComponent from '../../Components/restaurants/RestaurantsComponent';
@@ -118,11 +118,12 @@ const fetchMagazines = async () => {
         <Box style={{ width: "100%" }}>
           <Text style={{ fontFamily: "Plus Jakarta Sans", fontWeight: "bold", fontSize: 20, color: "rgb(0,0,0)", marginHorizontal: "3%", }}>Accomodation</Text>
           <Box height={3}></Box>
-          {accomodation?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
-            <Text>
-              No available Accomodation
-            </Text>
-          </Box> :
+          {accomodation?.length <= 0 ? 
+          <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" >
+              <ActivityIndicator color={'rgb(239, 172, 50)'} size={34}/>
+            
+          </Box>
+           :
             <Box width='100%' height={300} >
               <FlatList
                 horizontal
@@ -164,11 +165,12 @@ const fetchMagazines = async () => {
         <Box style={{ width: "100%" }}>
           <Text style={{ fontFamily: "Plus Jakarta Sans", fontWeight: "bold", fontSize: 20, color: "rgb(0,0,0)", marginHorizontal: "3%" }}>Restaurant</Text>
           <Box height={3}></Box>
-          {restaurants?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={150} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
-            <Text>
-              No available restaurant
-            </Text>
-          </Box> :
+          {restaurants?.length <= 0 ? 
+          <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" >
+          <ActivityIndicator color={'rgb(239, 172, 50)'} size={34}/>
+        
+      </Box>
+          :
             (
               <>
                 <Box width={'100%'} style={{ height: 300 }}>
@@ -215,11 +217,12 @@ const fetchMagazines = async () => {
         <Box
           style={{ width: "95%", height: 290, backgroundColor: "rgba(42, 42, 42, 0.95)", alignSelf: "center", borderRadius: 30, marginVertical: "11%" }}>
           <Box height={3}></Box>
-          {magazine?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"1%"} height={100} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
-            <Text>
-              No available Magazines
-            </Text>
-          </Box> :
+          {magazine?.length <= 0 ? 
+          <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" >
+          <ActivityIndicator color={'rgb(239, 172, 50)'} size={34}/>
+        
+      </Box>
+           :
             <>
               <Box height={180} style={{ marginVertical: "-9%", width: '90%', marginHorizontal: "5%", flexDirection: "row", justifyContent: "space-between", }}>
 

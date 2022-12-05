@@ -20,11 +20,8 @@ const BookingDetails = ({navigation, route}) => {
       const [message, setMessage] = useState('');
       
 
-      const handleStars = (star) => {
-            
-            setTimeout(() => {
-                console.log(booking)
-                if(message !== "") {
+      const handleStars = (star, isPressed) => {
+        if (message !== "" && star === stars && isPressed === true) {
                   BookingService.updateBookingReview(
                         user?.userName, user?.imageUrl, message ,true, star, booking.accomodationId, booking.bookingId
                       ).then(() => {
@@ -42,7 +39,6 @@ const BookingDetails = ({navigation, route}) => {
                         console.log(error, 'after calling update booking review');
                 })
             }                      
-            }, 2000)
       }
 
 
@@ -50,82 +46,108 @@ const BookingDetails = ({navigation, route}) => {
     <>
 
 <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-          style={styles.centeredBox}
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+        style={styles.centeredBox}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1, height: "100%" }}
         >
-             <KeyboardAvoidingView
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
-    style={{flex:1, height:"100%"}}
-    >
-            <Box flex={3}></Box>
+          <Box flex={3}></Box>
           <Box style={styles.modalView}>
-            <Text fontSize={16} color={'rgb(119, 119, 119)'} fontFamily="Plus Jakarta Sans" fontWeight={'bold'} style={{marginVertical:"2%"}}>Please help us improve</Text>
-            <Text fontSize={24} color={'rgb(119, 119, 119)'} fontFamily="Plus Jakarta Sans" fontWeight={'bold'} style={{marginVertical:"-3%"}}
-                  alignSelf={'center'} width={'80%'}
+            <Text fontSize={16} color={'rgb(119, 119, 119)'} fontFamily="Plus Jakarta Sans" fontWeight={'bold'} style={{ marginVertical: "2%" }}>Please help us improve</Text>
+            <Text fontSize={24} color={'rgb(119, 119, 119)'} fontFamily="Plus Jakarta Sans" fontWeight={'bold'} style={{ marginVertical: "-3%" }}
+              alignSelf={'center'} width={'80%'}
             >
-            {`How was your experience 
+              {`How was your experience 
                 with us?`}
-                  </Text>
-            <Box style={{flexDirection:"row", marginVertical:"3%", marginHorizontal:"10%"}}>
-        <TouchableOpacity activeOpacity={0.9}>
-        <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=1 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            setStars(1)
-            handleStars(1)}}/>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.9}>
+            </Text>
+            <Box style={{ flexDirection: "row", marginVertical: "3%", marginHorizontal: "10%" }}>
+              <TouchableOpacity activeOpacity={0.9}>
+                <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 1 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
+                  try {
+                    setStars(1);
+                    handleStars(1);
+                   }
+                    catch(error) {
+                      
+                    }
+                }} />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.9}>
                 <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 2 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-                  setStars(2)
-                  handleStars(2)
+                 try {
+                  setStars(2);
+                  handleStars(2);
+                 }
+                  catch(error) {
+                    
+                  }
                 }} />
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.9}>
                 <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 3 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-                 setStars(3)
-                 handleStars(3)
+                  try {
+                    setStars(3);
+                    handleStars(3);
+                   }
+                    catch(error) {
+                      
+                    }
                 }} />
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.9}>
                 <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 4 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-                  
-                  setStars(4)
-                  handleStars(4)
+                   try {
+                    setStars(4);
+                    handleStars(4);
+                   }
+                    catch(error) {
+                      
+                    }
                 }} />
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.9}>
                 <AntDesign name='star' size={30} style={{ fontWeight: "500", justifyContent: "center", alignSelf: "center" }} color={stars >= 5 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-                  setStars(5)
-                  handleStars(5)
+                   try {
+                    setStars(5);
+                    handleStars(5);
+                   }
+                    catch(error) {
+                      
+                    }
                 }} />
               </TouchableOpacity>
             </Box>
-            
-             <TextArea placeholder='Write your review...' alignSelf="center" width="90%" marginHorizontal="5%" height={150} 
-              backgroundColor="lightgrey" borderRadius={20} 
-            onChangeText={(message) => setMessage(message)}
-            textContentType='text'
-            value={message}
-            />              
-            
-              <TouchableOpacity
-              activeOpacity={0.9} 
-              onPress={() => {handleStars()}}
-                  style={{alignSelf: "center",backgroundColor:"rgb(239, 172, 50)", width:"90%", height:45, opacity:3 ,justifyContent:"center", borderRadius:30, marginVertical:"5%"}}>
-                      <Text alignSelf="center" color="#FFFFFF" fontWeight="bold" fontFamily="Plus Jakarta Sans" fontSize={14}>SUBMIT</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-              activeOpacity={0.9} 
-                  onPress={() => { setModalVisible(!modalVisible)}}>
-            <Text alignSelf="center" fontSize={14} fontFamily="Plus Jakarta Sans" fontWeight="700" color='rgb(239, 172, 50)' style={{marginVertical:"-2%"}}>NOT NOW</Text>                
-           </TouchableOpacity>
+
+            <TextArea placeholder='Write your review...' alignSelf="center" width="90%" marginHorizontal="5%" height={150}
+              backgroundColor="lightgrey" borderRadius={20} bg={'primary.600'}
+              onChangeText={(message) => setMessage(message)}
+              textContentType='text'
+              value={message}
+            />
+
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => { handleStars(stars, true) }}
+              style={{ alignSelf: "center", backgroundColor: "rgb(239, 172, 50)", width: "90%", height: 45, opacity: 3, justifyContent: "center", borderRadius: 30, marginVertical: "5%" }}>
+              <Text alignSelf="center" color="#FFFFFF" fontWeight="bold" fontFamily="Plus Jakarta Sans" fontSize={14}>SUBMIT</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => { setModalVisible(!modalVisible) }}>
+              <Text alignSelf="center" fontSize={14} fontFamily="Plus Jakarta Sans" fontWeight="700" color='rgb(239, 172, 50)' style={{ marginVertical: "-2%" }}>NOT NOW</Text>
+            </TouchableOpacity>
           </Box>
-          </KeyboardAvoidingView>
-      </Modal>  
+        </KeyboardAvoidingView>
+      </Modal>
+ 
     <SafeAreaView  style={{ backgroundColor:"#F4FAFF", width:"100%", height:"100%" }}>
    <Box style={{width:"95%", backgroundColor:'rgba(239, 172, 50, 0.05)', borderRadius:30, flexDirection:"row", marginVertical:"3%", height:80,marginHorizontal:"2%", alignContent:"center", alignItems:"center"}}>
       <Box>
@@ -198,27 +220,32 @@ const BookingDetails = ({navigation, route}) => {
             <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:16, color:"rgb(0,0,0)", marginHorizontal:"1%"}}>Payment Method</Text> 
             </Box>
             <Box style={{width:"40%", justifyContent:"flex-end", alignContent:"flex-end", alignItems:"flex-end"}}>
-              { booking.isPaid ?
-            <Image alt='yoco' source={require('../../assets/images/yocologo.png')} style={{resizeMode:"contain" ,width:"100%", height:30, alignSelf:"flex-end", alignContent:"flex-end"}}/>
+              { booking.paid ?
+            <Image alt='payfast' source={require('../../assets/images/payfast.png')} style={{resizeMode:"contain" ,width:"100%", height:30, alignSelf:"flex-end", alignContent:"flex-end"}}/>
               : <Text style={{marginHorizontal:"15%"}}>Not Paid</Text>}
             </Box>
             
       </Box>
-      <Box style={{flex:.1}}></Box>
+      <Box style={{flex:.4}}></Box>
       <Box style={{width:"100%", height:100}}>
 
       </Box>
+     { booking.paid === true ?
+     <>
       <Box style={{height:"20%", marginHorizontal:"1%"}}>
         <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:20, color:"rgb(0,0,0)", marginHorizontal:"1%", fontWeight:"bold"}}>
             Review
         </Text>
-        { booking.review <= 0 ? 
+        {/* {console.log(booking.image)} */}
+        { booking.image === undefined && booking.review === 0 ? 
         <>
         <Box>
+          {/* {review stars} */}
         <Box style={{flexDirection:"row", marginVertical:"2%", marginHorizontal:"10%"}}>
         <TouchableOpacity activeOpacity={0.9}>
         <AntDesign name='star' size={30} style={{fontWeight:"500", justifyContent:"center", alignSelf:"center"}} color={stars >=1 ? "rgb(239, 172, 50)" : "lightgrey"} onPress={() => {
-            try{setStars(1)
+            try{
+              setStars(1)
               handleStars(1)
               } catch(error) {
                 
@@ -276,20 +303,25 @@ const BookingDetails = ({navigation, route}) => {
         </>
           : 
           <>
-          <Box style={{marginVertical:"3%"}}>
+          { booking.review >=1 ? 
+          <Box style={{marginVertical:"3%"}}> 
             <ReviewComponent
             image={booking.image}
             name={booking.userName}
             review={booking.review}
             reviewDescription={booking.description}
             />
+            
             </Box>
+ : null}
           </>
         }
-        <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:16, color:"rgb(239, 172, 50)", marginHorizontal:"1%",alignSelf:"center"}}>
+      </Box> 
+      <Text style={{fontFamily:"Plus Jakarta Sans", marginVertical:15, fontSize:16, color:"rgb(239, 172, 50)", marginHorizontal:"1%",alignSelf:"center"}}>
             Thank you for staying at {booking.accomodationName}
         </Text>
-      </Box>
+        </>
+        : null}
    </SafeAreaView>
    </>
   )

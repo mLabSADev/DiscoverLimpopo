@@ -92,26 +92,22 @@ bookRoom: async (
         roomId: roomId,
         roomName: roomName,
         roomPrice:roomPrice,
-        isPaid: isPaid,
+        paid: isPaid,
+        review: 0,
         totalAmount:totalAmount,
         userDetails: user
     }).then((doc) => {
+      const bookingId = doc.id;
+      setBookingId(bookingId);
         doc.update({
             bookingId: doc.id
-        }).then(() => {setBookingId(doc.id)})
+        }).then(() => {}).catch((error) => {console.log(error)})
+        // console.log(bookingId)
+      
     }).catch((error) => {console.log({error})})
 
 },
 
-// getReview: (bookingId : string, setBookingReview : (review: any | null) => void) => {
-//           return firestore().collection('bookings').where("bookingId", "==", bookingId).get().then((querySnap) => {
-//             querySnap.docs.map((document) => {
-//                 if(document.exists) {
-//                     setBookingReview(document.data())
-//                 }
-//             })
-//           })
-// }
 
 }
 export default BookingService;

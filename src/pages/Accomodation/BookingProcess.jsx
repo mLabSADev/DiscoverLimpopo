@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text } from 'native-base';
-import { ScrollView, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { ScrollView, TouchableOpacity, StyleSheet, Modal, Linking } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -11,6 +11,9 @@ import Accomodations from '../../services/accomodation';
 import Toast from 'react-native-toast-message';
 import { useAuth } from '../../context/auth.context';
 import BookingService from '../../services/booking';
+import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import axios from 'axios';
+
 
 const CUSTOM_LOCALE = {
     monthNames: [
@@ -58,29 +61,33 @@ const BookingProcess = ({ navigation, route }) => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [bookingId, setBookingId] = useState("");
 
+  const getDeepLink = (path) => {
+        const scheme = 'https://us-central1-discover-limpopo.cloudfunctions.net'
+        const prefix = Platform.OS === 'android' ? `${scheme}://` : `${scheme}://`
+        return prefix + path
+      }
 
 
-
-    const bookRoom = () => {
+    const bookRoom = async() => {
 
         const numOfDays = moment(startDate).format("D").toString()
             const numOfDays2 = moment(endDate).format("D").toString()
             const totalNumOfDays = numOfDays2 - numOfDays;
             const totalAmount = totalNumOfDays * roomValue.price;
 
+
         if(roomValue.length <= 0) {
             Toast.show({type:"error", text2:"Please select your desired room"})
         } else if(people === 0) {
             Toast.show({type:"error", text2:"Please select the number of guest(s)"})
         } else {
+            // console.log({accomodation})
 
-           console.log(totalAmount, 'the total amount per stay')
-            console.log({roomValue})
             BookingService.bookRoom(
                 accomodation.accomodationId, 
                 accomodation.name,
-                startDate, 
-                endDate, 
+                moment(startDate).format("YYYY-MM-DD").toString(), 
+                moment(endDate).format("YYYY-MM-DD").toString(), 
                 people,
                 totalNumOfDays,
                 roomValue.id,
@@ -89,11 +96,15 @@ const BookingProcess = ({ navigation, route }) => {
                 false,
                 totalAmount,
                 user,
-                (book) => setBookingId(book)
+                (booking) =>{ setBookingId(booking);
+                    console.log({booking})
+                    const url = `https://us-central1-discover-limpopo.cloudfunctions.net/payDemo?itemName=${accomodation.name}&description=${roomValue.name-roomValue.id}&amount=${totalAmount}&referenceId=${booking}&firstName=${user.userName}&email=${user.email}&callbackUrl=https://us-central1-discover-limpopo.cloudfunctions.net/payment`
+                    const payfast = InAppBrowser.open(url);
+                }
                 ).then(() => {
-                    Toast.show({type:"success", text2:"Your booking has been reserved"})
+                    // Toast.show({type:"success", text2:"Your booking has been reserved"})
                     navigation.goBack()
-                    console.log({bookingId})
+                   
             })
         }
         
@@ -123,7 +134,6 @@ const BookingProcess = ({ navigation, route }) => {
           <View style={{flex:.5}}></View>
           <ActivityIndicator size={54} color={'rgb(239, 172, 50)'}/>          
           </Modal>)}
-
 
             <Box style={{ flex: .1 }}></Box>
             <Box style={{ width: "100%", height: "100%", borderTopRightRadius: 30, borderTopLeftRadius: 30, backgroundColor: "#FFFFFF", alignContent: "center", elevation: 5 }}>
@@ -171,19 +181,24 @@ const BookingProcess = ({ navigation, route }) => {
                     />
                 </Box>
                 <Box style={{ height: 20 }}></Box>
+                <Box style={{flexDirection:"row", width: "90%", alignSelf: "center", }}>
+                        <DropDown1 value={people} setDropdown1={(value) => SetPeople(value)}/>
+                        <DropDown2 value={rooms} setDropdown2={(value) => setRoomValue(value)} roomValue={roomValue} />
+                </Box>
+                <Box style={{ height: 10 }}></Box>
                 <Box style={{ flexDirection: "column", width: "90%", alignSelf: "center" }}>
                     <Text fontFamily="Plus Jakarta Sans" fontWeight={'bold'} fontSize={20} color="rgb(0,0,0)" >Date</Text>
                     <Box style={{ height: 10 }}></Box>
+                    <Box style={{flexDirection:'row', width:"100%", justifyContent:"space-between"}}>
                     <Box style={{ flexDirection: "row", alignItems: "center" }}>
                         <Text fontFamily="Plus Jakarta Sans" fontWeight={'normal'} fontSize={14} color="rgb(0,0,0)" >{moment(startDate).format('DD MMM').toString()}</Text>
                         <AntDesign name='arrowright' size={14} style={{ fontWeight: "500", marginHorizontal: "2%" }} />
                         <Text fontFamily="Plus Jakarta Sans" fontWeight={'normal'} fontSize={14} color="rgb(0,0,0)">{moment(endDate).format('DD MMM').toString()}</Text>
                     </Box>
-                </Box>
-                <Box style={{ height: 20 }}></Box>
-                <Box style={{flexDirection:"row", width: "90%", alignSelf: "center", }}>
-                        <DropDown1 value={people} setDropdown1={(value) => SetPeople(value)}/>
-                        <DropDown2 value={rooms} setDropdown2={(value) => setRoomValue(value)} roomValue={roomValue} />
+                    <Box style={{alignSelf:"flex-end", alignContent:"flex-end", alignItems:"flex-end"}}>
+                    <Text fontFamily="Plus Jakarta Sans" fontWeight={'bold'} fontSize={20} color="rgb(0,0,0)" >{roomValue.price ? `R${roomValue.price}.00 pp/pn` : ""}</Text>
+                    </Box>
+                    </Box>
                 </Box>
                 
                 <Box style={{ height: 20 }}></Box>

@@ -36,7 +36,7 @@ const AccomodationComponent = ({
                 </Box>
           </Box>
           
-          <Text  color="rgb(0,0,0)" fontSize={14} width="95%" style={{ marginHorizontal:"5%", marginVertical:"2%", height:"50%"}}>
+          <Text numberOfLines={3} color="rgb(0,0,0)" fontSize={14} width="95%" style={{ marginHorizontal:"5%", marginVertical:"2%", height:"50%"}}>
           {description}
         </Text>
         <Box style={{flexDirection:"row", width:"80%", marginHorizontal:"5%" }}>
@@ -52,7 +52,6 @@ const AccomodationComponent = ({
       </Box>
       <Box width="20%" height={100}>
       <Image alt='loggo' source={{uri: loggoImage}} style={{width:40, height:40, alignSelf:"flex-start"}}/>
-
         </Box>  
     </Box>
     </Box>

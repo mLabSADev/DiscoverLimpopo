@@ -7,12 +7,15 @@ import Feather from 'react-native-vector-icons/Feather';
 import ReviewComponent from '../../Components/ReviewComponent';
 import MasonryList from '@react-native-seoul/masonry-list';
 import { Box, Image, Text, ScrollView, FlatList } from 'native-base';
+import { Chip } from 'react-native-paper';
 import { useAuth } from '../../context/auth.context';
 import Accomodations from '../../services/accomodation';
 import Amenities from '../../Components/accomodation/Amenities';
 import Amenities2 from '../../Components/accomodation/Amenities2';
 
 const profile = 'https://media.istockphoto.com/id/1364105164/photo/hologram-human-head-deep-learning-and-artificial-intelligence-abstract-background.jpg?b=1&s=170667a&w=0&k=20&c=i9-oulHCR0LCxqzqUW2Q7bKt3RrdbCZU0OXqXV2gw-o=';
+
+const dataSource = ["Volvo", "Alpha Sports", "Ford", "Gräf & Stift", "Aston Martin", "BMW", "Tarrant Automobile","Push", "Österreichische Austro-Fiat", "Mazda", "Rosenbauer"]
 
 const AccomodationDetails = ({ navigation, route }) => {
 
@@ -147,12 +150,34 @@ const AccomodationDetails = ({ navigation, route }) => {
       <Amenities/>       
     </Box> */}
           </Box>
-          <Box style={{ marginVertical: "-2%", flexDirection: "row", width: "100%", justifyContent: "space-around" }}>
-            <Amenities line={1} amenities={accomodation.amenities} />
+          <Box>
+
           </Box>
-          <Box style={{ marginVertical: "2%", flexDirection: "row", width: "100%", justifyContent: "space-around" }}>
-            <Amenities2
-              line={2} amenities={accomodation.amenities} />
+          <Box width={'100%'} style={{ height: 110, alignSelf:"center", marginHorizontal:"4%" }}>
+                  <MasonryList
+                 showsHorizontalScrollIndicator={false}
+                    horizontal={true}
+                    style={{ width:"95%",}}
+                    data={accomodation.amenities}
+                    // numColumns={3}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({ item, index }) => {
+                      return (
+                        <>
+                        <Box style={{flexWrap:"wrap",  height:20, width:"90%"}}>
+                         <Chip 
+                         icon={item.icon !== undefined ? item.icon : "information"}
+                         key={index}    
+                         mode="outlined" //changing display mode, default is flat.       
+                         height={20} //give desirable height to chip       
+                         textStyle={{ color:'white',fontSize: 10,  }} //label properties       
+                         style={{ borderColor: 'rgb(239, 172, 50)', borderWidth:1, marginHorizontal:5}} //display diff color BG       
+                         >  
+                        <Text> {item.label}</Text>      
+                        </Chip>
+                        </Box>
+                        </>
+                        )}}/>
           </Box>
           <Image alt='resto1' source={{ uri: images }} style={{ width: "100%", height: 438 }} />
           <Box style={{ width: "84%", alignSelf: "center", marginVertical: "2%", marginHorizontal: "5%" }}>

@@ -34,8 +34,7 @@ const RestaurantsComponent = ({
 
               </Box>
               <Box flexDirection={'row'} width='90%' style={{ marginHorizontal:"6%", marginVertical:"5%",}}>
-              <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:14, color:"rgb(0,0,0)", width:"100%", height:20, }}>{location}</Text>
-              <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:14, color:"rgb(0,0,0)", width:"20%", marginHorizontal:-20, height:20, }}>...</Text>
+              <Text numberOfLines={1} style={{fontFamily:"Plus Jakarta Sans", fontSize:14, color:"rgb(0,0,0)", width:"100%", height:20, }}>{location}</Text>
               </Box>
               <Box style={{flexDirection:"row", width:"100%", marginHorizontal:"6%", marginVertical:"-1%", }}>
                  <>
