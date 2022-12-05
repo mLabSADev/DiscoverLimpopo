@@ -145,10 +145,6 @@ const AccomodationDetails = ({ navigation, route }) => {
           </Box>
           <Box style={{ marginHorizontal: "4%", marginVertical: "5%", width: "100%" }}>
             <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)", fontWeight: "700" }}>Amenities</Text>
-
-            {/* <Box style={{marginVertical:"-5%" ,flexDirection:"row", width:"80%", justifyContent:"space-around"}}>
-      <Amenities/>       
-    </Box> */}
           </Box>
           <Box>
 

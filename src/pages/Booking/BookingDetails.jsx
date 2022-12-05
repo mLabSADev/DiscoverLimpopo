@@ -7,9 +7,10 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useAuth } from '../../context/auth.context';
 import Toast from 'react-native-toast-message';
 import BookingService from '../../services/booking';
-import { TextInput } from 'react-native-gesture-handler';
 import ReviewComponent from '../../Components/ReviewComponent';
+import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import moment from 'moment';
+
 
 const BookingDetails = ({navigation, route}) => {
 
@@ -41,6 +42,18 @@ const BookingDetails = ({navigation, route}) => {
             }                      
       }
 
+      const bookRoom = () => {
+        const dateValid = moment(new Date()).format('DD-MM-YY').toString();
+        const date = moment(booking.checkIn).format('DD-MM-YY').toString();
+         
+        if(date >= dateValid) {
+          const url = `https://us-central1-discover-limpopo.cloudfunctions.net/payDemo?itemName=${booking.accomodationName}&description=${booking.roomName-booking.roomId}&amount=${booking.totalAmount}&referenceId=${booking.bookingId}&firstName=${booking.userDetails.userName}&email=${booking.userDetails.email}&callbackUrl=https://us-central1-discover-limpopo.cloudfunctions.net/payment`
+          const payfast = InAppBrowser.open(url);
+        } else {
+          Toast.show({type:"error", text2:"Check In date is overdue"})
+        }
+       
+      }
 
   return (
     <>
@@ -156,7 +169,7 @@ const BookingDetails = ({navigation, route}) => {
        </TouchableOpacity>
     </Box>
        <Box style={{marginHorizontal:"5%"}}>
-       <Text style={{fontFamily:"Plus Jakarta Sans", fontSize:24, color:"rgb(0,0,0)", fontWeight:"700",}}>{booking.accomodationName}</Text>
+       <Text fontFamily="Plus Jakarta Sans" fontSize={24} color="rgb(0,0,0)" fontWeight="700" height={10}>{booking.accomodationName}</Text>
         <Text>Booking Info</Text>
        </Box>
    </Box>
@@ -226,7 +239,7 @@ const BookingDetails = ({navigation, route}) => {
             </Box>
             
       </Box>
-      <Box style={{flex:.4}}></Box>
+      <Box style={{flex:.9}}></Box>
       <Box style={{width:"100%", height:100}}>
 
       </Box>
@@ -321,7 +334,14 @@ const BookingDetails = ({navigation, route}) => {
             Thank you for staying at {booking.accomodationName}
         </Text>
         </>
-        : null}
+        : 
+        <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={bookRoom}
+              style={{ alignSelf: "center", backgroundColor: "rgb(239, 172, 50)", width: "90%", height: 50, opacity: 3, justifyContent: "center", borderRadius: 30, }}>
+              <Text style={{ alignSelf: "center", color: "#FFFFFF", fontWeight: "bold", fontFamily: "Plus Jakarta Sans", fontSize: 14 }}>CONTINUE TO PAY</Text>
+            </TouchableOpacity>
+        }
    </SafeAreaView>
    </>
   )

@@ -4,6 +4,9 @@ import { KeyboardAvoidingView, TouchableOpacity, ImageBackground, ScrollView, Sa
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MasonryList from '@react-native-seoul/masonry-list';
+import { Chip } from 'react-native-paper';
+
 
 
 const AccomodationComponent = ({
@@ -40,11 +43,32 @@ const AccomodationComponent = ({
           {description}
         </Text>
         <Box style={{flexDirection:"row", width:"80%", marginHorizontal:"5%" }}>
-          {amenities.pool ?
-          <Box borderColor="rgb(239, 172, 50)" flexDirection="row" borderRadius={30} justifyContent="center" width={70} > 
-          <MaterialIcons name='pool' size={24} color={'rgb(239, 172, 50)'}/>
-          <Text color="rgb(239, 172, 50)">pool</Text>
-          </Box>
+          {console.log({amenities})}
+          {amenities !== [] ?
+          <MasonryList
+          showsHorizontalScrollIndicator={false}
+             horizontal={true}
+             style={{ width:"95%",}}
+             data={amenities}
+              numColumns={1}
+             showsVerticalScrollIndicator={false}
+             renderItem={({ item, index }) => {
+               return (
+                 <>
+                 <Box style={{flexWrap:"wrap",  height:20, width:"90%"}}>
+                  <Chip 
+                  icon={item.icon !== undefined ? item.icon : "information"}
+                  key={index}    
+                  mode="outlined" //changing display mode, default is flat.       
+                  height={20} //give desirable height to chip       
+                  textStyle={{ color:'white',fontSize: 10,  }} //label properties       
+                  style={{ borderColor: 'rgb(239, 172, 50)', borderWidth:1, marginHorizontal:5}} //display diff color BG       
+                  >  
+                 <Text> {item.label}</Text>      
+                 </Chip>
+                 </Box>
+                 </>
+                 )}}/>
           : <Box></Box>
 }
         </Box>

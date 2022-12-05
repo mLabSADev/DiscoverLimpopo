@@ -35,11 +35,12 @@ export default function SpecialPackages({navigation, routes}) {
        <Text fontFamily="Plus Jakarta Sans" fontSize={34} color="#FFFFFF" fontWeight="bold" width="80%" style={{marginHorizontal:"5%", marginVertical:"-1%", }}>Special Packages</Text>
 
       </Box>
-    {events?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={400} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
-          <Text>
-            No available Event!
-          </Text>
-    </Box> :
+    {events?.length <= 0 ?
+     <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" >
+     <ActivityIndicator color={'rgb(239, 172, 50)'} size={34}/>
+   
+     </Box>
+    :
     <Box width={'100%'} height='100%'>
       <MasonryList
       horizontal={false}

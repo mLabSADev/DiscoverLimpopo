@@ -221,7 +221,7 @@ const fetchMagazines = async () => {
           <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" >
           <ActivityIndicator color={'rgb(239, 172, 50)'} size={34}/>
         
-      </Box>
+          </Box>
            :
             <>
               <Box height={180} style={{ marginVertical: "-9%", width: '90%', marginHorizontal: "5%", flexDirection: "row", justifyContent: "space-between", }}>

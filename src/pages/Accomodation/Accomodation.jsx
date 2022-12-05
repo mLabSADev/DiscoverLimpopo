@@ -100,8 +100,9 @@ const Accomodation = ({navigation, route}) => {
                  textContentType="search"
                  /> 
                  </View>
-                 <Ionicons name='ios-search-outline' size={20} style={{alignSelf:"flex-start", color:"rgb(34, 149, 59)", alignSelf:"center", marginHorizontal:"4%"}} 
-                    onPress={() => {searchFilterFunction(search)}}/>
+                 <Ionicons name='ios-search-outline' size={20} style={{alignSelf:"flex-start", color:search === "" ? "rgb(34, 149, 59)" : "rgb(0,0,0)", alignSelf:"center", marginHorizontal:"4%"}} 
+                    // onPress={() => {searchFilterFunction(search)}}
+                    />
                  </View>
                  <Ionicons name='filter' size={20} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)",marginHorizontal:"2%",alignSelf:"center" }} />
                  </View>

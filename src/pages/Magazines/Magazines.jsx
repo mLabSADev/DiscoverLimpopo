@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, Box, Image } from 'native-base';
-import { ImageBackground, ScrollBox, SafeAreaView, TouchableOpacity} from 'react-native';
+import { ImageBackground, ScrollBox, SafeAreaView, TouchableOpacity, ActivityIndicator} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import MasonryList from '@react-native-seoul/masonry-list';
 import Magazine from '../../services/magazine';
@@ -62,11 +62,12 @@ export default function Magazines({navigation, routes}) {
          <Text fontFamily="Plus Jakarta Sans" fontSize={16} color="rgba(244, 250, 255, 0.6)" width="80%" style={{ marginHorizontal:"5%", marginVertical:"1%"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
 
         </Box>
-{magazines?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={400} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
-          <Text>
-            No available Magazines!
-          </Text>
-    </Box> :
+{magazines?.length <= 0 ? 
+  <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" >
+          <ActivityIndicator color={'rgb(239, 172, 50)'} size={34}/>
+        
+          </Box>
+    :
     <Box width={'100%'} height='100%' style={{marginVertical:"2%"}}>
       <MasonryList
       horizontal={false}

@@ -90,20 +90,23 @@ export default function Bookings({navigation, routes}) {
                     textContentType="search"
                     /> 
                     </Box>
-                    <Ionicons name='ios-search-outline' size={20} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)", alignSelf:"center", marginHorizontal:"4%"}} 
-                     onPress={() => {searchFilterFunction(search)}}/>
+                    <Ionicons name='ios-search-outline' size={20} style={{alignSelf:"flex-start", color:search === "" ? "rgb(239, 172, 50)": "rgb(0,0,0)", alignSelf:"center", marginHorizontal:"4%"}} 
+                    //  onPress={() => {searchFilterFunction(search)}}
+                     />
                     </Box>
                     <Ionicons name='filter' size={20} style={{alignSelf:"flex-start", color:"rgb(239, 172, 50)",marginHorizontal:"2%",alignSelf:"center" }} />
                     </Box>
    </Box>
    <ScrollView style={{width:"100%"}}>
    
-   {booking?.length <= 0 ? <Box justifyContent={"center"} alignItems={"center"} alignContent='center' 
+   {booking?.length <= 0 ? 
+   <Box justifyContent={"center"} alignItems={"center"} alignContent='center' 
     alignSelf={"center"} marginTop={"4%"} height={400} width="90%" borderColor={"rgb(239, 172, 50)"} borderRadius={30} borderWidth={1}>
           <Text size={16} fontFamily="Plus Jakarta Sans" alignSelf="center" style={{width:"60%"}} >
           No bookings have been found.
           </Text>
-    </Box> :
+    </Box>
+     :
     <Box width={'100%'} height='100%'>
       <MasonryList
       horizontal={false}
