@@ -21,7 +21,7 @@ export default function Onboarding2({navigation}) {
               </View>                
             <View style={{flex:1.5, flexDirection:"row", }}>
                 <Text style={{display:"flex", alignSelf:"flex-start", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"100", width:"88%", height:"100%", color:'#2A2A2A', marginHorizontal:"5%",}}>
-                An opportunity to win various prizes awarded by our trusted partners, includes vouchers (travel, food, spa treatments), travel accessories and various consumer products.</Text>
+                An opportunity to win various prizes awarded by our trusted partners, includes vouchers (travel, food), travel accessories and various consumer products.</Text>
               </View>  
             <View style={{flex:1.5,  width:"100%", height:"100%"}}>
               <TouchableOpacity 

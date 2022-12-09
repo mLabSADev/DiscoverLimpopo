@@ -14,6 +14,8 @@ export default function Signup({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [border, setBorder] = useState("#4285F4");
   const [isModalVisible, setModalVisible] = useState(false);
+  const [emailColor, setEmailColor] = useState("lightgrey");
+  const [passwordColor, setPasswordColor] = useState("lightgrey");
 
 
   return (
@@ -61,22 +63,35 @@ export default function Signup({ navigation }) {
                   const numReg = new RegExp("^(?=.*[0-9])");
                  
                   if (!values.email) {
-                    errors.email = 'Required';
+                    setEmailColor("#FE4A49");
+                     errors.email = 'Required';   
                   } if(!values.password){
-                    errors.password = 'Required';
-                  } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(values.email.trim())) {
+                     errors.password = 'Required';
+                    setPasswordColor("#FE4A49");
+                  } else if (!reg.test(values.email.trim())) {
                     errors.email = 'Invalid email address';
+                    setEmailColor("#FE4A49");
                   } else if (!lenReg.test(values.password.trim())) {
                     errors.password = 'Password must contain min of 8 letters';
+                    setPasswordColor("#FE4A49");
                   } else if (!lowReg.test(values.password.trim())) {
                     errors.password = 'Password must contain lowercase letter';
+                    setPasswordColor("#FE4A49");
                   } else if (!uppReg.test(values.password.trim())) {
                     errors.password = 'Password must contain uppercase letter';
+                    setPasswordColor("#FE4A49");
                   } else if (!numReg.test(values.password.trim())) {
                     errors.password = 'Password must contain 1 numeric value';
+                    setPasswordColor("#FE4A49");
                   } else if (!charReg.test(values.password.trim())) {
                     errors.password = 'Password must contain 1 Character' ;
+                    setPasswordColor("#FE4A49");
+                  } else if (lenReg.test(values.password.trim()) && lowReg.test(values.password.trim()) && uppReg.test(values.password.trim()) && numReg.test(values.password.trim())  && charReg.test(values.password.trim()) ) { 
+                    setPasswordColor("#31E981");
+                  } else if (reg.test(values.email.trim())) {
+                    setEmailColor("#31E981");
                   }
+                  setEmailColor("#31E981");
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
@@ -100,7 +115,7 @@ export default function Signup({ navigation }) {
 
                   <View>
                     <Text style={{ alignSelf: "flex-start", fontSize: 14, fontFamily: "Plus Jakarta Sans", fontWeight: "600", color: '#000000', marginVertical: "3%", marginHorizontal: "9%" }}>Email</Text>
-                    <View style={{display:"flex", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:50}}>
+                    <View style={{display:"flex", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:50,  borderColor:emailColor, borderWidth:1}}>
           <TextInput placeholder='Email' style={{alignSelf:"flex-start", width:"80%", marginHorizontal:"5%"}} 
             // onChangeText={(email) => setEmail(email)}
             testID='email'
@@ -113,7 +128,7 @@ export default function Signup({ navigation }) {
           </View>
                     <Text style={{ alignSelf: "flex-start", fontSize: 14, fontFamily: "Plus Jakarta Sans", fontWeight: "600", color: colorTheme.primary[600], marginVertical: "1%", marginHorizontal: "9%"}}>{errors.email && touched.email ? errors.email : null}</Text>
                     <Text style={{ alignSelf: "flex-start", fontSize: 14, fontFamily: "Plus Jakarta Sans", fontWeight: "600", color: '#000000', marginVertical: "1%", marginHorizontal: "9%" }}>Password</Text>
-              <View style={{ backgroundColor: "rgba(120, 120, 120, 0.3)", alignSelf: "center", width: "90%", borderRadius: 30, height: 50, flexDirection: "row" }}>
+              <View style={{ backgroundColor: "rgba(120, 120, 120, 0.3)", alignSelf: "center", width: "90%", borderRadius: 30, height: 50, flexDirection: "row", borderColor:passwordColor, borderWidth:1 }}>
                 <TextInput placeholder='Password' style={{ alignSelf: "flex-start", width: "80%", marginHorizontal: "5%", }}
                 testID='password'
                  nativeID='passowrd'

@@ -10,40 +10,29 @@ const Restaurants = {
         const user = auth()?.currentUser;
         const restaurantsCollection = firestore().collection('restaurants');
         restaurantsCollection.onSnapshot((snapShot) => {
-
             return new Promise<Event[]>(resolve => {
                 const restaurants = snapShot.docs.map((document) => {
-
                     const obj = document.data();
                     obj.id = document.id;
-
                     document.ref.collection('reviews').onSnapshot((snapS) => {
-
                         return new Promise<Event[]>(resolve => {
                             const size = snapS.size;
-
                             const rates = snapS.docs.map((documents) => parseFloat(documents.data().review));
                             // console.log(rates, size)
                             const rating = rates.reduce((total, val) => total + val) / size;
-
                             obj.review = rating; //total rates
                             obj.size = rates.length; //total reviews
                             const review = rating as Event;
-
                             //   const accom = accomodation as array;
                             //  console.log(review); => correct number that should be pushed
                             setRestaurants(restaurants);
                             //   console.log(accom)
                             resolve(rates)
                             return review;
-
                         })
-
                     })
-
                     const newObj = obj as Event;
                     return newObj;
-
                 });
                 resolve(restaurants);
                 // console.log({...v})
@@ -51,12 +40,11 @@ const Restaurants = {
         })
     },
 
-    getSpecials: async (setSpecials: (specials: any | null) => void) => {
+getSpecials: async (setSpecials: (specials: any | null) => void) => {
 
         const user = auth()?.currentUser;
         const restaurantsCollection = firestore().collection('restaurants').where('isSpecial', '==', true);
         restaurantsCollection.onSnapshot((snapShot) => {
-
             return new Promise<Event[]>(resolve => {
                 const restaurants = snapShot.docs.map((document) => {
                     const obj = document.data();
@@ -100,7 +88,7 @@ const Restaurants = {
                 });
                 resolve(v);
                 setReviews([...v])
-                 console.log({...v},"the id is null")
+                //  console.log({...v},"the id is null")
             });
         } )
         
@@ -152,7 +140,6 @@ updateReview: async (restaurantId: string,) => {
                     resolve(rates)
                 })
             })
-            snapchot.ref
         })
 }
 }

@@ -43,7 +43,6 @@ const AccomodationComponent = ({
           {description}
         </Text>
         <Box style={{flexDirection:"row", width:"80%", marginHorizontal:"5%" }}>
-          {console.log({amenities})}
           {amenities !== [] ?
           <MasonryList
           showsHorizontalScrollIndicator={false}

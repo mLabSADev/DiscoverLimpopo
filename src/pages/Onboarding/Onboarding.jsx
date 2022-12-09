@@ -24,7 +24,7 @@ export default function Onboarding({navigation}) {
               </View>                
             <View style={{flex:1.5, flexDirection:"row", }}>
                 <Text style={{display:"flex", alignSelf:"flex-start", fontSize:16, fontFamily:"Plus Jakarta Sans", fontWeight:"100", width:"88%", height:"100%", color:'#2A2A2A', marginHorizontal:"5%", marginVertical:"1.2%"}}>
-                Limpopo Guide users have access to different trip packages offered by our trusted and verified partners.</Text>
+                Discover Limpopo users have access to different trip packages offered by our trusted and verified partners.</Text>
               </View>  
             <View style={{flex:1.5,  width:"100%", height:"100%"}}>
               <TouchableOpacity 

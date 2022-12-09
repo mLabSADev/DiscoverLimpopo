@@ -215,16 +215,6 @@ console.log(route.params.item.id, 'id is this value')
         <ScrollView style={{ backgroundColor: "#F4FAFF" }} showsVerticalScrollIndicator={false}>
           <Box style={{ height: 336, backgroundColor: "grey", borderBottomLeftRadius: 30, borderBottomRightRadius: 30, width: "100%" }}>
             <Image alt='background' source={{ uri: restaurant.loggoImage }} resizeMode="cover" style={{ width: "100%", height: "100%", borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }} />
-            <Box style={{ width: "95%", borderRadius: 30, flexDirection: "row", marginVertical: "-73%", height: 50, marginHorizontal: "2%", justifyContent: "space-between", alignContent: "center", alignItems: "center" }}>
-              <Box>
-                <TouchableOpacity activeOpacity={2} onPress={() => navigation.goBack()} style={{ backgroundColor: "rgb(239, 172, 50)", borderRadius: 30, height: 50, width: 50, alignSelf: "center", justifyContent: "center" }}>
-                  <MaterialIcons name='keyboard-arrow-left' size={32} style={{ alignSelf: "center", alignContent: "center", color: "#FFFFFF", marginHorizontal: "10%" }} />
-                </TouchableOpacity>
-              </Box>
-              <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-                <Image alt='profile' source={{ uri: user?.imageUrl }} style={{ width: 38, height: 38, alignSelf: "flex-end", borderRadius: 38, marginHorizontal: "10%" }} />
-              </TouchableOpacity>
-            </Box>
           </Box>
 
           <Box style={{ width: "100%", marginHorizontal: "4%", marginVertical: "5%" }}>

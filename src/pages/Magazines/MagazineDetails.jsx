@@ -50,23 +50,9 @@ const onLikePress = () => {
        <Image alt='magazineCover' source={{uri: magazine.imageCover}} resizeMode="cover" width="100%" height="100%"  borderBottomLeftRadius={30} borderBottomRightRadius={30}/>   
    <Box width="95%" borderRadius={30} flexDirection="column" height="100%"
    justifyContent="space-between" alignContent="center" alignItems="center"
-   style={{ marginVertical:"-65%",marginHorizontal:"2%",}}>
-  <Box width="100%" borderRadius={30} flexDirection="row" 
-     justifyContent="space-between" alignContent="center" alignItems="center"
-  style={{ marginVertical:"5%"}}>
-  <Box>
-          <TouchableOpacity activeOpacity={2} onPress={() => navigation.goBack()} style={{backgroundColor:"rgb(239, 172, 50)", borderRadius:30, height:50, width:50, alignSelf:"center", justifyContent:"center"}}>
-          <MaterialIcons name='keyboard-arrow-left' size={32} style={{alignSelf:"center",alignContent:"center" ,color:"#FFFFFF", marginHorizontal:"10%"}} />
-          </TouchableOpacity>
-  </Box>
-  <Box style={{alignSelf:"flex-end"}}>
-    <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-       <Image alt='user' source={{uri: user.imageUrl}} style={{width:38, height:38, alignSelf:"flex-end", borderRadius:38, marginHorizontal:"10%"}}/>
-       </TouchableOpacity>
-  </Box>  
-    </Box>  
+   style={{ marginVertical:"-65%",marginHorizontal:"2%",}}> 
    </Box>
-   
+
    </Box>
 {/*  */}
    

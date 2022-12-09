@@ -34,7 +34,7 @@ export function DropDown1  ({value, setDropdown1}) {
     return(
             <Box style={{flexDirection:"column", width:"50%"}}>
             <Text style={{ alignSelf: "flex-start", fontSize: 14, fontFamily: "Plus Jakarta Sans", fontWeight: "600", color: '#000000', marginVertical: "3%", marginHorizontal: "9%" }}>People</Text>
-            <View style={{flexDirection:"row", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:50, }}>
+            <View style={{flexDirection:"row", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:35, }}>
             <Dropdown
               style={{alignSelf:"center", width:"80%", marginHorizontal:20}}
               placeholderStyle={styles.placeholderStyle}
@@ -69,7 +69,7 @@ export function DropDown2  ({value, setDropdown2, roomValue}) {
   return(
           <Box style={{flexDirection:"column", width:"50%", alignContent:"flex-end"}}>
           <Text style={{ alignSelf: "flex-start", fontSize: 14, fontFamily: "Plus Jakarta Sans", fontWeight: "600", color: '#000000', marginVertical: "3%", marginHorizontal: "9%" }}>Room</Text>
-          <View style={{flexDirection:"row", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:50}}>
+          <View style={{flexDirection:"row", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:35}}>
           <Dropdown
               style={{alignSelf:"center", width:"80%", marginHorizontal:20}}
               placeholderStyle={styles.placeholderStyle}
@@ -91,6 +91,35 @@ export function DropDown2  ({value, setDropdown2, roomValue}) {
 
             />   
 
+        </View>
+          </Box>
+  )
+}
+
+export function DropDown3 ({value, setDropdown3}) {
+  return(
+          <Box style={{flexDirection:"column", width:"50%", alignSelf:"flex-end", marginHorizontal:"7%"}}>
+          <Text style={{ alignSelf: "flex-start", fontSize: 14, fontFamily: "Plus Jakarta Sans", fontWeight: "600", color: '#000000', marginVertical: "3%", marginHorizontal: "8%" }}>No. of rooms</Text>
+          <View style={{flexDirection:"row", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"flex-start", width:"90%", borderRadius: 30, height:35, }}>
+          <Dropdown
+            style={{alignSelf:"center", width:"80%", marginHorizontal:20}}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder="No. of Rooms"
+            searchPlaceholder="Search..."
+            value={value}
+            onChange={item => {
+              setDropdown3(item.value);
+            }}
+            
+          />   
         </View>
           </Box>
   )

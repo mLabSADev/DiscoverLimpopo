@@ -67,20 +67,10 @@ const AccomodationDetails = ({ navigation, route }) => {
           <Box style={{ height: 390, backgroundColor: "grey", borderBottomLeftRadius: 30, borderBottomRightRadius: 30, width: "100%" }}>
             <Image alt="accomodation" source={{ uri: accomodation.accomodationImage }} resizeMode="cover" style={{ width: "100%", height: "100%", borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }} />
             <Box style={{ width: "95%", borderRadius: 30, flexDirection: "column", marginVertical: "-95%", height: "100%", marginHorizontal: "2%", justifyContent: "space-between", alignContent: "center", alignItems: "center" }}>
-              <Box style={{ width: "100%", borderRadius: 30, flexDirection: "row", marginVertical: "5%", justifyContent: "space-between", alignContent: "center", alignItems: "center" }}>
-                <Box>
-                  <TouchableOpacity activeOpacity={2} onPress={() => navigation.goBack()} style={{ backgroundColor: "rgb(239, 172, 50)", borderRadius: 30, height: 50, width: 50, alignSelf: "center", justifyContent: "center" }}>
-                    <MaterialIcons name='keyboard-arrow-left' size={32} style={{ alignSelf: "center", alignContent: "center", color: "#FFFFFF", marginHorizontal: "10%" }} />
-                  </TouchableOpacity>
-                </Box>
-                <Box style={{ alignSelf: "flex-end" }}>
-                  <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-                    <Image alt='profile' source={{ uri: user?.imageUrl ? user?.imageUrl : profile }} style={{ width: 38, height: 38, alignSelf: "flex-end", borderRadius: 38, marginHorizontal: "10%" }} />
-                  </TouchableOpacity>
-                </Box>
-              </Box>
+             {/* top navigation */}
+            
               {accomodation.startingPrice ?
-                <Box style={{ width: "42%", borderRadius: 30, flexDirection: "row", marginVertical: "65%", height: 40, backgroundColor: "#FFFFFF", alignSelf: "flex-end", justifyContent: "center", alignItems: "center", }}>
+                <Box style={{ width: "42%", borderRadius: 30, flexDirection: "row", marginVertical: "87%", height: 40, backgroundColor: "#FFFFFF", alignSelf: "flex-end", justifyContent: "center", alignItems: "center", }}>
                   <Text style={{ fontFamily: "Plus Jakarta Sans", fontSize: 20, color: "rgb(0,0,0)", fontWeight: "bold" }}>
                     R {accomodation.startingPrice}.00 pppn
                   </Text>

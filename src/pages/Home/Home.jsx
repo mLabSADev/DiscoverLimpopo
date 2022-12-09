@@ -89,34 +89,12 @@ const fetchMagazines = async () => {
     <SafeAreaView style={{ backgroundColor: "#F4FAFF", }}>
       <ScrollView scrollEnabled={true} showsVerticalScrollIndicator={false} style={{ height: "100%" }}>
 
-        <Box>
-          <ImageBackground style={{ width: "100%", height: 125 }} source={require("../../assets/images/advert.jpg")} blurRadius={3}>
-            <Box style={{ marginVertical: "2%", flexDirection: "column", marginHorizontal: "3%", height: "90%" }}>
-              <Box style={{ borderWidth: 1, borderColor: "rgb(239, 172, 50)", borderRadius: 30, width: 110, height: 30, justifyContent: "center" }}>
-                <Text style={{ fontFamily: "Plus Jakarta Sans", color: "#FFFFFF", alignSelf: "center", }}>advertisement</Text>
-              </Box>
-              <Box style={{ width: "100%", flexDirection: "row", justifyContent: "center", height: "55%" }}>
-                <Text fontFamily="Plus Jakarta Sans" width="80%" fontSize={24} fontWeight="bold" color="#FFFFFF" style={{ marginVertical: "-1%" }}>PEERMONT GIN & NOMALI GIN LAUNCH</Text>
-                <Text style={{ fontFamily: "Plus Jakarta Sans", color: "rgb(239, 172, 50)", width: "20%", alignSelf: "center", fontWeight: "bold" }}>VIEW</Text>
-              </Box>
-              <Text style={{ fontFamily: "Plus Jakarta Sans", color: "#FFFFFF", marginVertical: ".5%" }}>DISCOVER LIMPOPO</Text>
-            </Box>
-          </ImageBackground>
-        </Box>
-
-        <Box style={{ width: "95%", backgroundColor: 'rgba(239, 172, 50, 0.05)', borderRadius: 30, flexDirection: "row", marginVertical: "3%", height: 50, marginHorizontal: "2%", justifyContent: "space-between", alignContent: "center", alignItems: "center", elevation: .3, shadowColor: "lightgrey", }}>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <Feather name='menu' size={32} style={{ alignSelf: "flex-start", color: "rgb(239, 172, 50)", marginHorizontal: "10%" }} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-            <Image source={{ uri: user?.imageUrl ? user?.imageUrl : image }} alt={'profile'} style={{ width: 38, height: 38, alignSelf: "flex-end", borderRadius: 38, marginHorizontal: "10%" }} />
-          </TouchableOpacity>
-        </Box>
-
         <Box height={1}></Box>
         {/* Accomodation */}
-        <Box style={{ width: "100%" }}>
+        <Box style={{ width: "100%" ,}}>
+          <Box style={{width:"100%", flexDirection:"row"}}>
           <Text style={{ fontFamily: "Plus Jakarta Sans", fontWeight: "bold", fontSize: 20, color: "rgb(0,0,0)", marginHorizontal: "3%", }}>Accomodation</Text>
+          </Box>
           <Box height={3}></Box>
           {accomodation?.length <= 0 ? 
           <Box justifyContent={"center"} alignItems={"center"} alignSelf={"center"} marginTop={"4%"} height={300} width="90%" >

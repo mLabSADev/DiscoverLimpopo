@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Dropdown } from 'react-native-element-dropdown';
 import Calendar from "react-native-calendar-range-picker";
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { DropDown1, DropDown2 } from '../../Components/Dropdowns';
+import { DropDown1, DropDown2, DropDown3 } from '../../Components/Dropdowns';
 import Accomodations from '../../services/accomodation';
 import Toast from 'react-native-toast-message';
 import { useAuth } from '../../context/auth.context';
@@ -55,6 +55,7 @@ const BookingProcess = ({ navigation, route }) => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date().getTime() + 24 * 60 * 60 * 1000);
     const [people, SetPeople] = useState(0);
+    const [noOfRoom, setNoOfRoom] = useState(1);
     const [rooms, setRoom] = useState([]);
     const [value, setValue] = useState(null);
     const [roomValue, setRoomValue] = useState([]);
@@ -73,7 +74,7 @@ const BookingProcess = ({ navigation, route }) => {
         const numOfDays = moment(startDate).format("D").toString()
             const numOfDays2 = moment(endDate).format("D").toString()
             const totalNumOfDays = numOfDays2 - numOfDays;
-            const totalAmount = totalNumOfDays * roomValue.price;
+            const totalAmount = totalNumOfDays * roomValue.price * noOfRoom;
 
 
         if(roomValue.length <= 0) {
@@ -81,7 +82,7 @@ const BookingProcess = ({ navigation, route }) => {
         } else if(people === 0) {
             Toast.show({type:"error", text2:"Please select the number of guest(s)"})
         } else {
-            // console.log({accomodation})
+             console.log({totalAmount})
 
             BookingService.bookRoom(
                 accomodation.accomodationId, 
@@ -90,6 +91,7 @@ const BookingProcess = ({ navigation, route }) => {
                 moment(endDate).format("YYYY-MM-DD").toString(), 
                 people,
                 totalNumOfDays,
+                noOfRoom,
                 roomValue.id,
                 roomValue.name,
                 roomValue.price,
@@ -99,7 +101,12 @@ const BookingProcess = ({ navigation, route }) => {
                 (booking) =>{ setBookingId(booking);
                     console.log({booking})
                     const url = `https://us-central1-discover-limpopo.cloudfunctions.net/payDemo?itemName=${accomodation.name}&description=${roomValue.name-roomValue.id}&amount=${totalAmount}&referenceId=${booking}&firstName=${user.userName}&email=${user.email}&callbackUrl=https://us-central1-discover-limpopo.cloudfunctions.net/payment`
-                    const payfast = InAppBrowser.open(url);
+                    const payfast = InAppBrowser.open(url).then((results) => {
+                        if(results.type === "cancel") {
+                            navigation.navigate("Home");
+                        }
+                    }).catch((error) => {console.log(error)})
+                    console.log({payfast})
                 }
                 ).then(() => {
                     // Toast.show({type:"success", text2:"Your booking has been reserved"})
@@ -154,14 +161,14 @@ const BookingProcess = ({ navigation, route }) => {
                     </Box>
                     {/* <PayFastWebView title={'Pay Now'} data={paymentData} />                */}
                 </Box>
-
-                <Box style={{ height: 15 }}></Box>
+                <Box style={{ height: 5 }}></Box>
                 <Box style={{ alignSelf: "center", width: "90%", height: 320, backgroundColor: "#F4FAFF", borderRadius: 20 }}>
                     <Calendar
                         pastYearRange={1}
                         futureYearRange={3}
                         locale={CUSTOM_LOCALE}
                         initialNumToRender={7}
+                        
                         disabledBeforeToday={true}
                         isMonthFirst={true}
                         style={{ selectedBetweenDayBackgroundTextColor: "rgb(239, 172, 50)", selectedDayBackgroundColor:"rgb(239, 172, 50)" }}
@@ -180,32 +187,36 @@ const BookingProcess = ({ navigation, route }) => {
                         }
                     />
                 </Box>
-                <Box style={{ height: 20 }}></Box>
+                <Box style={{ height: 10 }}></Box>
                 <Box style={{flexDirection:"row", width: "90%", alignSelf: "center", }}>
                         <DropDown1 value={people} setDropdown1={(value) => SetPeople(value)}/>
                         <DropDown2 value={rooms} setDropdown2={(value) => setRoomValue(value)} roomValue={roomValue} />
                 </Box>
-                <Box style={{ height: 10 }}></Box>
+                <Box style={{ height: 30 }}></Box>
+                <Box style={{ height: 40, width:"90%", flexDirection:"row", }}>
+                <DropDown3 value={noOfRoom} setDropdown3={(value) => setNoOfRoom(value)} />
+                </Box>
+
+                <Box style={{ height: 10}}></Box>
                 <Box style={{ flexDirection: "column", width: "90%", alignSelf: "center" }}>
                     <Text fontFamily="Plus Jakarta Sans" fontWeight={'bold'} fontSize={20} color="rgb(0,0,0)" >Date</Text>
-                    <Box style={{ height: 10 }}></Box>
                     <Box style={{flexDirection:'row', width:"100%", justifyContent:"space-between"}}>
                     <Box style={{ flexDirection: "row", alignItems: "center" }}>
                         <Text fontFamily="Plus Jakarta Sans" fontWeight={'normal'} fontSize={14} color="rgb(0,0,0)" >{moment(startDate).format('DD MMM').toString()}</Text>
                         <AntDesign name='arrowright' size={14} style={{ fontWeight: "500", marginHorizontal: "2%" }} />
                         <Text fontFamily="Plus Jakarta Sans" fontWeight={'normal'} fontSize={14} color="rgb(0,0,0)">{moment(endDate).format('DD MMM').toString()}</Text>
                     </Box>
-                    <Box style={{alignSelf:"flex-end", alignContent:"flex-end", alignItems:"flex-end"}}>
-                    <Text fontFamily="Plus Jakarta Sans" fontWeight={'bold'} fontSize={20} color="rgb(0,0,0)" >{roomValue.price ? `R${roomValue.price}.00 pp/pn` : ""}</Text>
+                    <Box style={{alignSelf:"flex-end", alignContent:"flex-end", alignItems:"flex-end", marginHorizontal:"4%"}}>
+                    <Text fontFamily="Plus Jakarta Sans" fontWeight={'bold'} fontSize={20} color="rgb(0,0,0)" >{roomValue.price ? `R${roomValue.price * noOfRoom}.00 pp/pn` : ""}</Text>
                     </Box>
                     </Box>
                 </Box>
                 
-                <Box style={{ height: 20 }}></Box>
+                <Box style={{ height: 5 }}></Box>
                 <TouchableOpacity
               activeOpacity={0.9}
               onPress={bookRoom}
-              style={{ alignSelf: "center", backgroundColor: "rgb(239, 172, 50)", width: "90%", height: 50, opacity: 3, justifyContent: "center", borderRadius: 30, }}>
+              style={{ alignSelf: "center", backgroundColor: "rgb(239, 172, 50)", width: "90%", height: 45, opacity: 3, justifyContent: "center", borderRadius: 30, }}>
               <Text style={{ alignSelf: "center", color: "#FFFFFF", fontWeight: "bold", fontFamily: "Plus Jakarta Sans", fontSize: 14 }}>CONTINUE TO PAY</Text>
             </TouchableOpacity>
             </Box>

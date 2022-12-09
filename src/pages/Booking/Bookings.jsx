@@ -119,7 +119,7 @@ export default function Bookings({navigation, routes}) {
           <>
           <TouchableOpacity activeOpacity={1}
           key={item?.bookingId}
-        style={{marginVertical:"2%", marginHorizontal:"4%"}}>
+        style={{marginVertical:"2%", marginHorizontal:"4%", elevation:5, shadowOpacity:1}}>
            <Box style={{alignSelf:"center", backgroundColor:"#FFFFFF", alignContent:"center", justifyContent:"center", alignItems:"center" ,marginHorizontal:"2%", width:"100%", height:80, borderRadius:30, flexDirection:"row"}}>
       <Box style={{flexDirection:"column", width:"70%", height:"100%",justifyContent:"center"}}>
             <Text fontFamily="Plus Jakarta Sans" fontSize={16} color="rgb(0,0,0)" fontWeight="700">{item.accomodationName}</Text>

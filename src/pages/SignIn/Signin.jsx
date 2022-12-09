@@ -15,16 +15,15 @@ export default function Signin({navigation}) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [resetPassword, setResetPassword] = useState(false);
   const [border, setBorder] = useState("lightgrey");
+  const [emailColor, setEmailColor] = useState("lightgrey");
+  const [passwordColor, setPasswordColor] = useState("lightgrey");
 
 
 const validateLink = () => {
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-   if (reg.test(resetPassword) === false) { 
+   if (reg.test(values.password.trim()) === false) { 
         setBorder("red");
-    //   Toast.show({
-    //     type: 'error',
-    //     text2: 'Email is not valid',
-    //  })
+  
   } else {
     setBorder("green");
    auth().sendPasswordResetEmail(resetPassword).then((results) => {
@@ -72,22 +71,54 @@ const validateLink = () => {
           onRequestClose={() => {
             setModalVisible(!modalVisible);
           }}
+          
         >
           <View style={{flex:3}}></View>
-          <View style={styles.modalView}>
+          <View style={styles.modalView} onPress={Keyboard.dismiss}>
             <Text style={{alignSelf:"flex-start", fontSize:32, fontFamily:"Plus Jakarta Sans", fontWeight:"bold", color:'#000000'}}>Reset Email</Text>
-            <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"600", color:'#000000', marginVertical:"3%"}}>Email</Text>  
-             <View style={{backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"flex-start", width:"100%", borderRadius: 30, height:50, flexDirection:"row", marginVertical:"3%", borderWidth:1, borderColor:border}}>
+            <Formik
+            
+                initialValues={{ email: '' }}
+                validate={values => {
+                  const errors = {};
+                  const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    
+                  if (!values.email) {
+                     errors.email = 'Required';
+                    setBorder("#FE4A49");
+                  } else if (!reg.test(values.email.trim())) {
+                    errors.email = 'Invalid email address';
+                    setBorder("#FE4A49");
+                  } else if (reg.test(values.email.trim())) {
+                    setBorder("#31E981")
+                  }
+                  return errors;
+                }}
+                onSubmit={(values, { setSubmitting }) => {
+                  auth().sendPasswordResetEmail(values.email).then((results) => {
+                    setModalVisible(!modalVisible);
+                    alert();
+                  }).catch((error) => {})
+                  }
+                }
+              >
+                {({errors, touched, handleChange, handleBlur, handleSubmit, values }) => (
+                  <View>
+                   <Text style={{alignSelf:"flex-start", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"600", color:'#000000', marginVertical:"3%"}}>Email</Text>  
+             <View style={{backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"flex-start", width:300, borderRadius: 30, height:50, flexDirection:"row", marginVertical:"3%", borderWidth:1, borderColor:border}}>
              <TextInput placeholder='Enter email address...' style={{alignSelf:"flex-start", width:"80%", marginHorizontal:"5%",}} 
-             onChangeText={(password) => setResetPassword(password)}
-             textContentType="email"
-             value={resetPassword}
+             testID='email'
+             nativeID='email'
+             validate={values.email}
+             onChangeText={handleChange('email')}
+             onBlur={handleBlur('email')}
+              value={values.email}
              />              
              </View>
               <TouchableOpacity
               activeOpacity={0.9} 
-                  onPress={() => validateLink()}
-                  style={{alignSelf: "flex-start", backgroundColor:"rgb(239, 172, 50)", width:"100%", height:50, opacity:3 ,justifyContent:"center", borderRadius:30,}}>
+                  onPress={handleSubmit}
+                  style={{alignSelf: "center", backgroundColor:"rgb(239, 172, 50)", width:300, height:50, opacity:3 ,justifyContent:"center", borderRadius:30,}}>
                       <Text style={{alignSelf:"center", color:"#FFFFFF", fontWeight:"bold",fontFamily:"Plus Jakarta Sans", fontSize:14}}>SEND LINK</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -95,6 +126,9 @@ const validateLink = () => {
                   onPress={() => { setModalVisible(!modalVisible)}}>
             <Text style={{alignSelf:"center", fontSize:14, fontFamily:"Plus Jakarta Sans", fontWeight:"700", color:'rgb(239, 172, 50)', marginVertical:"2%"}}>CANCEL</Text>                
            </TouchableOpacity>
+                  </View>
+                )}
+              </Formik>
           </View>
       </Modal>        
         </View>
@@ -117,21 +151,33 @@ const validateLink = () => {
                   const numReg = new RegExp("^(?=.*[0-9])");
                  
                   if (!values.email) {
-                    errors.email = 'Required';
+                    // errors.email = 'Required';
+                    setEmailColor("#FE4A49");
                   } if(!values.password){
-                    errors.password = 'Required';
-                  } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(values.email.trim())) {
+                    // errors.password = 'Required';
+                    setPasswordColor("#FE4A49");
+                  } else if (!reg.test(values.email.trim())) {
                     errors.email = 'Invalid email address';
+                    setEmailColor("#FE4A49");
                   } else if (!lenReg.test(values.password.trim())) {
                     errors.password = 'Password must contain min of 8 letters';
+                    setPasswordColor("#FE4A49");
                   } else if (!lowReg.test(values.password.trim())) {
                     errors.password = 'Password must contain lowercase letter';
+                    setPasswordColor("#FE4A49");
                   } else if (!uppReg.test(values.password.trim())) {
                     errors.password = 'Password must contain uppercase letter';
+                    setPasswordColor("#FE4A49");
                   } else if (!numReg.test(values.password.trim())) {
                     errors.password = 'Password must contain 1 numeric value';
+                    setPasswordColor("#FE4A49");
                   } else if (!charReg.test(values.password.trim())) {
                     errors.password = 'Password must contain 1 Character' ;
+                    setPasswordColor("#FE4A49");
+                  } else if (lenReg.test(values.password.trim()) && lowReg.test(values.password.trim()) && uppReg.test(values.password.trim()) && numReg.test(values.password.trim())  && charReg.test(values.password.trim()) ) { 
+                    setPasswordColor("#31E981");
+                  } else if (reg.test(values.email.trim())) {
+                    setEmailColor("#31E981")
                   }
                   return errors;
                 }}
@@ -155,7 +201,7 @@ const validateLink = () => {
 
                   <View>
                     <Text style={{ alignSelf: "flex-start", fontSize: 14, fontFamily: "Plus Jakarta Sans", fontWeight: "600", color: '#000000', marginVertical: "3%", marginHorizontal: "9%" }}>Email</Text>
-                    <View style={{display:"flex", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:50}}>
+                    <View style={{display:"flex", backgroundColor:"rgba(120, 120, 120, 0.3)", alignSelf:"center", width:"90%", borderRadius: 30, height:50,borderColor:emailColor, borderWidth:1}}>
           <TextInput placeholder='Email' style={{alignSelf:"flex-start", width:"80%", marginHorizontal:"5%"}} 
             // onChangeText={(email) => setEmail(email)}
             testID='email'
@@ -168,7 +214,7 @@ const validateLink = () => {
           </View>
                     <Text style={{ alignSelf: "flex-start", fontSize: 14, fontFamily: "Plus Jakarta Sans", fontWeight: "600", color: colorTheme.primary[600], marginVertical: "1%", marginHorizontal: "9%"}}>{errors.email && touched.email ? errors.email : null}</Text>
                     <Text style={{ alignSelf: "flex-start", fontSize: 14, fontFamily: "Plus Jakarta Sans", fontWeight: "600", color: '#000000', marginVertical: "1%", marginHorizontal: "9%" }}>Password</Text>
-              <View style={{ backgroundColor: "rgba(120, 120, 120, 0.3)", alignSelf: "center", width: "90%", borderRadius: 30, height: 50, flexDirection: "row" }}>
+              <View style={{ backgroundColor: "rgba(120, 120, 120, 0.3)", alignSelf: "center", width: "90%", borderRadius: 30, height: 50, flexDirection: "row", borderColor:passwordColor, borderWidth:1 }}>
                 <TextInput placeholder='Password' style={{ alignSelf: "flex-start", width: "80%", marginHorizontal: "5%", }}
                 testID='password'
                  nativeID='passowrd'
@@ -224,7 +270,7 @@ const validateLink = () => {
   },
   modalView: {
     width:"90%",
-    height:270,
+    height:280,
     margin: 20,
     flexDirection:"column",
     backgroundColor: "white",
